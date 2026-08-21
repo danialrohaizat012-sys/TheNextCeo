@@ -276,12 +276,10 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
       <div class="brandText"><small>ONLINE MULTIPLAYER</small><b>KELANTAN NEXT CEO: <span>START UP</span></b></div>
     </div>
     <div class="userbox">
-      <button id="installBtn" class="pill installBtn">INSTALL APP</button>
-      <img id="avatar" class="avatar" alt="">
-      <div id="userName" class="pill">Belum log masuk</div>
-      <button id="loginBtn" class="pill">Google Login</button>
-      <button id="logoutBtn" class="pill" style="display:none">Logout</button>
-    </div>
+  <button id="installBtn" class="pill installBtn">INSTALL APP</button>
+  <div id="userName" class="pill">Guest Founder</div>
+  <button id="logoutBtn" class="pill" style="display:none">Exit</button>
+</div>
   </div>
 
   <div class="mobileHero"><img src="brand-logo.png" alt="Kelantan Next CEO Online"></div>
@@ -321,8 +319,13 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 
 <div class="modal show" id="gateModal"><div class="box">
   <img src="brand-logo.png" alt="Kelantan Next CEO Online" style="display:block;width:min(390px,88%);margin:0 auto 8px">
-  <p class="muted" style="text-align:center">Log masuk dengan Google untuk create atau join room bersama kawan.</p><div id="firebaseStatus" class="firebaseStatus"><b>FIREBASE</b>Checking project configuration...</div><div id="authDebug" class="firebaseStatus"><b>GOOGLE AUTH</b>Belum log masuk.</div>
-  <button id="gateLoginBtn" class="btn gold">CONTINUE WITH GOOGLE</button><div class="muted" style="text-align:center;margin-top:8px">Mobile/PWA akan dibawa ke Google dan kembali semula ke game selepas login.</div>
+  <h2 style="text-align:center;margin-bottom:4px">Masuk Sebagai Founder</h2>
+  <p class="muted" style="text-align:center">Tak perlu akaun. Masukkan nama sahaja dan terus main online dengan kawan.</p>
+  <label>Nama Founder</label>
+  <input id="guestName" class="input" maxlength="24" placeholder="Contoh: Danial">
+  <div id="firebaseStatus" class="firebaseStatus"><b>ONLINE SERVER</b>Checking Firebase...</div>
+  <div id="authDebug" class="firebaseStatus"><b>GUEST SESSION</b>Belum bermula.</div>
+  <button id="guestStartBtn" class="btn gold">ENTER THE MARKET</button>
 </div></div>
 
 <div class="modal" id="homeModal"><div class="box">
@@ -350,7 +353,7 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, setPersistence, browserLocalPersistence, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+import { getAuth, signInAnonymously, setPersistence, browserLocalPersistence, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 import {
   getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, onSnapshot,
   serverTimestamp, runTransaction, arrayUnion, increment
@@ -370,7 +373,6 @@ if(firebaseStatus){
 const auth = getAuth(app);
 await setPersistence(auth, browserLocalPersistence).catch(e=>console.warn("Auth persistence:",e));
 const db = getFirestore(app);
-const provider = new GoogleAuthProvider();
 
 const $=id=>document.getElementById(id);
 const fmt=n=>"RM"+Math.round(n||0).toLocaleString("en-MY");
@@ -420,113 +422,90 @@ function playerRef(uid){return doc(db,"rooms",roomId,"players",uid)}
 function code(){const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";return Array.from({length:6},()=>c[Math.floor(Math.random()*c.length)]).join("")}
 function closeModals(){document.querySelectorAll(".modal").forEach(m=>m.classList.remove("show"))}
 
-const isStandalone = window.matchMedia?.("(display-mode: standalone)")?.matches || window.navigator.standalone === true;
-const isMobileBrowser = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+let guestName = localStorage.getItem("knc_guest_name") || "";
+queueMicrotask(()=>{
+  const input=document.getElementById("guestName");
+  if(input && guestName) input.value=guestName;
+});
 
-async function googleLogin(){
-  if(!configReady) return alert("Firebase belum dikonfigurasi.");
+async function startGuestSession(){
+  const name=(document.getElementById("guestName")?.value||guestName||"Founder").trim().slice(0,24);
+  if(!name) return alert("Masukkan nama Founder.");
+  guestName=name;
+  localStorage.setItem("knc_guest_name",name);
+
   const authDebug=document.getElementById("authDebug");
   if(authDebug){
     authDebug.classList.remove("bad","ok");
-    authDebug.innerHTML="<b>GOOGLE AUTH</b>Membuka Google Sign-In...";
+    authDebug.innerHTML="<b>GUEST SESSION</b>Connecting...";
   }
 
   try{
-    // Popup is attempted first on ALL platforms because it avoids redirect-storage
-    // issues on modern Safari/Chrome when authDomain differs from the app domain.
-    const result = await signInWithPopup(auth,provider);
-    if(result?.user){
-      if(authDebug){
-        authDebug.classList.add("ok");
-        authDebug.innerHTML="<b>GOOGLE AUTH CONNECTED</b>"+(result.user.email||result.user.displayName||"Signed in");
-      }
-      return;
+    if(!auth.currentUser){
+      await signInAnonymously(auth);
+    }
+    if(authDebug){
+      authDebug.classList.add("ok");
+      authDebug.innerHTML="<b>GUEST SESSION READY</b>"+guestName;
     }
   }catch(e){
-    console.error("Popup auth error:",e);
-
-    // Only fallback to redirect when popup truly cannot run.
-    const redirectCodes=[
-      "auth/popup-blocked",
-      "auth/operation-not-supported-in-this-environment",
-      "auth/web-storage-unsupported"
-    ];
-
-    if(redirectCodes.includes(e.code)){
-      try{
-        sessionStorage.setItem("knc_auth_redirect_pending","1");
-        await signInWithRedirect(auth,provider);
-        return;
-      }catch(e2){
-        console.error("Redirect auth error:",e2);
-        if(authDebug){
-          authDebug.classList.add("bad");
-          authDebug.innerHTML="<b>GOOGLE AUTH ERROR</b>"+(e2.code||"")+"<br>"+e2.message;
-        }
-        alert("Google Login gagal: "+(e2.code||"")+". "+e2.message);
-        return;
-      }
-    }
-
+    console.error("Anonymous auth error:",e);
     if(authDebug){
       authDebug.classList.add("bad");
-      authDebug.innerHTML="<b>GOOGLE AUTH ERROR</b>"+(e.code||"")+"<br>"+e.message;
+      authDebug.innerHTML="<b>GUEST ERROR</b>"+(e.code||"")+"<br>"+e.message;
     }
-    alert("Google Login gagal: "+(e.code||"")+". "+e.message);
+    alert("Tak dapat sambung online: "+(e.code||"")+". "+e.message);
   }
 }
 
-$("loginBtn").onclick=$("gateLoginBtn").onclick=googleLogin;
-$("logoutBtn").onclick=()=>signOut(auth);
-
-// Resolve mobile/PWA redirect after returning from Google.
-getRedirectResult(auth).then(result=>{
-  const authDebug=document.getElementById("authDebug");
-  if(result?.user){
-    sessionStorage.removeItem("knc_auth_redirect_pending");
-    if(authDebug){
-      authDebug.classList.add("ok");
-      authDebug.innerHTML="<b>GOOGLE AUTH CONNECTED</b>"+(result.user.email||result.user.displayName||"Signed in");
-    }
-    document.getElementById("gateModal")?.classList.remove("show");
-  }
-}).catch(e=>{
-  console.error("Google redirect result error:",e);
-  const authDebug=document.getElementById("authDebug");
-  if(authDebug){
-    authDebug.classList.add("bad");
-    authDebug.innerHTML="<b>GOOGLE REDIRECT ERROR</b>"+(e.code||"")+"<br>"+e.message;
-  }
-});
+document.getElementById("guestStartBtn").onclick=startGuestSession;
+document.getElementById("logoutBtn").onclick=async()=>{
+  localStorage.removeItem("knc_guest_name");
+  await signOut(auth);
+  location.reload();
+};
 
 onAuthStateChanged(auth,async u=>{
- const authDebug=document.getElementById("authDebug");
- if(authDebug){
-   authDebug.classList.remove("bad","ok");
-   if(u){
-     authDebug.classList.add("ok");
-     authDebug.innerHTML="<b>GOOGLE AUTH CONNECTED</b>"+(u.email||u.displayName||"Signed in");
-   }else{
-     authDebug.innerHTML="<b>GOOGLE AUTH</b>Belum log masuk.";
-   }
- }
  user=u;
- if(!u){$("gateModal").classList.add("show");$("homeModal").classList.remove("show");$("gameLayout").style.display="none";$("loginBtn").style.display="";$("logoutBtn").style.display="none";$("userName").textContent="Belum log masuk";$("avatar").src="";return}
- $("gateModal").classList.remove("show");$("loginBtn").style.display="none";$("logoutBtn").style.display="";$("userName").textContent=u.displayName||"Founder";$("avatar").src=u.photoURL||"";
- $("homeModal").classList.add("show");
+ const authDebug=document.getElementById("authDebug");
+
+ if(!u){
+   document.getElementById("gateModal")?.classList.add("show");
+   document.getElementById("homeModal")?.classList.remove("show");
+   document.getElementById("gameLayout").style.display="none";
+   document.getElementById("userName").textContent="Guest Founder";
+   document.getElementById("logoutBtn").style.display="none";
+   if(authDebug) authDebug.innerHTML="<b>GUEST SESSION</b>Belum bermula.";
+   return;
+ }
+
+ if(!guestName){
+   guestName=localStorage.getItem("knc_guest_name")||("Founder-"+u.uid.slice(0,4));
+   localStorage.setItem("knc_guest_name",guestName);
+ }
+
+ document.getElementById("userName").textContent=guestName;
+ document.getElementById("logoutBtn").style.display="";
+ document.getElementById("gateModal")?.classList.remove("show");
+ document.getElementById("homeModal")?.classList.add("show");
+
+ if(authDebug){
+   authDebug.classList.add("ok");
+   authDebug.innerHTML="<b>GUEST SESSION READY</b>"+guestName;
+ }
 });
 
 $("createRoomBtn").onclick=async()=>{
  roomId=code();
  await setDoc(doc(db,"rooms",roomId),{code:roomId,hostUid:user.uid,status:"lobby",createdAt:serverTimestamp(),round:0,phase:"READY",market:null,turnUid:user.uid,move:0,dice:0});
- await setDoc(playerRef(user.uid),{uid:user.uid,name:user.displayName||"Founder",photo:user.photoURL||"",cash:15000,debt:0,rep:0,loc:"kb",biz:[],loans:[],joinedAt:serverTimestamp()});
+ await setDoc(playerRef(user.uid),{uid:user.uid,name:guestName||"Founder",photo:"",cash:15000,debt:0,rep:0,loc:"kb",biz:[],loans:[],joinedAt:serverTimestamp()});
  enterRoom(roomId);
 };
 $("joinRoomBtn").onclick=async()=>{
  const c=$("joinCode").value.trim().toUpperCase(); if(c.length!==6)return toast("Masukkan 6 aksara room code");
  const snap=await getDoc(doc(db,"rooms",c)); if(!snap.exists())return toast("Room tak dijumpai");
  roomId=c;
- await setDoc(playerRef(user.uid),{uid:user.uid,name:user.displayName||"Founder",photo:user.photoURL||"",cash:15000,debt:0,rep:0,loc:"kb",biz:[],loans:[],joinedAt:serverTimestamp()},{merge:true});
+ await setDoc(playerRef(user.uid),{uid:user.uid,name:guestName||"Founder",photo:"",cash:15000,debt:0,rep:0,loc:"kb",biz:[],loans:[],joinedAt:serverTimestamp()},{merge:true});
  enterRoom(c);
 };
 

@@ -1,0 +1,30 @@
+KELANTAN NEXT CEO ONLINE V0.5 — NO LOGIN / GUEST MULTIPLAYER
+
+YES: online multiplayer still works without Google Login.
+
+How:
+- Players only enter a nickname.
+- Firebase Anonymous Authentication creates a hidden guest UID.
+- Firestore still gets a unique authenticated user ID for each player/device.
+- Room codes, realtime multiplayer, turn sync, cash, businesses and deals continue to work.
+
+ONE FIREBASE SETTING REQUIRED:
+Firebase Console > Authentication > Sign-in method
+Enable: Anonymous
+
+Google Sign-In can be disabled if you no longer want it.
+
+Then:
+1. Deploy V0.5.
+2. Open app.
+3. Enter Founder name.
+4. Create Room.
+5. Friend opens app on another phone/browser.
+6. Friend enters name and Join Room.
+7. Host starts game.
+
+Notes:
+- Guest identity is local to that browser/device.
+- Clearing browser storage/uninstalling PWA may create a new guest account.
+- For private play with friends, this is much simpler than Google login.
+- For a future commercial account system, Google/Apple/email login can be added later without changing the core room architecture.
