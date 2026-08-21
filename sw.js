@@ -1,4 +1,4 @@
-const CACHE="knc-startup-v060-track-double-dice";
+const CACHE="knc-startup-v064-balance";
 const STATIC=[
   "./manifest.json",
   "./board.png",

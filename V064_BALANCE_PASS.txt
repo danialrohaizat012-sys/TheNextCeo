@@ -1,0 +1,21 @@
+KELANTAN NEXT CEO : START UP — V0.6.4 BALANCE PASS
+
+Core balance changes:
+- Starting cash remains equal for all Founders.
+- Staff now directly affects business revenue:
+  0 staff = founder-operated at 45% base revenue.
+  Full staff = 100% revenue.
+- Manager gives +10% efficiency and frees Owner Capacity.
+- Owner Capacity remains 2 unmanaged businesses.
+- Hire cost scales with business size: RM1k / RM1.5k / RM2.5k.
+- Manager cost scales: RM5k / RM10k.
+- SME Loan requires Reputation 2.
+- Growth Loan requires Reputation 5.
+- Bankrupt Founder is removed from future turns when debt exceeds total assets and cash is zero.
+- Cashflow skips bankrupt players and automatically advances to the next active Founder.
+- Player card now shows Net Worth.
+- Portfolio shows estimated business cashflow.
+- Rules book updated with business balance and bankruptcy rules.
+
+Design goal:
+Luck can create opportunities/problems, but staffing, leverage, cash reserves, managers and negotiation determine who scales.

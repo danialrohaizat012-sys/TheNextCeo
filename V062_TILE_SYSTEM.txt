@@ -1,0 +1,8 @@
+V0.6.2
+- Exact square-to-square perimeter alignment.
+- Every perimeter tile now has a function.
+- Realistic Kelantan events: MPKB compound, flood, supplier delay, machine breakdown, TikTok viral, corporate order, entrepreneur grant, festive demand.
+- START gives RM5,000 after a completed lap.
+- Landing automatically resolves the tile function.
+- Business, Loan and Deal tiles open the relevant gameplay UI.
+- MATLAMAT checks RM1,000,000 net worth and declares winner.

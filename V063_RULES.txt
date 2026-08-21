@@ -1,0 +1,6 @@
+V0.6.3 RULE BOOK
+- Added RULES button to main game navigation.
+- Full in-game rule book modal.
+- Covers objective, room setup, turns, two dice, movement, START bonus, business, cashflow, loan, deal, events, reputation and RM1M victory.
+- Includes quick tile-function legend.
+- Responsive phone/tablet/desktop.

@@ -131,7 +131,7 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
  border-radius:4px 4px 8px 8px
 }
 .trackStepFlash{
- position:absolute;z-index:19;width:32px;height:32px;border-radius:9px;
+ position:absolute;z-index:19;width:42px;height:30px;border-radius:7px;
  transform:translate(-50%,-50%);border:2px solid rgba(240,185,74,.92);
  box-shadow:0 0 0 5px rgba(240,185,74,.18),0 0 22px rgba(240,185,74,.5);
  animation:trackPulse .34s ease both;pointer-events:none
@@ -300,6 +300,20 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 .diceResult.show{opacity:1;transform:none}.diceBreakdown{font-size:11px;color:#d9c6a0;margin-top:3px;font-weight:800}
 @media(max-width:680px){.diceArena{width:235px;height:150px}.dieWrap{width:74px;height:74px}.dieWrap.one{left:31px}.dieWrap.two{right:31px}.die3d,.dieFace{width:74px;height:74px}.dieFace{border-radius:13px}.dieFace.front{transform:translateZ(37px)}.dieFace.back{transform:rotateY(180deg) translateZ(37px)}.dieFace.right{transform:rotateY(90deg) translateZ(37px)}.dieFace.left{transform:rotateY(-90deg) translateZ(37px)}.dieFace.top{transform:rotateX(90deg) translateZ(37px)}.dieFace.bottom{transform:rotateX(-90deg) translateZ(37px)}.pip{width:11px;height:11px}.pip.tl{left:12px;top:12px}.pip.tc{left:30px;top:12px}.pip.tr{right:12px;top:12px}.pip.ml{left:12px;top:30px}.pip.mc{left:30px;top:30px}.pip.mr{right:12px;top:30px}.pip.bl{left:12px;bottom:12px}.pip.bc{left:30px;bottom:12px}.pip.br{right:12px;bottom:12px}}
 @media(prefers-reduced-motion:reduce){.dieWrap.rolling{animation-duration:.15s}.diceShadow,.diceImpactFlash{animation:none}}
+
+.tileBox{text-align:center;border-color:#8f6b35!important}.tileBadge{display:inline-block;padding:6px 11px;border-radius:999px;background:#76191d;color:#f4dfbd;border:1px solid #c79a43;font-size:9px;font-weight:1000;letter-spacing:1px}.tileBox h2{font-family:Georgia,serif;color:#eadbc1;margin:12px 0 7px}.tileDesc{color:#aeb9c0;font-size:12px;line-height:1.55}.tileOutcome{margin:13px 0;padding:12px;border-radius:12px;background:#08131c;border:1px solid #243c4e;color:#f0d8aa;font-size:13px;font-weight:900;line-height:1.5}
+
+/* ===== V0.6.3 RULE BOOK ===== */
+.rulesBox{width:min(760px,94vw)!important;max-height:90vh!important;padding:0!important;overflow:hidden!important;border:1px solid #8c6b3c!important;background:linear-gradient(180deg,#101c26,#07111a)!important}
+.rulesHead{display:flex;gap:14px;justify-content:space-between;align-items:flex-start;padding:20px 20px 15px;border-bottom:1px solid #243849;background:linear-gradient(135deg,rgba(113,24,28,.36),rgba(195,147,70,.08))}
+.rulesKicker{font-size:9px;letter-spacing:1.5px;font-weight:1000;color:#d9ad62}.rulesHead h2{margin:4px 0 6px;color:#f3e4c7;font-family:Georgia,serif;font-size:25px}.rulesHead p{margin:0;color:#aeb8bf;font-size:11px;line-height:1.5;max-width:560px}
+.rulesCloseX{flex:0 0 36px;width:36px;height:36px;border-radius:50%;padding:0!important;background:#142432!important;border:1px solid #365064!important;color:#f1dfc0!important;font-size:22px!important}
+.rulesScroll{padding:16px 18px 8px;overflow:auto;max-height:62vh}.ruleHero{display:flex;flex-direction:column;gap:5px;padding:14px;border-radius:14px;background:linear-gradient(135deg,#72191d,#411013);border:1px solid #c39448;color:#f4e5c8;margin-bottom:12px}.ruleHero b{font-size:12px;letter-spacing:.8px}.ruleHero span{font-size:11px;line-height:1.5}
+.rulesGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.ruleCard{padding:12px;border-radius:12px;background:#0a1721;border:1px solid #243b4c}.ruleCard b{display:block;color:#e6bd73;font-size:10px;letter-spacing:.6px;margin-bottom:5px}.ruleCard p{margin:0;color:#b7c0c6;font-size:10px;line-height:1.5}
+.ruleTypes{margin-top:12px;padding:13px;border-radius:13px;background:#0b1822;border:1px solid #253b4b}.ruleTypes h3{margin:0 0 9px;color:#f0dfc0;font-family:Georgia,serif}.ruleLegend{display:flex;flex-wrap:wrap;gap:6px}.ruleLegend span{padding:6px 8px;border-radius:999px;background:#122532;border:1px solid #29475a;color:#c9d0d4;font-size:9px;font-weight:800}
+.ruleNote{margin:12px 0 4px;padding:12px;border-left:3px solid #c89545;background:#151a1d;color:#bfc5c8;font-size:10px;line-height:1.55}.ruleNote b{color:#efc87f}.rulesDone{margin:10px 18px 18px!important;width:calc(100% - 36px)!important}
+@media(max-width:680px){.rulesBox{width:96vw!important;max-height:92vh!important}.rulesHead{padding:16px 15px 12px}.rulesHead h2{font-size:21px}.rulesScroll{padding:12px 13px 5px;max-height:66vh}.rulesGrid{grid-template-columns:1fr}.ruleCard{padding:10px}.ruleCard p{font-size:10px}.rulesDone{margin:8px 13px 13px!important;width:calc(100% - 26px)!important}}
+
 </style>
 <script>
 (function(){
@@ -338,6 +352,7 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
     <button data-tab="playersWrap">FOUNDERS</button>
     <button data-tab="portfolioWrap">PORTFOLIO</button>
     <button data-tab="logWrap">FEED</button>
+    <button type="button" id="rulesBtn">RULES</button>
   </div>
 
   <div class="layout" id="gameLayout" style="display:none">
@@ -360,6 +375,11 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
       <div class="panel card" id="playersWrap"><h3>👥 FOUNDERS</h3><div id="players" class="players"></div></div>
       <div class="panel card" id="portfolioWrap"><h3>🏢 PORTFOLIO SAYA</h3><div id="portfolio" class="portfolio"></div></div>
       <div class="panel card" id="logWrap"><h3>📜 GAME FEED</h3><div id="log" class="log"></div></div>
+    
+      <div class="panel card" id="balanceWrap">
+        <h3>⚖️ BALANCE</h3>
+        <div class="muted" id="balanceInfo">Staff penuh = revenue penuh • Manager = +10% efficiency • Owner Capacity = 2 unmanaged business.</div>
+      </div>
     </aside>
   </div>
 </div>
@@ -431,6 +451,68 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
   <button id="leaveRoomBtn" class="btn light">LEAVE ROOM</button>
 </div></div>
 
+<div class="modal" id="rulesModal">
+  <div class="box rulesBox">
+    <div class="rulesHead">
+      <div>
+        <div class="rulesKicker">KELANTAN NEXT CEO : START UP</div>
+        <h2>Rules Permainan</h2>
+        <p>Bina bisnes, urus cashflow, survive pasaran dan jadi Founder pertama mencapai RM1 juta net worth.</p>
+      </div>
+      <button type="button" class="rulesCloseX" id="rulesCloseX">×</button>
+    </div>
+
+    <div class="rulesScroll">
+      <section class="ruleHero">
+        <b>🏆 MATLAMAT</b>
+        <span>Jadi Founder pertama yang mencapai <strong>RM1,000,000 net worth</strong> dan mendarat di petak MATLAMAT.</span>
+      </section>
+
+      <div class="rulesGrid">
+        <section class="ruleCard"><b>1. MULA GAME</b><p>Seorang player create room dan kongsi Room Code. Kawan join menggunakan code yang sama. Host mulakan round.</p></section>
+        <section class="ruleCard"><b>2. TURN PLAYER</b><p>Player bermain mengikut giliran. Bila turn anda, tekan Roll Dice. Jangan tutup game ketika pawn sedang bergerak.</p></section>
+        <section class="ruleCard"><b>3. DUA DADU</b><p>Dua dadu adalah random 1–6. Jumlah kedua-duanya menentukan movement. Contoh 4 + 2 = pawn bergerak tepat 6 petak.</p></section>
+        <section class="ruleCard"><b>4. MOVEMENT</b><p>Pawn bergerak clockwise di petak luar board. Function hanya berlaku pada petak terakhir tempat pawn mendarat.</p></section>
+        <section class="ruleCard"><b>5. START</b><p>Semua Founder bermula di START. Setiap kali lengkap satu pusingan dan melepasi START, terima RM5,000 modal pusingan.</p></section>
+        <section class="ruleCard"><b>6. BUSINESS</b><p>Petak Business membuka peluang membeli bisnes. Jika cash cukup, bisnes masuk portfolio dan boleh menjana cashflow.</p></section>
+        <section class="ruleCard"><b>7. CASHFLOW</b><p>Cashflow bergantung kepada portfolio. Petak Cashflow boleh memberi payout daripada operasi bisnes anda.</p></section>
+        <section class="ruleCard"><b>8. LOAN</b><p>Petak Loan membenarkan pembiayaan. Loan menambah cash tetapi juga hutang. Gunakan leverage dengan waras.</p></section>
+        <section class="ruleCard"><b>9. DEAL</b><p>Petak Deal membuka negotiation dengan Founder lain. Gunakan rundingan untuk mempercepat strategi anda.</p></section>
+        <section class="ruleCard"><b>10. EVENT & PASAR</b><p>Event boleh positif atau negatif: geran, viral, banjir, kompaun MPKB, supplier lambat, mesin rosak dan lain-lain.</p></section>
+        <section class="ruleCard"><b>11. REPUTASI</b><p>Networking dan latihan boleh meningkatkan Reputasi. Sesetengah kejadian boleh menurunkannya.</p></section>
+        <section class="ruleCard"><b>12. MATLAMAT RM1 JUTA</b><p>Net worth = cash + nilai portfolio − hutang. Capai sekurang-kurangnya RM1 juta dan mendarat di MATLAMAT untuk menang.</p></section>
+      <section class="ruleCard"><b>13. BALANCE BISNES</b><p>Business yang kurang staff hanya menghasilkan sebahagian revenue. Manager membebaskan Owner Capacity dan memberi bonus operasi kecil.</p></section>
+        <section class="ruleCard"><b>14. BANKRUPTCY</b><p>Jika cash anda kosong dan jumlah hutang melebihi cash + nilai semua business, anda bankrupt dan tersingkir daripada giliran.</p></section>
+      </div>
+
+      <section class="ruleTypes">
+        <h3>Fungsi Petak</h3>
+        <div class="ruleLegend">
+          <span>🚀 START</span><span>🏢 BUSINESS</span><span>💡 PELUANG</span><span>💸 KOS</span>
+          <span>🎓 LATIHAN</span><span>🌍 PASAR</span><span>💰 CASH</span><span>📦 SUPPLIER</span>
+          <span>🤝 NETWORK</span><span>⚡ EVENT</span><span>📣 MARKETING</span><span>🏦 LOAN</span>
+          <span>🤝 DEAL</span><span>📈 INVEST</span><span>👥 STAFF</span><span>🌊 BANJIR</span>
+          <span>☕ REHAT</span><span>🏆 MATLAMAT</span>
+        </div>
+      </section>
+
+      <section class="ruleNote">
+        <b>Nota:</b> Nasib menentukan dadu dan event, tetapi keputusan cash, loan, business dan deal menentukan siapa yang benar-benar membina empayar.
+      </section>
+    </div>
+
+    <button type="button" class="btn gold rulesDone" id="rulesDone">FAHAM, JOM MAIN</button>
+  </div>
+</div>
+
+<div class="modal" id="tileModal"><div class="box tileBox">
+  <div class="tileBadge" id="tileBadge">PETAK</div>
+  <h2 id="tileTitle">Petak</h2>
+  <p id="tileDesc" class="tileDesc"></p>
+  <div class="tileOutcome" id="tileOutcome"></div>
+  <button id="tileActionBtn" class="btn gold" style="display:none">TERUSKAN</button>
+  <button id="tileCloseBtn" class="btn light">OK</button>
+</div></div>
 <div class="modal" id="businessModal"><div class="box"><h2>Business Opportunities</h2><div id="offers" class="shop"></div><button class="btn light closeBtn">Tutup</button></div></div>
 <div class="modal" id="loanModal"><div class="box"><h2>Business Financing</h2><div id="loans"></div><button class="btn light closeBtn">Tutup</button></div></div>
 <div class="modal" id="dealModal"><div class="box"><h2>Negotiation</h2><p class="muted">Hantar cash deal kepada Founder lain.</p><select id="dealTo" class="input"></select><input id="dealAmount" class="input" type="number" step="1000" value="5000"><input id="dealNote" class="input" placeholder="Terma deal"><button id="sendDealBtn" class="btn gold">SEND DEAL</button><button class="btn light closeBtn">Tutup</button></div></div>
@@ -477,17 +559,62 @@ const nodes=[
 {id:"krai",name:"Kuala Krai",x:46,y:75,adj:["tm","machang","gm"]},
 {id:"gm",name:"Gua Musang",x:41,y:87,adj:["krai"]}
 ];
-// 60-space outer track. Position 0 = START/PERMULAAN.
-const TRACK = (() => {
-  const pts=[];
-  for(let i=0;i<16;i++) pts.push({x:5.2 + (89.6*i/15), y:4.5});
-  for(let i=1;i<=15;i++) pts.push({x:94.8, y:4.5 + (90.4*i/15)});
-  for(let i=1;i<=15;i++) pts.push({x:94.8 - (89.6*i/15), y:94.9});
-  for(let i=1;i<=14;i++) pts.push({x:5.2, y:94.9 - (90.4*i/15)});
-  return pts.slice(0,60);
-})();
-function trackPoint(pos){const n=((Number(pos)||0)%TRACK.length+TRACK.length)%TRACK.length;return TRACK[n]}
-function trackLabel(pos){const n=((Number(pos)||0)%60+60)%60;return n===0?"START":`PETAK ${n+1}`}
+// Exact centres of the visible perimeter tiles.
+// Position 0 is START. Every tile has a gameplay function.
+const TRACK = [
+  {x:7.77,y:5.59,label:"START",type:"START",title:"Permulaan",desc:"Lalui START untuk terima RM5,000 modal pusingan."},
+  {x:16.95,y:5.59,label:"02",type:"BUSINESS",title:"Peluang Perniagaan",desc:"Peluang membuka perniagaan baharu."},
+  {x:24.08,y:5.59,label:"03 PELUANG",type:"OPPORTUNITY",title:"Peluang",desc:"Peluang rawak. Boleh untung atau rugi."},
+  {x:31.07,y:5.59,label:"04",type:"COST",title:"Kos Operasi",desc:"Kos tidak dijangka. Bayar RM1,000."},
+  {x:37.81,y:5.59,label:"05",type:"TRAINING",title:"Latihan Founder",desc:"Bayar RM1,000 dan tambah +1 Reputasi."},
+  {x:44.64,y:5.59,label:"05 PASAR",type:"MARKET",title:"Pasar",desc:"Perubahan pasaran memberi kesan kepada bisnes."},
+  {x:51.59,y:5.59,label:"06",type:"CASH",title:"Jualan Walk-In",desc:"Terima RM1,500."},
+  {x:58.50,y:5.59,label:"07",type:"SUPPLIER",title:"Supplier",desc:"Harga supplier berubah secara rawak."},
+  {x:65.32,y:5.59,label:"08",type:"NETWORK",title:"Networking",desc:"Tambah +1 Reputasi."},
+  {x:72.40,y:5.59,label:"09 EVENT",type:"EVENT",title:"Event Kelantan",desc:"Kejadian realistik berlaku kepada bisnes."},
+  {x:79.53,y:5.59,label:"09",type:"MARKETING",title:"Marketing",desc:"Campaign boleh viral atau burn duit."},
+  {x:86.39,y:5.59,label:"PETAK",type:"CASHFLOW",title:"Cashflow Boost",desc:"Kutip sebahagian cashflow portfolio."},
+  {x:93.65,y:5.59,label:"10 REHAT",type:"REST",title:"Rehat",desc:"Petak selamat. Tiada risiko."},
+
+  {x:94.51,y:14.36,label:"11",type:"CASH",title:"Repeat Customer",desc:"Terima RM1,000."},
+  {x:94.51,y:24.14,label:"12 LOAN",type:"LOAN",title:"Pembiayaan",desc:"Boleh melihat pilihan pinjaman."},
+  {x:94.51,y:34.31,label:"13",type:"COMPOUND",title:"Kompaun MPKB",desc:"Bayar kompaun RM1,200."},
+  {x:94.51,y:44.41,label:"14 EVENT",type:"EVENT",title:"Event",desc:"Kejadian luar jangka berlaku."},
+  {x:94.51,y:54.51,label:"15",type:"NETWORK",title:"Business Network",desc:"Tambah +1 Reputasi."},
+  {x:94.51,y:64.55,label:"16 DEAL",type:"DEAL",title:"Deal",desc:"Buka rundingan dengan Founder lain."},
+  {x:94.51,y:75.60,label:"17",type:"BUSINESS",title:"Expansion Opportunity",desc:"Peluang tambah portfolio."},
+  {x:94.51,y:90.22,label:"18 REHAT",type:"REST",title:"Rehat",desc:"Tiada kesan."},
+
+  {x:86.05,y:94.54,label:"43",type:"SUPPLIER",title:"Supplier Deal",desc:"Harga khas atau caj tambahan."},
+  {x:76.70,y:94.54,label:"44",type:"MARKETING",title:"Content Viral",desc:"Campaign boleh untung atau rugi."},
+  {x:68.54,y:94.54,label:"45 PELUANG",type:"OPPORTUNITY",title:"Peluang Besar",desc:"Ambil peluang rawak."},
+  {x:60.30,y:94.54,label:"46",type:"CASH",title:"Corporate Order",desc:"Terima RM2,000."},
+  {x:51.93,y:94.54,label:"47 DEAL",type:"DEAL",title:"Deal",desc:"Buka rundingan."},
+  {x:43.56,y:94.54,label:"48",type:"TRAINING",title:"Business Coaching",desc:"Bayar RM1,000 dan +1 Reputasi."},
+  {x:35.24,y:94.54,label:"49 PASAR",type:"MARKET",title:"Pasar",desc:"Trend pasaran berubah."},
+  {x:26.91,y:94.54,label:"50",type:"BUSINESS",title:"Peluang Outlet",desc:"Peluang tambah business."},
+  {x:18.67,y:94.54,label:"51 EVENT",type:"EVENT",title:"Event",desc:"Kejadian rawak berlaku."},
+  {x:11.07,y:94.54,label:"52",type:"INVEST",title:"Pelaburan Berisiko",desc:"Labur RM2,000 dengan hasil rawak."},
+
+  {x:3.78,y:92.76,label:"53 REHAT",type:"REST",title:"Rehat",desc:"Petak selamat."},
+
+  {x:4.12,y:82.02,label:"54",type:"CASHFLOW",title:"Cashflow",desc:"Kutip sebahagian cashflow."},
+  {x:4.12,y:72.62,label:"55",type:"STAFF",title:"Talent Hunt",desc:"Dapat staff percuma jika ada kekosongan."},
+  {x:4.12,y:62.83,label:"56 LATIHAN",type:"TRAINING",title:"Latihan",desc:"Bayar RM1,000 dan +1 Reputasi."},
+  {x:4.12,y:53.30,label:"57",type:"FLOOD",title:"Banjir",desc:"Kerugian RM2,000."},
+  {x:4.12,y:43.52,label:"58 DEAL",type:"DEAL",title:"Deal",desc:"Buka rundingan."},
+  {x:4.12,y:33.67,label:"58",type:"OPPORTUNITY",title:"Peluang",desc:"Tarik peluang rawak."},
+  {x:4.12,y:23.89,label:"59",type:"BUSINESS",title:"Peluang Growth",desc:"Peluang buka atau expand business."},
+  {x:4.12,y:14.42,label:"60 MATLAMAT",type:"TARGET",title:"Matlamat RM1 Juta",desc:"Semak net worth untuk kemenangan."}
+];
+
+function trackPoint(pos){
+  const n=((Number(pos)||0)%TRACK.length+TRACK.length)%TRACK.length;
+  return TRACK[n];
+}
+function trackLabel(pos){
+  return trackPoint(pos).label;
+}
 
 const B=[
 ["Marketplace Seller",6000,3000,1000,1,7000,"Retail"],["Creative Freelancer",7000,3500,900,1,8000,"Digital"],
@@ -499,6 +626,124 @@ const B=[
 ["Regional Distribution Co.",150000,36000,24000,3,190000,"Logistics"],["Central Production Kitchen",180000,40000,27000,3,230000,"Manufacturing"],
 ["Kelantan Manufacturing Plant",320000,70000,48000,3,410000,"Manufacturing"],["National Franchise Network",450000,95000,65000,3,580000,"Franchise"]
 ].map((x,i)=>({id:"b"+i,name:x[0],cost:x[1],rev:x[2],op:x[3],staff:x[4],value:x[5],cat:x[6]}));
+const LOCAL_EVENTS=[
+ {name:"MPKB Datang Check",text:"Dokumen premis tak lengkap. Kompaun RM1,500.",cash:-1500},
+ {name:"Hujan Lebat & Banjir Kilat",text:"Operasi terganggu dan stok rosak. -RM2,500.",cash:-2500},
+ {name:"TikTok Viral",text:"Content bisnes meletup. +RM3,000 jualan.",cash:3000},
+ {name:"Corporate Order",text:"Dapat order syarikat. +RM2,500.",cash:2500},
+ {name:"Supplier Lambat",text:"Penghantaran terganggu. -RM1,000.",cash:-1000},
+ {name:"Geran Usahawan",text:"Permohonan berjaya. +RM4,000.",cash:4000},
+ {name:"Mesin Rosak",text:"Repair kecemasan. -RM1,800.",cash:-1800},
+ {name:"Musim Perayaan",text:"Demand meningkat. +RM2,000.",cash:2000}
+];
+const OPPORTUNITIES=[
+ {name:"Walk-In Besar",text:"Customer borong masuk. +RM2,000.",cash:2000},
+ {name:"Silap Pricing",text:"Margin tersalah kira. -RM1,000.",cash:-1000},
+ {name:"Referral",text:"Customer bawa customer baru. +RM1,500.",cash:1500},
+ {name:"Competitor Discount",text:"Terpaksa turunkan harga. -RM800.",cash:-800},
+ {name:"Micro Grant",text:"Dapat bantuan kecil. +RM2,500.",cash:2500},
+ {name:"Bad Review",text:"Perlu recovery customer. -RM700 dan -1 Reputasi.",cash:-700,rep:-1}
+];
+
+function currentNetWorth(p){
+ return (p?.cash||0)+(p?.biz||[]).reduce((a,b)=>a+(b.value||0),0)-(p?.debt||0);
+}
+function ownerCapacityUsed(p){
+ return (p?.biz||[]).filter(b=>!b.manager).length;
+}
+function staffingRatio(b){
+ const need=Math.max(1,b.staff||1);
+ return Math.min(1,Math.max(0,(b.staffNow||0)/need));
+}
+function estimatedBusinessCF(b){
+ // A business with no staff can still run in founder mode, but inefficiently.
+ const ratio=staffingRatio(b);
+ const revenueFactor=.45 + (.55*ratio);
+ const managerFactor=b.manager?1.10:1;
+ return Math.round(((b.rev||0)*revenueFactor*managerFactor)-(b.op||0));
+}
+function playerAssetValue(p){
+ return (p?.cash||0)+(p?.biz||[]).reduce((a,b)=>a+(b.value||0),0);
+}
+function isBankruptState(p){
+ return !p?.bankrupt && (p?.cash||0)<=0 && (p?.debt||0)>playerAssetValue(p);
+}
+async function checkBankruptcy(p){
+ if(!p||p.bankrupt||!isBankruptState(p))return false;
+ await updateDoc(playerRef(p.uid),{bankrupt:true,cash:0});
+ log(`💥 ${p.name} BANKRUPT dan tersingkir daripada permainan.`);
+ return true;
+}
+function activePlayers(){
+ return players.filter(p=>!p.bankrupt);
+}
+function nextActivePlayer(uid){
+ const active=activePlayers();
+ if(!active.length)return null;
+ const currentIndex=active.findIndex(p=>p.uid===uid);
+ return active[(currentIndex+1+active.length)%active.length];
+}
+
+function businessLocationForTrack(pos){
+ const i=Math.floor((((Number(pos)||0)%TRACK.length)/TRACK.length)*nodes.length)%nodes.length;
+ return nodes[i]?.id||"kb";
+}
+async function applyPlayerDelta({cash=0,rep=0,biz=null}={}){
+ const me=myPlayer();if(!me)return;
+ const patch={};
+ if(cash)patch.cash=Math.max(0,(me.cash||0)+cash);
+ if(rep)patch.rep=Math.max(0,(me.rep||0)+rep);
+ if(biz)patch.biz=biz;
+ if(Object.keys(patch).length)await updateDoc(playerRef(user.uid),patch);
+}
+function showTileModal(tile,outcome,actionLabel="",actionFn=null){
+ $("tileBadge").textContent=tile.label;
+ $("tileTitle").textContent=tile.title;
+ $("tileDesc").textContent=tile.desc;
+ $("tileOutcome").innerHTML=outcome||"Tiada kesan.";
+ const btn=$("tileActionBtn");
+ btn.style.display=actionLabel?"":"none";
+ btn.textContent=actionLabel||"TERUSKAN";
+ btn.onclick=actionFn||null;
+ $("tileModal").classList.add("show");
+}
+$("tileCloseBtn").onclick=()=>$("tileModal").classList.remove("show");
+
+async function openBusinessFromTile(){
+ $("tileModal").classList.remove("show");
+ const me=myPlayer(),seed=((room.round||0)*5+(me.trackPos||0)*3)%B.length;
+ const offers=[B[seed%B.length],B[(seed+3)%B.length],B[(seed+7)%B.length],B[(seed+11)%B.length]];
+ $("offers").innerHTML=offers.map(b=>'<div class="offer"><h4>'+b.name+'</h4><div class="muted">Open '+fmt(b.cost)+' • Value '+fmt(b.value)+'<br>CF +'+fmt(b.rev-b.op)+' • Staff '+b.staff+'</div><button data-buy="'+b.id+'">OPEN BUSINESS</button></div>').join("");
+ document.querySelectorAll("[data-buy]").forEach(x=>x.onclick=()=>buy(x.dataset.buy));
+ $("businessModal").classList.add("show");
+}
+
+async function resolveLandingTile(pos){
+ const tile=trackPoint(pos),me=myPlayer();if(!tile||!me)return;
+ switch(tile.type){
+  case "START":showTileModal(tile,"Bonus RM5,000 diberi bila lengkap satu pusingan.");break;
+  case "BUSINESS":showTileModal(tile,"Lokasi peluang: <b>"+N(businessLocationForTrack(pos)).name+"</b>.","LIHAT PELUANG",openBusinessFromTile);break;
+  case "OPPORTUNITY":{const e=OPPORTUNITIES[Math.floor(Math.random()*OPPORTUNITIES.length)];await applyPlayerDelta({cash:e.cash||0,rep:e.rep||0});showTileModal(tile,"<b>"+e.name+"</b><br>"+e.text);log(me.name+": "+e.name);break}
+  case "COST":await applyPlayerDelta({cash:-1000});showTileModal(tile,"Kos operasi: <b>-RM1,000</b>.");break;
+  case "TRAINING":if((me.cash||0)>=1000){await applyPlayerDelta({cash:-1000,rep:1});showTileModal(tile,"Bayar <b>RM1,000</b> • Reputasi <b>+1</b>.")}else showTileModal(tile,"Cash tak cukup untuk latihan.");break;
+  case "MARKET":
+  case "EVENT":{const e=LOCAL_EVENTS[Math.floor(Math.random()*LOCAL_EVENTS.length)];await applyPlayerDelta({cash:e.cash||0,rep:e.rep||0});showTileModal(tile,"<b>"+e.name+"</b><br>"+e.text);log(me.name+": "+e.name);break}
+  case "CASH":{const amount=tile.label==="46"?2000:(tile.label==="11"?1000:1500);await applyPlayerDelta({cash:amount});showTileModal(tile,"Cash masuk: <b>+"+fmt(amount)+"</b>.");break}
+  case "SUPPLIER":{const good=Math.random()<.5,amount=good?1200:-1400;await applyPlayerDelta({cash:amount});showTileModal(tile,good?"Supplier bagi harga khas. <b>+RM1,200</b>.":"Harga supplier naik. <b>-RM1,400</b>.");break}
+  case "NETWORK":await applyPlayerDelta({rep:1});showTileModal(tile,"Connection bertambah. <b>Reputasi +1</b>.");break;
+  case "MARKETING":{const win=Math.random()<.55,amount=win?3000:-1000;await applyPlayerDelta({cash:amount});showTileModal(tile,win?"Campaign viral. <b>+RM3,000</b>.":"Campaign tak convert. <b>-RM1,000</b>.");break}
+  case "CASHFLOW":{const cf=(me.biz||[]).reduce((a,b)=>a+((b.rev||0)-(b.op||0)),0),pay=Math.max(0,Math.round(cf*.5));if(pay)await applyPlayerDelta({cash:pay});showTileModal(tile,pay?"Kutip 50% cashflow: <b>+"+fmt(pay)+"</b>.":"Belum ada cashflow untuk dikutip.");break}
+  case "REST":showTileModal(tile,"Petak selamat. <b>Tiada kos, tiada risiko.</b>");break;
+  case "LOAN":showTileModal(tile,"Anda boleh menilai pembiayaan bank.","BUKA BANK",()=>{$("tileModal").classList.remove("show");$("loanBtn").click()});break;
+  case "COMPOUND":await applyPlayerDelta({cash:-1200});showTileModal(tile,"MPKB keluarkan kompaun. <b>-RM1,200</b>.");break;
+  case "DEAL":showTileModal(tile,"Masa untuk negotiate dengan Founder lain.","BUKA NEGOTIATION",()=>{$("tileModal").classList.remove("show");$("dealBtn").click()});break;
+  case "INVEST":{if((me.cash||0)<2000){showTileModal(tile,"Perlu RM2,000 untuk melabur.");break}const ok=Math.random()<.5;await applyPlayerDelta({cash:ok?3000:-2000});showTileModal(tile,ok?"Pelaburan menjadi. <b>+RM3,000</b>.":"Pelaburan gagal. <b>-RM2,000</b>.");break}
+  case "STAFF":{const biz=[...(me.biz||[])],i=biz.findIndex(b=>(b.staffNow||0)<(b.staff||0));if(i<0){showTileModal(tile,"Tiada kekosongan staff.");break}biz[i]={...biz[i],staffNow:(biz[i].staffNow||0)+1};await applyPlayerDelta({biz});showTileModal(tile,"1 staff percuma masuk ke <b>"+biz[i].name+"</b>.");break}
+  case "FLOOD":await applyPlayerDelta({cash:-2000});showTileModal(tile,"Banjir ganggu operasi. <b>-RM2,000</b>.");break;
+  case "TARGET":{const nw=currentNetWorth(me);if(nw>=1000000){showTileModal(tile,"Net worth: <b>"+fmt(nw)+"</b><br>🏆 <b>ANDA KELANTAN NEXT CEO!</b>");await updateDoc(roomRef(),{status:"finished",winnerUid:user.uid,winnerName:me.name})}else showTileModal(tile,"Net worth: <b>"+fmt(nw)+"</b><br>Perlu lagi <b>"+fmt(1000000-nw)+"</b> untuk menang.");break}
+ }
+}
+
 const markets=[
 {name:"🌧️ Banjir Besar",text:"Semua business -RM3,000 cashflow round ini.",all:-3000},
 {name:"🌙 Ramadan Demand",text:"F&B +RM2,000 cashflow.",cat:"F&B",bonus:2000},
@@ -636,6 +881,7 @@ $("createRoomBtn").onclick=async()=>{
      rep:0,
      loc:"kb",
      trackPos:0,
+     bankrupt:false,
      biz:[],
      loans:[],
      joinedAt:serverTimestamp()
@@ -705,6 +951,7 @@ $("joinRoomBtn").onclick=async()=>{
      rep:0,
      loc:"kb",
      trackPos:0,
+     bankrupt:false,
      biz:[],
      loans:[],
      joinedAt:serverTimestamp()
@@ -765,9 +1012,9 @@ function render(){
  players.forEach((p,i)=>{const tp=trackPoint(p.trackPos||0),e=document.createElement("div");e.className="pawn";e.style.left=`calc(${tp.x}% + ${(i%3-1)*7}px)`;e.style.top=`calc(${tp.y}% + ${Math.floor(i/3)*6}px)`;e.style.setProperty("--pawn-color",COLORS[i%COLORS.length]);e.title=`${p.name} • ${trackLabel(p.trackPos||0)}`;board.appendChild(e);
    (p.biz||[]).slice(0,8).forEach((b,j)=>{const bn=N(b.loc),q=document.createElement("div");q.className="building";q.style.left=`calc(${bn.x}% + ${(j%3-1)*14}px)`;q.style.top=`calc(${bn.y}% - ${14+Math.floor(j/3)*12}px)`;q.textContent="🏪";board.appendChild(q)})});
  $("players").innerHTML=players.map((p,i)=>{const nw=p.cash+(p.biz||[]).reduce((a,b)=>a+(b.value||0),0)-(p.debt||0);return `<div class="player ${p.uid===room.turnUid?"active":""}"><b>${p.name}</b><div class="money">${fmt(p.cash)}</div><small>Net ${fmt(nw)} • Debt ${fmt(p.debt)} • ${trackLabel(p.trackPos||0)}</small></div>`}).join("");
- const me=myPlayer();$("portfolio").innerHTML=(me?.biz||[]).length?(me.biz.map((b,j)=>`<div class="biz"><b>${b.name}</b><small>${N(b.loc).name} • Staff ${b.staffNow||0}/${b.staff} ${b.manager?"• Manager":""}<br>Value ${fmt(b.value)}</small><button data-hire="${j}">+ Staff</button>${(b.staffNow||0)>=b.staff&&!b.manager?`<button class="manager" data-manager="${j}">Manager RM5k</button>`:""}</div>`).join("")):`<div class="muted">Belum ada business.</div>`;
+ const me=myPlayer();$("portfolio").innerHTML=(me?.biz||[]).length?(me.biz.map((b,j)=>`<div class="biz"><b>${b.name}</b><small>${N(b.loc).name} • Staff ${b.staffNow||0}/${b.staff} ${b.manager?"• Manager":""}<br>Value ${fmt(b.value)} • CF est. ${fmt(estimatedBusinessCF(b))}</small><button data-hire="${j}">+ Staff</button>${(b.staffNow||0)>=b.staff&&!b.manager?`<button class="manager" data-manager="${j}">Lantik Manager</button>`:""}</div>`).join("")):`<div class="muted">Belum ada business.</div>`;
  document.querySelectorAll("[data-hire]").forEach(b=>b.onclick=()=>hire(+b.dataset.hire));document.querySelectorAll("[data-manager]").forEach(b=>b.onclick=()=>manager(+b.dataset.manager));
- $("marketBtn").disabled=!isHost();$("rollBtn").disabled=!isMyTurn()||!["ROLL","READY"].includes(room?.phase);$("businessBtn").disabled=!isMyTurn()||room?.phase!=="ACTION";$("loanBtn").disabled=!isMyTurn()||room?.phase!=="ACTION";$("dealBtn").disabled=!isMyTurn()||room?.phase!=="ACTION";$("cashflowBtn").disabled=!isHost();
+ $("marketBtn").disabled=!isHost();$("rollBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||!["ROLL","READY"].includes(room?.phase);$("businessBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";$("loanBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";$("dealBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";$("cashflowBtn").disabled=!isHost();
 }
 
 $("marketBtn").onclick=async()=>{
@@ -808,14 +1055,24 @@ async function animateDoubleDice(d1,d2){
 async function animatePawnSteps(steps){
  let pos=Number(myPlayer()?.trackPos||0);
  for(let i=0;i<steps;i++){
+  const previousPos=pos;
   pos=(pos+1)%TRACK.length;
+  if(previousPos===TRACK.length-1&&pos===0){
+   const cur=myPlayer();
+   if(cur){
+    const newCash=(cur.cash||0)+5000;
+    await updateDoc(playerRef(user.uid),{cash:newCash});
+    const own=players.findIndex(p=>p.uid===user.uid);if(own>=0)players[own]={...players[own],cash:newCash};
+    toast("START BONUS +RM5,000");log(cur.name+" lengkap satu pusingan: +RM5,000");
+   }
+  }
   const ownIndex=players.findIndex(p=>p.uid===user.uid);
   if(ownIndex>=0)players[ownIndex]={...players[ownIndex],trackPos:pos};
   render();
   const point=trackPoint(pos),flash=document.createElement("div");flash.className="trackStepFlash";flash.style.left=point.x+"%";flash.style.top=point.y+"%";$("board").appendChild(flash);setTimeout(()=>flash.remove(),360);
   await updateDoc(playerRef(user.uid),{trackPos:pos});
   try{navigator.vibrate?.(10)}catch(_){}
-  await new Promise(r=>setTimeout(r,265));
+  await new Promise(r=>setTimeout(r,305));
  }
  return pos;
 }
@@ -826,34 +1083,47 @@ $("rollBtn").onclick=async()=>{
  await updateDoc(roomRef(),{dice1:d1,dice2:d2,dice:total,move:total,phase:"ROLLING"});
  await animateDoubleDice(d1,d2);
  await updateDoc(roomRef(),{phase:"MOVING"});
- await animatePawnSteps(total);
+ const finalPos=await animatePawnSteps(total);
  await updateDoc(roomRef(),{move:0,phase:"ACTION"});
  toast(`${d1} + ${d2} = ${total} langkah`);
+ await resolveLandingTile(finalPos);
 };
 $("businessBtn").onclick=()=>{
- if(!isMyTurn())return;const me=myPlayer(),seed=((room.round||0)*5+nodes.findIndex(n=>n.id===me.loc)*3)%B.length;
+ if(!isMyTurn())return;const me=myPlayer(),seed=((room.round||0)*5+(me.trackPos||0)*3)%B.length;
  const offers=[B[seed%B.length],B[(seed+3)%B.length],B[(seed+7)%B.length],B[(seed+11)%B.length]];
  $("offers").innerHTML=offers.map(b=>`<div class="offer"><h4>${b.name}</h4><div class="muted">Open ${fmt(b.cost)} • Value ${fmt(b.value)}<br>CF +${fmt(b.rev-b.op)} • Staff ${b.staff}</div><button data-buy="${b.id}">OPEN BUSINESS</button></div>`).join("");
  document.querySelectorAll("[data-buy]").forEach(x=>x.onclick=()=>buy(x.dataset.buy));$("businessModal").classList.add("show");
 };
 async function buy(id){
- const b=B.find(x=>x.id===id),me=myPlayer();if(me.cash<b.cost)return toast("Cash tak cukup");const owned=(me.biz||[]).filter(x=>!x.manager).length;if(owned>=2)return toast("Owner Capacity penuh");
- await updateDoc(playerRef(user.uid),{cash:me.cash-b.cost,biz:arrayUnion({...b,loc:me.loc,staffNow:0,manager:false})});$("businessModal").classList.remove("show");log(`${me.name} buka ${b.name}`);
+ const b=B.find(x=>x.id===id),me=myPlayer();if(me.bankrupt)return toast("Anda sudah bankrupt");if(me.cash<b.cost)return toast("Cash tak cukup");const owned=ownerCapacityUsed(me);if(owned>=2)return toast("Owner Capacity penuh • lantik Manager dahulu");
+ await updateDoc(playerRef(user.uid),{cash:me.cash-b.cost,biz:arrayUnion({...b,loc:businessLocationForTrack(me.trackPos||0),staffNow:0,manager:false})});$("businessModal").classList.remove("show");log(`${me.name} buka ${b.name}`);
 }
 async function hire(i){
- const me=myPlayer(),biz=[...(me.biz||[])],b={...biz[i]};if(me.cash<1000)return toast("Cash tak cukup");if((b.staffNow||0)>=b.staff)return;
- b.staffNow=(b.staffNow||0)+1;biz[i]=b;await updateDoc(playerRef(user.uid),{cash:me.cash-1000,biz});
+ const me=myPlayer(),biz=[...(me.biz||[])],b={...biz[i]};
+ if(me.bankrupt)return toast("Anda sudah bankrupt");
+ if((b.staffNow||0)>=b.staff)return toast("Staff dah penuh");
+ const hireCost=b.cost>=100000?2500:(b.cost>=30000?1500:1000);
+ if(me.cash<hireCost)return toast("Cash tak cukup");
+ b.staffNow=(b.staffNow||0)+1;biz[i]=b;
+ await updateDoc(playerRef(user.uid),{cash:me.cash-hireCost,biz});
+ toast(`Hire staff -${fmt(hireCost)}`);
 }
 async function manager(i){
- const me=myPlayer(),biz=[...(me.biz||[])],b={...biz[i]};if(me.cash<5000)return toast("Cash tak cukup");b.manager=true;biz[i]=b;await updateDoc(playerRef(user.uid),{cash:me.cash-5000,biz});
+ const me=myPlayer(),biz=[...(me.biz||[])],b={...biz[i]};
+ if(me.bankrupt)return toast("Anda sudah bankrupt");
+ if(b.manager)return toast("Manager dah ada");
+ if((b.staffNow||0)<(b.staff||0))return toast("Lengkapkan staff dahulu");
+ const managerCost=b.cost>=100000?10000:5000;
+ if(me.cash<managerCost)return toast("Cash tak cukup");
+ b.manager=true;biz[i]=b;
+ await updateDoc(playerRef(user.uid),{cash:me.cash-managerCost,biz});
+ toast(`Manager dilantik -${fmt(managerCost)} • Owner Capacity dibebaskan`);
 }
-$("loanBtn").onclick=()=>{
- const L=[["Micro Loan",10000,3000,4],["SME Loan",30000,8000,4],["Growth Loan",100000,27000,4]];
- $("loans").innerHTML=L.map((l,i)=>`<div class="offer" style="margin-bottom:7px"><h4>${l[0]}</h4><div class="muted">Terima ${fmt(l[1])} • Bayar ${fmt(l[2])} × ${l[3]}</div><button data-loan="${i}">AMBIL</button></div>`).join("");
+$("loanBtn").onclick=()=>{ const L=[["Micro Loan",10000,3000,4,0],["SME Loan",30000,8000,4,2],["Growth Loan",100000,27000,4,5]];
+ const me=myPlayer();$("loans").innerHTML=L.map((l,i)=>`<div class="offer" style="margin-bottom:7px"><h4>${l[0]}</h4><div class="muted">Terima ${fmt(l[1])} • Bayar ${fmt(l[2])} × ${l[3]} • Min Rep ${l[4]}</div><button data-loan="${i}" ${((me?.rep||0)<l[4])?"disabled":""}>${((me?.rep||0)<l[4])?"REP TAK CUKUP":"AMBIL"}</button></div>`).join("");
  document.querySelectorAll("[data-loan]").forEach(x=>x.onclick=()=>takeLoan(+x.dataset.loan));$("loanModal").classList.add("show");
 };
-async function takeLoan(i){
- const L=[["Micro Loan",10000,3000,4],["SME Loan",30000,8000,4],["Growth Loan",100000,27000,4]][i],me=myPlayer();
+async function takeLoan(i){ const L=[["Micro Loan",10000,3000,4,0],["SME Loan",30000,8000,4,2],["Growth Loan",100000,27000,4,5]][i],me=myPlayer(); if((me.rep||0)<L[4])return toast("Reputasi tak cukup");
  await updateDoc(playerRef(user.uid),{cash:me.cash+L[1],debt:(me.debt||0)+L[2]*L[3],loans:arrayUnion({name:L[0],pay:L[2],left:L[3]})});$("loanModal").classList.remove("show");
 }
 $("dealBtn").onclick=()=>{
@@ -869,13 +1139,38 @@ $("cashflowBtn").onclick=async()=>{
  if(!isHost())return;
  const m=room.market||{};
  for(const p of players){
-   let cf=0;for(const b of (p.biz||[])){let x=(b.rev||0)-(b.op||0);if(m.all)x+=m.all;if(m.cat===b.cat)x+=m.bonus||0;if(m.cats?.includes(b.cat))x+=m.bonus||0;cf+=x}
-   let loans=[...(p.loans||[])],repay=0;loans=loans.map(l=>{if(l.left>0){repay+=l.pay;return {...l,left:l.left-1}}return l});
-   await updateDoc(playerRef(p.uid),{cash:p.cash+cf-repay,debt:Math.max(0,(p.debt||0)-repay),loans});
+   if(p.bankrupt)continue;
+   let cf=0;
+   for(const b of (p.biz||[])){
+     let x=estimatedBusinessCF(b);
+     if(m.all)x+=m.all;
+     if(m.cat===b.cat)x+=m.bonus||0;
+     if(m.cats?.includes(b.cat))x+=m.bonus||0;
+     cf+=x;
+   }
+   let loans=[...(p.loans||[])],repay=0;
+   loans=loans.map(l=>{if(l.left>0){repay+=l.pay;return {...l,left:l.left-1}}return l});
+   const cashAfter=(p.cash||0)+cf-repay;
+   const debtAfter=Math.max(0,(p.debt||0)-repay);
+   await updateDoc(playerRef(p.uid),{cash:Math.max(0,cashAfter),debt:debtAfter,loans});
  }
- const idx=players.findIndex(p=>p.uid===room.turnUid),next=players[(idx+1)%players.length];
+ // Refresh local players before evaluating bankruptcy.
+ for(const p of players){
+   const projected={...p};
+   if(!p.bankrupt){
+     const snap=await getDoc(playerRef(p.uid));
+     if(snap.exists())Object.assign(projected,snap.data());
+     await checkBankruptcy(projected);
+   }
+ }
+ const next=nextActivePlayer(room.turnUid);
+ if(!next){
+   await updateDoc(roomRef(),{status:"finished",phase:"FINISHED"});
+   log("Game tamat: tiada Founder aktif.");
+   return;
+ }
  await updateDoc(roomRef(),{turnUid:next.uid,phase:"ROLL",move:0,dice:0,dice1:0,dice2:0});
- log("Cashflow settled.");
+ log("Cashflow settled • next Founder.");
 };
 
 function log(t){$("log").innerHTML=`<div>${t}</div>`+$("log").innerHTML}
@@ -1003,6 +1298,15 @@ splashSkip?.addEventListener("click",finishSplash);
 if("serviceWorker" in navigator){
   window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 }
+
+// Rules / rule book
+function openRules(){ $("rulesModal").classList.add("show"); }
+function closeRules(){ $("rulesModal").classList.remove("show"); }
+$("rulesBtn").onclick=openRules;
+$("rulesCloseX").onclick=closeRules;
+$("rulesDone").onclick=closeRules;
+$("rulesModal").addEventListener("click",e=>{if(e.target===$("rulesModal"))closeRules()});
+
 </script>
 </body>
 </html>
