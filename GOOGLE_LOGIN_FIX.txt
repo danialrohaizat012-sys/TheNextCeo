@@ -1,0 +1,28 @@
+KELANTAN NEXT CEO ONLINE V0.4.2 — GOOGLE LOGIN FIX
+
+Main fix:
+- Desktop browser: Google sign-in uses signInWithPopup.
+- iPhone / Android / installed PWA: Google sign-in uses signInWithRedirect.
+- If desktop popup is blocked, app automatically falls back to redirect.
+- getRedirectResult() handles return from Google authentication.
+- Added visible Google Auth diagnostic status.
+
+IMPORTANT FIREBASE CONSOLE CHECK:
+Authentication > Settings > Authorized domains
+
+Make sure the domain you are opening the game from is listed.
+For Firebase Hosting, these are normally:
+- thenextceo-35473.web.app
+- thenextceo-35473.firebaseapp.com
+
+If using another domain / GitHub Pages / Netlify / custom domain, add that exact hostname too.
+
+Also verify:
+Authentication > Sign-in method > Google = ENABLED.
+
+TEST:
+1. Deploy V0.4.2.
+2. Open the HTTPS deployed URL, not file://.
+3. On phone, tap Continue with Google.
+4. Browser/PWA should redirect to Google account selection.
+5. After selecting account, it should return to the game.

@@ -1,4 +1,4 @@
-const CACHE="knc-online-v041-connected";
+const CACHE="knc-online-v042-googleauthfix";
 const ASSETS=["./","./index.html","./manifest.json","./board.png","./brand-logo.png","./splash-logo.png","./icon-192.png","./icon-512.png","./icon-maskable-192.png","./icon-maskable-512.png","./apple-touch-icon.png","./firebase-config.js","./splash-static.jpg"];
 self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS))));
 self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))));
