@@ -10,6 +10,7 @@
 <title>Kelantan Next CEO Online</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
 :root{
  --bg:#07111b;--panel:#0d1924;--panel2:#112334;--line:#223849;--text:#f5f7f9;--muted:#91a2ae;
@@ -28,32 +29,125 @@ body{
 button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 
 #splash{
- position:fixed;inset:0;z-index:5000;background:#03080d;overflow:hidden;
- display:block;color:white
+ position:fixed;inset:0;z-index:5000;overflow:hidden;
+ background:
+   radial-gradient(circle at 50% 46%,rgba(23,109,153,.13),transparent 24%),
+   radial-gradient(circle at 50% 46%,rgba(227,52,45,.12),transparent 32%),
+   linear-gradient(180deg,#03070b 0%,#07101a 55%,#020507 100%);
+ color:white;display:flex;align-items:center;justify-content:center;
 }
-.splashStage{position:absolute;inset:0;opacity:0;transition:opacity .7s ease,transform 2.4s cubic-bezier(.2,.8,.2,1);transform:scale(1.035)}
-.splashStage.active{opacity:1;transform:scale(1)}
-.splashStage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block}
-.splashShade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(2,7,12,.10),rgba(2,7,12,.02) 48%,rgba(2,7,12,.68));z-index:2;pointer-events:none}
-.splashFx{position:absolute;inset:0;z-index:3;pointer-events:none}
-.splashFx:before{
- content:"";position:absolute;left:50%;top:44%;width:58vw;height:58vw;max-width:520px;max-height:520px;
+.splashScene{position:absolute;inset:0;overflow:hidden}
+.splashGrid{
+ position:absolute;inset:-20%;
+ background:
+  linear-gradient(rgba(89,180,224,.055) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(89,180,224,.055) 1px,transparent 1px);
+ background-size:34px 34px;
+ transform:perspective(700px) rotateX(63deg) translateY(40%);
+ transform-origin:center bottom;
+ opacity:.32;
+ animation:gridMove 5s linear infinite
+}
+@keyframes gridMove{to{background-position:0 34px,34px 0}}
+.splashOrb{
+ position:absolute;left:50%;top:47%;width:min(76vw,560px);aspect-ratio:1;
  transform:translate(-50%,-50%);border-radius:50%;
- background:radial-gradient(circle,rgba(33,183,255,.17),rgba(255,59,48,.07) 38%,transparent 70%);
- filter:blur(7px);animation:splashPulse 1.5s ease-in-out infinite alternate
+ border:1px solid rgba(70,190,255,.16);
+ box-shadow:
+  0 0 60px rgba(58,176,235,.10),
+  inset 0 0 80px rgba(58,176,235,.06);
+ animation:orbPulse 2.5s ease-in-out infinite alternate
 }
-@keyframes splashPulse{to{transform:translate(-50%,-50%) scale(1.12);opacity:.45}}
+.splashOrb:before,.splashOrb:after{
+ content:"";position:absolute;border-radius:50%;inset:11%;
+ border:1px solid rgba(255,75,58,.12)
+}
+.splashOrb:after{inset:25%;border-color:rgba(255,194,77,.12)}
+@keyframes orbPulse{to{transform:translate(-50%,-50%) scale(1.045);opacity:.74}}
+
+.kelantanHero{
+ position:absolute;left:50%;top:49%;
+ width:min(47vw,330px);height:min(67vw,470px);
+ transform:translate(-50%,-50%);
+ animation:heroFloat 4.4s ease-in-out infinite;
+ filter:drop-shadow(0 0 20px rgba(230,54,47,.50)) drop-shadow(0 0 42px rgba(241,178,60,.13))
+}
+.kelantanShape{
+ position:absolute;inset:0;
+ background:
+  radial-gradient(circle at 51% 24%,#ffcf62 0 2px,transparent 3px),
+  radial-gradient(circle at 45% 34%,#ffcf62 0 2px,transparent 3px),
+  radial-gradient(circle at 58% 42%,#ffcf62 0 2px,transparent 3px),
+  radial-gradient(circle at 48% 54%,#ffcf62 0 2px,transparent 3px),
+  radial-gradient(circle at 42% 67%,#ffcf62 0 2px,transparent 3px),
+  linear-gradient(155deg,#ef4a3e 0%,#c32827 46%,#7e1116 100%);
+ clip-path:polygon(
+   40% 0%,58% 5%,70% 13%,79% 24%,87% 37%,85% 49%,
+   79% 61%,72% 71%,67% 82%,59% 94%,50% 100%,42% 94%,
+   34% 86%,28% 78%,22% 67%,16% 56%,12% 43%,14% 31%,
+   20% 19%,28% 9%
+ );
+ border-radius:18px;
+ box-shadow:inset 0 0 0 2px rgba(255,208,100,.45),inset -18px -28px 45px rgba(68,0,9,.42)
+}
+.kelantanShape:before{
+ content:"";position:absolute;inset:0;
+ background:
+  linear-gradient(118deg,transparent 0 46%,rgba(255,222,130,.40) 47%,transparent 48%),
+  linear-gradient(68deg,transparent 0 52%,rgba(255,222,130,.28) 53%,transparent 54%),
+  linear-gradient(160deg,transparent 0 62%,rgba(255,222,130,.22) 63%,transparent 64%);
+ opacity:.42;mix-blend-mode:screen
+}
+.kelantanShape:after{
+ content:"";position:absolute;left:46%;top:18%;width:8%;height:64%;
+ background:linear-gradient(180deg,rgba(53,181,229,.95),rgba(73,132,191,.25));
+ border-radius:999px;transform:rotate(7deg);
+ box-shadow:0 0 12px rgba(66,187,236,.40)
+}
+@keyframes heroFloat{0%,100%{transform:translate(-50%,-50%) translateY(0) rotate(-1deg)}50%{transform:translate(-50%,-50%) translateY(-9px) rotate(1deg)}}
+
+.scanline{
+ position:absolute;left:50%;top:18%;width:min(54vw,390px);height:3px;
+ transform:translateX(-50%);
+ background:linear-gradient(90deg,transparent,rgba(255,220,121,.9),transparent);
+ filter:blur(.3px);opacity:.0;
+ animation:scan 2.8s .7s ease-in-out infinite
+}
+@keyframes scan{
+ 0%{top:20%;opacity:0}12%{opacity:.7}50%{opacity:.45}88%{opacity:.7}100%{top:78%;opacity:0}
+}
+
+.spark{position:absolute;width:3px;height:3px;border-radius:50%;background:#ffcf62;box-shadow:0 0 8px #ffcf62;opacity:.0;animation:spark 3.6s infinite}
+.spark.s1{left:34%;top:34%;animation-delay:.4s}.spark.s2{left:66%;top:40%;animation-delay:1.1s}.spark.s3{left:41%;top:65%;animation-delay:1.8s}.spark.s4{left:59%;top:70%;animation-delay:2.5s}
+@keyframes spark{0%,100%{opacity:0;transform:translateY(7px) scale(.7)}35%,60%{opacity:1;transform:translateY(-7px) scale(1)}}
+
+.splashContent{
+ position:absolute;left:0;right:0;top:calc(54px + env(safe-area-inset-top,0px));
+ z-index:10;text-align:center;padding:0 24px;
+ animation:contentIn 1s .15s ease both
+}
+.splashBrand{display:block;width:min(430px,86vw);margin:auto;filter:drop-shadow(0 10px 20px rgba(0,0,0,.45))}
+@keyframes contentIn{from{opacity:0;transform:translateY(-12px) scale(.96)}to{opacity:1;transform:none}}
+
 .splashBottom{
  position:absolute;left:0;right:0;bottom:calc(28px + env(safe-area-inset-bottom,0px));
- z-index:4;text-align:center;padding:0 22px
+ z-index:12;text-align:center;padding:0 24px
 }
-.splashTag{font-size:12px;font-weight:900;letter-spacing:.35px;color:#f7d779;text-shadow:0 2px 12px #000}
-.splashStatus{margin-top:8px;font-size:9px;letter-spacing:1.7px;color:#c4d0d8;font-weight:900}
-.splashProgress{width:min(330px,78vw);height:7px;margin:13px auto 0;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden;border:1px solid rgba(255,255,255,.14)}
-.splashProgress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#e4372f,#f0b94a);box-shadow:0 0 12px rgba(240,185,74,.42);transition:width .6s ease}
-.splashDots{display:flex;justify-content:center;gap:6px;margin-top:12px}
-.splashDots i{display:block;width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.25);transition:.25s}
-.splashDots i.active{background:#f0b94a;transform:scale(1.3)}
+.splashTag{font-size:13px;font-weight:1000;letter-spacing:.25px;color:#f7d779;text-shadow:0 2px 12px #000}
+.splashStatus{margin-top:7px;font-size:9px;letter-spacing:1.6px;color:#aebec9;font-weight:900}
+.splashProgress{width:min(330px,78vw);height:7px;margin:13px auto 0;border-radius:999px;background:rgba(255,255,255,.10);overflow:hidden;border:1px solid rgba(255,255,255,.12)}
+.splashProgress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#d72e31,#f0b94a);box-shadow:0 0 13px rgba(240,185,74,.42);animation:cinematicLoad 3.8s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes cinematicLoad{to{width:100%}}
+.splashVersion{font-size:7px;letter-spacing:1.4px;color:#566875;margin-top:9px;font-weight:900}
+@media(max-width:680px){
+ .kelantanHero{width:min(58vw,295px);height:min(82vw,420px);top:50%}
+ .splashContent{top:calc(36px + env(safe-area-inset-top,0px))}
+ .splashBrand{width:min(360px,82vw)}
+}
+@media(prefers-reduced-motion:reduce){
+ .splashGrid,.splashOrb,.kelantanHero,.scanline,.spark{animation:none!important}
+ .splashProgress span{animation-duration:.1s}
+}
 
 
 .app{max-width:1560px;margin:auto;padding:calc(10px + var(--safe-top)) 12px calc(92px + var(--safe-bottom))}
@@ -154,23 +248,23 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 </head>
 <body>
 <div id="splash">
-  <div class="splashStage active" data-stage="0"><img src="splash-frame-1.jpg" alt=""></div>
-  <div class="splashStage" data-stage="1"><img src="splash-frame-2.jpg" alt=""></div>
-  <div class="splashStage" data-stage="2"><img src="splash-frame-3.jpg" alt=""></div>
-  <div class="splashStage" data-stage="3"><img src="splash-frame-4.jpg" alt=""></div>
-  <div class="splashShade"></div>
-  <div class="splashFx"></div>
+  <div class="splashScene">
+    <div class="splashGrid"></div>
+    <div class="splashOrb"></div>
+    <div class="kelantanHero"><div class="kelantanShape"></div></div>
+    <div class="scanline"></div>
+    <i class="spark s1"></i><i class="spark s2"></i><i class="spark s3"></i><i class="spark s4"></i>
+  </div>
+  <div class="splashContent">
+    <img class="splashBrand" src="brand-logo.png" alt="Kelantan Next CEO Online">
+  </div>
   <div class="splashBottom">
     <div class="splashTag">Bina Bisnes. Bangun Kelantan.</div>
-    <div class="splashStatus" id="splashStatus">MEMULAKAN MARKET</div>
-    <div class="splashProgress"><span id="splashBar"></span></div>
-    <div class="splashDots">
-      <i class="active"></i><i></i><i></i><i></i>
-    </div>
+    <div class="splashStatus">PREPARING THE MARKET</div>
+    <div class="splashProgress"><span></span></div>
+    <div class="splashVersion">ONLINE MULTIPLAYER • FOUNDER EDITION</div>
   </div>
 </div>
-</div>
-
 <div class="app">
   <div class="topbar">
     <div class="brand">
@@ -462,41 +556,14 @@ tabs.forEach(btn=>btn.addEventListener("click",()=>{
   document.getElementById(btn.dataset.tab)?.classList.add("mobileShow");
 }));
 
-// --- Commercial 4-stage splash sequence ---
-const splashStages=[...document.querySelectorAll(".splashStage")];
-const splashDots=[...document.querySelectorAll(".splashDots i")];
-const splashBar=document.getElementById("splashBar");
-const splashStatus=document.getElementById("splashStatus");
-const splashCopy=[
-  "MEMULAKAN MARKET",
-  "MEMBINA PETA KELANTAN",
-  "MENYEDIAKAN EMPAYAR",
-  "READY TO BUILD EMPIRE"
-];
-let splashIndex=0;
+// --- Continuous cinematic splash ---
 const splashRoot=document.getElementById("splash");
-
-function showSplashStage(i){
-  splashStages.forEach((el,j)=>el.classList.toggle("active",j===i));
-  splashDots.forEach((el,j)=>el.classList.toggle("active",j===i));
-  splashStatus.textContent=splashCopy[i];
-  splashBar.style.width=((i+1)/splashStages.length*100)+"%";
-}
-showSplashStage(0);
-
-const splashTimer=setInterval(()=>{
-  splashIndex++;
-  if(splashIndex<splashStages.length){
-    showSplashStage(splashIndex);
-  }else{
-    clearInterval(splashTimer);
-    setTimeout(()=>{
-      splashRoot.style.transition="opacity .5s ease";
-      splashRoot.style.opacity="0";
-      setTimeout(()=>splashRoot.remove(),520);
-    },650);
-  }
-},850);
+setTimeout(()=>{
+  splashRoot.style.transition="opacity .65s ease, transform .65s ease";
+  splashRoot.style.opacity="0";
+  splashRoot.style.transform="scale(1.015)";
+  setTimeout(()=>splashRoot.remove(),680);
+},4200);
 
 // --- Service worker ---
 if("serviceWorker" in navigator){
