@@ -1,0 +1,12 @@
+KELANTAN NEXT CEO : START UP — V0.5.9
+
+NEW DICE EXPERIENCE
+- Roll button now launches a full-screen physical-style 3D dice animation.
+- Dice drops, tumbles, bounces and settles.
+- Final visible face matches the actual random result.
+- Result appears briefly before returning to the board.
+- Mobile vibration added when supported.
+- Roll button is temporarily locked during animation to prevent double rolls.
+- Firebase room state is updated after the animation, so movement begins only after the result is revealed.
+- Responsive for phone/tablet/desktop.
+- Reduced-motion accessibility fallback included.

@@ -250,6 +250,74 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
  margin-top:9px;color:#7d5d3b;font-size:9px;letter-spacing:1px;font-weight:800
 }
 
+
+/* ===== V0.5.9 REAL DICE ROLL ===== */
+.diceRollOverlay{
+ position:fixed;inset:0;z-index:4500;display:none;align-items:center;justify-content:center;
+ background:rgba(4,6,8,.70);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+ opacity:0;transition:opacity .18s ease
+}
+.diceRollOverlay.show{display:flex;opacity:1}
+.diceRollStage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;perspective:900px}
+.diceRollWho{
+ color:#f2e7cf;font-family:Georgia,serif;font-size:14px;font-weight:800;letter-spacing:1.5px;
+ text-transform:uppercase;text-shadow:0 2px 10px #000
+}
+.dice3d{
+ width:92px;height:92px;position:relative;transform-style:preserve-3d;
+ transform:rotateX(-18deg) rotateY(24deg);
+ filter:drop-shadow(0 22px 22px rgba(0,0,0,.55))
+}
+.dice3d.rolling{animation:diceTumble 1.35s cubic-bezier(.16,.74,.2,1) forwards}
+@keyframes diceTumble{
+ 0%{transform:translateY(-135px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(.72)}
+ 16%{transform:translateY(-40px) rotateX(250deg) rotateY(180deg) rotateZ(95deg) scale(.96)}
+ 38%{transform:translateY(18px) rotateX(590deg) rotateY(430deg) rotateZ(210deg) scale(1.04)}
+ 52%{transform:translateY(-20px) rotateX(760deg) rotateY(570deg) rotateZ(275deg) scale(1)}
+ 70%{transform:translateY(5px) rotateX(930deg) rotateY(720deg) rotateZ(330deg) scale(1)}
+ 84%{transform:translateY(-6px) rotateX(1010deg) rotateY(795deg) rotateZ(350deg) scale(1)}
+ 100%{transform:translateY(0) rotateX(1080deg) rotateY(900deg) rotateZ(360deg) scale(1)}
+}
+.diceFace{
+ position:absolute;width:92px;height:92px;border-radius:17px;
+ background:linear-gradient(145deg,#fffaf0,#e8dec9);
+ border:2px solid #b89658;box-shadow:inset -7px -8px 14px rgba(82,58,28,.16),inset 4px 4px 9px rgba(255,255,255,.86);
+ backface-visibility:hidden
+}
+.diceFace.front{transform:translateZ(46px)}
+.diceFace.back{transform:rotateY(180deg) translateZ(46px)}
+.diceFace.right{transform:rotateY(90deg) translateZ(46px)}
+.diceFace.left{transform:rotateY(-90deg) translateZ(46px)}
+.diceFace.top{transform:rotateX(90deg) translateZ(46px)}
+.diceFace.bottom{transform:rotateX(-90deg) translateZ(46px)}
+.pip{position:absolute;width:15px;height:15px;border-radius:50%;background:#451419;box-shadow:inset 2px 2px 3px rgba(0,0,0,.5)}
+.pip.tl{left:16px;top:16px}.pip.tc{left:37px;top:16px}.pip.tr{right:16px;top:16px}
+.pip.ml{left:16px;top:37px}.pip.mc{left:37px;top:37px}.pip.mr{right:16px;top:37px}
+.pip.bl{left:16px;bottom:16px}.pip.bc{left:37px;bottom:16px}.pip.br{right:16px;bottom:16px}
+.diceResult{
+ min-width:160px;text-align:center;padding:10px 18px;border-radius:999px;
+ color:#f4e6c9;background:linear-gradient(135deg,#6f171b,#3a0c0f);
+ border:1px solid #c99b4b;font-size:13px;font-weight:1000;letter-spacing:.8px;
+ box-shadow:0 10px 25px rgba(0,0,0,.34);opacity:0;transform:translateY(8px) scale(.95);
+ transition:.2s ease
+}
+.diceResult.show{opacity:1;transform:none}
+.diceGround{
+ position:absolute;width:150px;height:28px;border-radius:50%;background:rgba(0,0,0,.38);
+ filter:blur(7px);transform:translateY(68px);animation:groundPulse 1.35s ease both
+}
+@keyframes groundPulse{0%{opacity:.12;transform:translateY(68px) scale(.6)}50%{opacity:.55;transform:translateY(68px) scale(1.1)}100%{opacity:.36;transform:translateY(68px) scale(.9)}}
+@media(max-width:680px){
+ .dice3d,.diceFace{width:78px;height:78px}.diceFace{border-radius:14px}
+ .diceFace.front{transform:translateZ(39px)}.diceFace.back{transform:rotateY(180deg) translateZ(39px)}
+ .diceFace.right{transform:rotateY(90deg) translateZ(39px)}.diceFace.left{transform:rotateY(-90deg) translateZ(39px)}
+ .diceFace.top{transform:rotateX(90deg) translateZ(39px)}.diceFace.bottom{transform:rotateX(-90deg) translateZ(39px)}
+ .pip{width:12px;height:12px}.pip.tl{left:13px;top:13px}.pip.tc{left:31px;top:13px}.pip.tr{right:13px;top:13px}
+ .pip.ml{left:13px;top:31px}.pip.mc{left:31px;top:31px}.pip.mr{right:13px;top:31px}
+ .pip.bl{left:13px;bottom:13px}.pip.bc{left:31px;bottom:13px}.pip.br{right:13px;bottom:13px}
+}
+@media(prefers-reduced-motion:reduce){.dice3d.rolling{animation:none}.diceGround{animation:none}}
+
 </style>
 <script>
 (function(){
@@ -267,7 +335,7 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
     <div class="splashProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <span class="splashProgressBar" id="splashProgressBar"></span>
     </div>
-    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V0.5.8</div><div class="splashCredit">Developed by BinaLab</div>
+    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V0.5.9</div><div class="splashCredit">Developed by BinaLab</div>
     <button type="button" class="splashSkip" id="splashSkip">TERUSKAN</button>
   </div>
 </div>
@@ -319,6 +387,25 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 <footer style="text-align:center;padding:14px 8px calc(10px + env(safe-area-inset-bottom,0px));color:#7f8d97;font-size:9px;letter-spacing:.7px;font-weight:800">
   Developed by <span style="color:#c79a43">BinaLab</span>
 </footer>
+
+
+<div class="diceRollOverlay" id="diceRollOverlay" aria-hidden="true">
+  <div class="diceRollStage">
+    <div class="diceRollWho" id="diceRollWho">ROLLING DICE</div>
+    <div style="position:relative">
+      <div class="diceGround"></div>
+      <div class="dice3d" id="dice3d" aria-label="Animated dice">
+        <div class="diceFace front" id="diceFront"></div>
+        <div class="diceFace back"><span class="pip tl"></span><span class="pip tr"></span><span class="pip bl"></span><span class="pip br"></span><span class="pip ml"></span><span class="pip mr"></span></div>
+        <div class="diceFace right"><span class="pip tl"></span><span class="pip tr"></span><span class="pip mc"></span><span class="pip bl"></span><span class="pip br"></span></div>
+        <div class="diceFace left"><span class="pip tl"></span><span class="pip tr"></span><span class="pip bl"></span><span class="pip br"></span></div>
+        <div class="diceFace top"><span class="pip tl"></span><span class="pip br"></span><span class="pip mc"></span></div>
+        <div class="diceFace bottom"><span class="pip mc"></span></div>
+      </div>
+    </div>
+    <div class="diceResult" id="diceResult">DICE: 1</div>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -690,8 +777,66 @@ $("marketBtn").onclick=async()=>{
  await updateDoc(roomRef(),{round:nextRound,market:m,phase:"ROLL",turnUid:first.uid,move:0,dice:0});
  log(`Round ${nextRound}: ${m.name}`);
 };
+
+function dicePips(value){
+ const positions={
+   1:["mc"],
+   2:["tl","br"],
+   3:["tl","mc","br"],
+   4:["tl","tr","bl","br"],
+   5:["tl","tr","mc","bl","br"],
+   6:["tl","tr","ml","mr","bl","br"]
+ };
+ return (positions[value]||[]).map(pos=>`<span class="pip ${pos}"></span>`).join("");
+}
+
+async function animateDiceRoll(value){
+ const overlay=document.getElementById("diceRollOverlay");
+ const dice=document.getElementById("dice3d");
+ const front=document.getElementById("diceFront");
+ const result=document.getElementById("diceResult");
+ const who=document.getElementById("diceRollWho");
+ const me=myPlayer?.();
+ if(!overlay||!dice)return;
+
+ who.textContent=(me?.name||"FOUNDER")+" IS ROLLING";
+ front.innerHTML=dicePips(value);
+ result.textContent="DICE: "+value;
+ result.classList.remove("show");
+
+ overlay.style.display="flex";
+ overlay.setAttribute("aria-hidden","false");
+ requestAnimationFrame(()=>overlay.classList.add("show"));
+
+ // Restart CSS animation every roll.
+ dice.classList.remove("rolling");
+ void dice.offsetWidth;
+ dice.classList.add("rolling");
+
+ // Tiny vibration on supported phones, best-effort only.
+ try{ navigator.vibrate?.([25,35,20]); }catch(_){}
+
+ await new Promise(r=>setTimeout(r,1120));
+ result.classList.add("show");
+ await new Promise(r=>setTimeout(r,520));
+
+ overlay.classList.remove("show");
+ overlay.setAttribute("aria-hidden","true");
+ await new Promise(r=>setTimeout(r,190));
+ overlay.style.display="none";
+ dice.classList.remove("rolling");
+}
+
 $("rollBtn").onclick=async()=>{
- if(!isMyTurn())return toast("Bukan turn anda"); const d=1+Math.floor(Math.random()*6);await updateDoc(roomRef(),{dice:d,move:d,phase:"MOVE"});toast(`Dadu: ${d}`);
+ if(!isMyTurn())return toast("Bukan turn anda");
+ const btn=$("rollBtn");
+ btn.disabled=true;
+ const d=1+Math.floor(Math.random()*6);
+
+ // Show the physical-style roll first, then commit the result to the shared room.
+ await animateDiceRoll(d);
+ await updateDoc(roomRef(),{dice:d,move:d,phase:"MOVE"});
+ toast(`Dadu: ${d}`);
 };
 async function moveTo(id){
  if(!isMyTurn()||room.phase!=="MOVE"||room.move<=0)return;
