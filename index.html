@@ -186,6 +186,38 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 .firebaseStatus.ok{border-color:#2ea777;color:#a8e7ca;background:#0d211b}
 .firebaseStatus.bad{border-color:#da5b68;color:#ffc0c6;background:#261116}
 .firebaseStatus b{display:block;margin-bottom:3px;color:#f0b94a}
+
+.founderGate{padding:0!important;background:#050607!important;overflow:auto!important;align-items:flex-start!important}
+.founderGate .founderScreen{width:100%;min-height:100dvh;background:#050607;color:#f2ead8;position:relative}
+.founderHero{width:100%;height:min(64dvh,720px);min-height:430px;overflow:hidden;position:relative;background:#050607}
+.founderHero:after{content:"";position:absolute;inset:auto 0 0;height:26%;background:linear-gradient(180deg,transparent,#050607)}
+.founderHero img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+.founderPanel{
+ width:min(680px,calc(100% - 32px));margin:-26px auto 28px;position:relative;z-index:3;
+ background:linear-gradient(145deg,#101010,#070808);border:1px solid #9f7738;border-radius:25px;
+ box-shadow:0 22px 55px rgba(0,0,0,.52),inset 0 0 0 1px rgba(255,237,194,.035);
+ padding:28px 24px calc(28px + env(safe-area-inset-bottom,0px))
+}
+.founderPanel h2{text-align:center;font-family:Georgia,serif;letter-spacing:1.2px;color:#eadbc1;font-size:clamp(23px,5.8vw,36px);margin:0 0 10px}
+.founderPanel p{text-align:center;color:#aaa49a;font-size:14px;line-height:1.55;margin:0 auto 25px;max-width:520px}
+.founderPanel label{display:block;color:#c99b4b;font-family:Georgia,serif;font-weight:900;letter-spacing:.7px;margin:0 0 9px;font-size:14px}
+.founderInput{
+ width:100%;box-sizing:border-box;background:#090a0b!important;color:#f5eee0!important;
+ border:1px solid #946d31!important;border-radius:16px!important;padding:17px 18px!important;
+ min-height:58px;font-size:18px!important;outline:none;box-shadow:inset 0 0 20px rgba(0,0,0,.28)
+}
+.founderInput:focus{border-color:#c99b4b!important;box-shadow:0 0 0 3px rgba(201,155,75,.12)}
+.founderEnter{
+ width:100%;min-height:62px;margin-top:25px;border:0;border-radius:16px;cursor:pointer;
+ background:linear-gradient(110deg,#d9b56c,#c69543,#e1bc70);color:#090909;font-size:18px;
+ font-weight:1000;letter-spacing:.4px;box-shadow:0 8px 26px rgba(176,125,49,.18)
+}
+.founderEnter:active{transform:translateY(1px)}
+@media(min-width:700px){
+ .founderHero{height:700px}
+ .founderPanel{margin-top:-45px;padding:34px 38px}
+}
+
 </style>
 <script>
 (function(){
@@ -203,7 +235,7 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
     <div class="splashProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <span class="splashProgressBar" id="splashProgressBar"></span>
     </div>
-    <div class="splashTask" id="splashTask">MEMULAKAN APLIKASI</div><div style="margin-top:7px;color:#72808a;font-size:7px;font-weight:900;letter-spacing:1.2px">BUILD V0.5.5</div>
+    <div class="splashTask" id="splashTask">MEMULAKAN APLIKASI</div><div style="margin-top:7px;color:#72808a;font-size:7px;font-weight:900;letter-spacing:1.2px">BUILD V0.5.6</div>
     <button type="button" class="splashSkip" id="splashSkip">TERUSKAN</button>
   </div>
 </div>
@@ -255,16 +287,22 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 
 <div class="toast" id="toast"></div>
 
-<div class="modal show" id="gateModal"><div class="box">
-  <img src="brand-logo.png" alt="Kelantan Next CEO Online" style="display:block;width:min(390px,88%);margin:0 auto 8px">
-  <h2 style="text-align:center;margin-bottom:4px">Masuk Sebagai Founder</h2>
-  <p class="muted" style="text-align:center">Tak perlu akaun. Masukkan nama sahaja dan terus main online dengan kawan.</p>
-  <label>Nama Founder</label>
-  <input id="guestName" class="input" maxlength="24" placeholder="Contoh: Danial">
-  <div id="firebaseStatus" class="firebaseStatus"><b>ONLINE SERVER</b>Checking Firebase...</div>
-  <div id="authDebug" class="firebaseStatus"><b>GUEST SESSION</b>Belum bermula.</div>
-  <button id="guestStartBtn" class="btn gold">ENTER THE MARKET</button>
-</div></div>
+<div class="modal show founderGate" id="gateModal">
+  <div class="founderScreen">
+    <div class="founderHero">
+      <img src="founder-hero-approved.jpg" alt="">
+    </div>
+    <div class="founderPanel">
+      <h2>MASUK SEBAGAI FOUNDER</h2>
+      <p>Tak perlu akaun. Masukkan nama sahaja dan terus main online dengan kawan.</p>
+      <label>NAMA FOUNDER</label>
+      <input id="guestName" class="founderInput" maxlength="24" placeholder="Contoh: Danial">
+      <button id="guestStartBtn" class="founderEnter">ENTER THE MARKET</button>
+      <div id="firebaseStatus" style="display:none"></div>
+      <div id="authDebug" style="display:none"></div>
+    </div>
+  </div>
+</div>
 
 <div class="modal" id="homeModal"><div class="box">
   <h2>Ready to Build Empire?</h2>

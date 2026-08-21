@@ -1,10 +1,10 @@
-const CACHE="knc-online-v055-brand-splash";
+const CACHE="knc-startup-v056";
 const STATIC=[
   "./manifest.json",
   "./board.png",
   "./brand-logo.png",
   "./splash-logo.png",
-  "./commercial-splash-brand.jpg",
+  "./commercial-splash-brand.jpg","./founder-hero-approved.jpg",
   "./icon-192.png",
   "./icon-512.png",
   "./icon-maskable-192.png",

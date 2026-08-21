@@ -1,0 +1,16 @@
+KELANTAN NEXT CEO : START UP — V0.5.6
+
+Founder entry screen updated to the approved final design direction.
+
+Changes:
+- Removed visible FIREBASE READY panel.
+- Removed visible GUEST SESSION panel.
+- Removed old Kelantan Next CEO Online banner/logo block.
+- Uses approved black / deep-red / muted-gold / cream branding.
+- Main title is Kelantan Next CEO : Start Up.
+- Founder name entry remains live/functional.
+- Enter The Market remains live/functional.
+- Firebase anonymous multiplayer remains underneath.
+- Firebase/auth diagnostics remain hidden from players but code still handles errors.
+- Phone-first responsive layout.
+- PWA cache bumped to V0.5.6.
