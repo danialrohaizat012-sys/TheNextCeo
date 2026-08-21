@@ -350,7 +350,7 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, setPersistence, browserLocalPersistence, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 import {
   getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, onSnapshot,
   serverTimestamp, runTransaction, arrayUnion, increment
@@ -364,10 +364,11 @@ const configReady = firebaseConfig?.apiKey && !String(firebaseConfig.apiKey).inc
 if(firebaseStatus){
   firebaseStatus.classList.add(configReady ? "ok" : "bad");
   firebaseStatus.innerHTML = configReady
-    ? `<b>FIREBASE READY</b>Project: ${firebaseConfig.projectId}`
+    ? `<b>FIREBASE READY</b>Project: ${firebaseConfig.projectId}<br>App domain: ${location.hostname}<br>Auth domain: ${firebaseConfig.authDomain}`
     : `<b>FIREBASE CONFIG REQUIRED</b>Isi firebase-config.js dahulu.`;
 }
 const auth = getAuth(app);
+await setPersistence(auth, browserLocalPersistence).catch(e=>console.warn("Auth persistence:",e));
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
@@ -431,29 +432,45 @@ async function googleLogin(){
   }
 
   try{
-    // Installed PWA / mobile: redirect is substantially more reliable than popup.
-    if(isMobileBrowser || isStandalone){
-      await signInWithRedirect(auth,provider);
+    // Popup is attempted first on ALL platforms because it avoids redirect-storage
+    // issues on modern Safari/Chrome when authDomain differs from the app domain.
+    const result = await signInWithPopup(auth,provider);
+    if(result?.user){
+      if(authDebug){
+        authDebug.classList.add("ok");
+        authDebug.innerHTML="<b>GOOGLE AUTH CONNECTED</b>"+(result.user.email||result.user.displayName||"Signed in");
+      }
       return;
     }
-
-    // Desktop: popup gives the cleanest experience.
-    await signInWithPopup(auth,provider);
   }catch(e){
-    console.error("Google login error:", e);
-    if(authDebug){
-      authDebug.classList.add("bad");
-      authDebug.innerHTML="<b>GOOGLE AUTH ERROR</b>"+(e.code||"")+"<br>"+e.message;
-    }
+    console.error("Popup auth error:",e);
 
-    // If popup was blocked, transparently retry with redirect.
-    if(e.code==="auth/popup-blocked" || e.code==="auth/operation-not-supported-in-this-environment"){
+    // Only fallback to redirect when popup truly cannot run.
+    const redirectCodes=[
+      "auth/popup-blocked",
+      "auth/operation-not-supported-in-this-environment",
+      "auth/web-storage-unsupported"
+    ];
+
+    if(redirectCodes.includes(e.code)){
       try{
+        sessionStorage.setItem("knc_auth_redirect_pending","1");
         await signInWithRedirect(auth,provider);
         return;
       }catch(e2){
-        console.error("Redirect fallback error:", e2);
+        console.error("Redirect auth error:",e2);
+        if(authDebug){
+          authDebug.classList.add("bad");
+          authDebug.innerHTML="<b>GOOGLE AUTH ERROR</b>"+(e2.code||"")+"<br>"+e2.message;
+        }
+        alert("Google Login gagal: "+(e2.code||"")+". "+e2.message);
+        return;
       }
+    }
+
+    if(authDebug){
+      authDebug.classList.add("bad");
+      authDebug.innerHTML="<b>GOOGLE AUTH ERROR</b>"+(e.code||"")+"<br>"+e.message;
     }
     alert("Google Login gagal: "+(e.code||"")+". "+e.message);
   }
@@ -465,9 +482,13 @@ $("logoutBtn").onclick=()=>signOut(auth);
 // Resolve mobile/PWA redirect after returning from Google.
 getRedirectResult(auth).then(result=>{
   const authDebug=document.getElementById("authDebug");
-  if(result?.user && authDebug){
-    authDebug.classList.add("ok");
-    authDebug.innerHTML="<b>GOOGLE AUTH CONNECTED</b>"+(result.user.email||result.user.displayName||"Signed in");
+  if(result?.user){
+    sessionStorage.removeItem("knc_auth_redirect_pending");
+    if(authDebug){
+      authDebug.classList.add("ok");
+      authDebug.innerHTML="<b>GOOGLE AUTH CONNECTED</b>"+(result.user.email||result.user.displayName||"Signed in");
+    }
+    document.getElementById("gateModal")?.classList.remove("show");
   }
 }).catch(e=>{
   console.error("Google redirect result error:",e);

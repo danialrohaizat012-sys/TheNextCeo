@@ -1,0 +1,20 @@
+V0.4.4 AUTH PERSISTENCE FIX
+
+Changes:
+- Explicit browserLocalPersistence for Firebase Auth.
+- Google popup is now attempted FIRST on all browsers, including mobile.
+- Redirect is only used when popup is actually blocked/unsupported.
+- This avoids a common modern-browser signInWithRedirect issue where the user
+  successfully selects a Google account but Firebase cannot recover auth state
+  after returning because the auth helper domain is cross-origin.
+- Login screen now displays both App Domain and configured Auth Domain.
+
+Important:
+If App Domain is a *.web.app Firebase Hosting URL while authDomain remains
+thenextceo-35473.firebaseapp.com, signInWithRedirect can be affected by modern
+third-party storage restrictions. Popup-first avoids that for most users.
+
+If you want redirect to be fully robust too:
+- Tell us the exact deployed URL.
+- The authDomain can then be aligned with the Firebase Hosting/custom domain
+  following Firebase's redirect best practices.
