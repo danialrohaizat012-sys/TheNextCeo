@@ -1,0 +1,14 @@
+KELANTAN NEXT CEO : START UP — V0.5.7
+
+Final locked splash:
+- Uses approved cream / white + deep red + muted gold + charcoal branding.
+- Phone-first 1080x2340 composition.
+- Static loading UI from artwork removed.
+- Only functional code-driven loading bar remains.
+- Splash duration targets ~4 seconds.
+- Loading copy changed to relatable business/game phrases.
+- Small "Developed by BinaLab" credit added to splash.
+- "Developed by BinaLab" footer added under the game UI.
+- PWA cache bumped to V0.5.7.
+
+No further splash design changes included.

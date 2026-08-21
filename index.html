@@ -218,6 +218,41 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
  .founderPanel{margin-top:-45px;padding:34px 38px}
 }
 
+
+.splashCountdown{
+ margin-top:8px;color:#6f241f;font-size:12px;font-weight:900;letter-spacing:.3px
+}
+.splashLoader{
+ background:rgba(248,239,221,.92);
+ border:1px solid rgba(132,92,36,.20);
+ border-radius:18px;
+ padding:14px 16px 10px;
+ box-shadow:0 12px 30px rgba(61,32,18,.15)
+}
+.splashLoadLabel{color:#7b1f22!important;text-shadow:none!important}
+.splashLoadLabel span:last-child{color:#8e1d21!important}
+.splashTask{color:#6d5746!important;text-shadow:none!important}
+.splashProgress{
+ background:rgba(87,34,32,.12)!important;
+ border:2px solid rgba(161,111,43,.78)!important;
+ box-shadow:inset 0 0 0 1px rgba(255,255,255,.28)!important
+}
+.splashProgressBar{
+ background:linear-gradient(90deg,#7a171c 0%,#9b2424 55%,#c79a43 100%)!important;
+ box-shadow:0 0 10px rgba(153,38,37,.28)!important
+}
+.splashSkip{
+ color:#6e4e32!important;
+ background:rgba(255,250,241,.75)!important;
+ border-color:rgba(132,92,36,.22)!important
+}
+.splashBuild{
+ margin-top:9px;color:#8a745d;font-size:7px;font-weight:900;letter-spacing:1.2px
+}
+.splashCredit{
+ margin-top:9px;color:#7d5d3b;font-size:9px;letter-spacing:1px;font-weight:800
+}
+
 </style>
 <script>
 (function(){
@@ -228,14 +263,14 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 </head>
 <body>
 <div id="splash" aria-live="polite" aria-label="Loading Kelantan Next CEO">
-  <img class="splashArtwork" src="commercial-splash-brand.jpg" alt="">
+  <img class="splashArtwork" src="commercial-splash-final.jpg" alt="">
   <div class="splashOverlay"></div><div class="splashCleanShade"></div>
   <div class="splashLoader">
     <div class="splashLoadLabel"><span>MEMUATKAN...</span><span id="splashPercent">0%</span></div>
     <div class="splashProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <span class="splashProgressBar" id="splashProgressBar"></span>
     </div>
-    <div class="splashTask" id="splashTask">MEMULAKAN APLIKASI</div><div style="margin-top:7px;color:#72808a;font-size:7px;font-weight:900;letter-spacing:1.2px">BUILD V0.5.6</div>
+    <div class="splashCountdown">Bersedia dalam <b>4 saat</b></div><div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V0.5.7</div><div class="splashCredit">Developed by BinaLab</div>
     <button type="button" class="splashSkip" id="splashSkip">TERUSKAN</button>
   </div>
 </div>
@@ -284,6 +319,9 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
     </aside>
   </div>
 </div>
+<footer style="text-align:center;padding:14px 8px calc(10px + env(safe-area-inset-bottom,0px));color:#7f8d97;font-size:9px;letter-spacing:.7px;font-weight:800">
+  Developed by <span style="color:#c79a43">BinaLab</span>
+</footer>
 
 <div class="toast" id="toast"></div>
 
@@ -760,7 +798,7 @@ function setSplashProgress(value,label){
 async function finishSplash(){
   if(splashClosed)return;
   const elapsed=performance.now()-splashStartedAt;
-  if(elapsed<2400) await new Promise(r=>setTimeout(r,2400-elapsed));
+  if(elapsed<3600) await new Promise(r=>setTimeout(r,3600-elapsed));
   setSplashProgress(100,"MARKET READY");
   await new Promise(r=>setTimeout(r,250));
   splashClosed=true;
@@ -769,12 +807,12 @@ async function finishSplash(){
   setTimeout(()=>splashRoot.remove(),520);
 }
 
-setSplashProgress(8,"MEMULAKAN APLIKASI");
+setSplashProgress(8,"MERANCANG STRATEGI KEMENANGAN");
 
 (async()=>{
   try{
     // 1. DOM has already parsed to this script.
-    setSplashProgress(20,"MENYEDIAKAN ANTARAMUKA");
+    setSplashProgress(20,"MENGANALISIS PELUANG PASARAN");
 
     // 2. Confirm main board artwork is decoded.
     const boardImg=document.querySelector("#board img");
@@ -790,10 +828,10 @@ setSplashProgress(8,"MEMULAKAN APLIKASI");
         await boardImg.decode().catch(()=>{});
       }
     }
-    setSplashProgress(43,"MEMUATKAN PAPAN PERMAINAN");
+    setSplashProgress(43,"MENYEDIAKAN PAPAN PERMAINAN");
 
     // 3. Firebase SDK and configuration have already initialized above this loader.
-    setSplashProgress(configReady ? 62 : 52, configReady ? "MENGHUBUNGKAN SERVER ONLINE" : "MODE KONFIGURASI FIREBASE");
+    setSplashProgress(configReady ? 62 : 52, configReady ? "MENGHUBUNGKAN USAHAWAN KELANTAN" : "MENYEDIAKAN MARKET");
 
     // 4. Wait briefly for anonymous auth state to resolve.
     await new Promise(resolve=>{
@@ -812,16 +850,16 @@ setSplashProgress(8,"MEMULAKAN APLIKASI");
         resolve();
       },1200);
     });
-    setSplashProgress(78,"MENYEDIAKAN MULTIPLAYER");
+    setSplashProgress(78,"MENYEDIAKAN MULTIPLAYER ONLINE");
 
     // 5. Service worker registration is attempted below. App itself is usable without it.
-    setSplashProgress(90,"MENYEDIAKAN PWA");
+    setSplashProgress(90,"MENYEDIAKAN PENGALAMAN TERBAIK");
 
     await new Promise(r=>setTimeout(r,220));
     await finishSplash();
   }catch(err){
     console.warn("Splash loader fallback:",err);
-    setSplashProgress(96,"MENYEDIAKAN GAME");
+    setSplashProgress(96,"HAMPIR SEDIA");
     await finishSplash();
   }
 })();
