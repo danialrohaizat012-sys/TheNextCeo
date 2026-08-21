@@ -1,0 +1,21 @@
+BEFORE TESTING
+[ ] firebase-config.js filled
+[ ] Google Authentication enabled
+[ ] Firestore created
+[ ] firestore.rules published
+[ ] deployed domain added to Authorized domains
+[ ] app deployed over HTTPS
+[ ] old PWA uninstalled before reinstalling latest build
+
+MULTIPLAYER TEST
+[ ] Create Room
+[ ] Join from second Google account/device
+[ ] Host Start Game
+[ ] Market sync
+[ ] Dice/turn sync
+[ ] Pawn movement sync
+[ ] Business sync
+[ ] Staff/Manager sync
+[ ] Loan sync
+[ ] Deal cash sync
+[ ] Cashflow sync

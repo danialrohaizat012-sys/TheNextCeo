@@ -1,0 +1,71 @@
+KELANTAN NEXT CEO ONLINE V0.4 — FIREBASE READY
+
+A. CREATE FIREBASE PROJECT
+1. Go to Firebase Console.
+2. Create a new project, e.g. kelantan-next-ceo.
+3. Spark/free plan is enough for early multiplayer testing.
+
+B. REGISTER WEB APP
+1. Project Settings > General.
+2. Under Your apps, choose Web </>.
+3. Register app.
+4. Copy the firebaseConfig object.
+5. Paste its values into firebase-config.js.
+
+C. ENABLE GOOGLE LOGIN
+1. Authentication > Get started.
+2. Sign-in method > Google.
+3. Enable.
+4. Choose support email.
+5. Save.
+
+D. CREATE FIRESTORE
+1. Firestore Database > Create database.
+2. Choose your nearest available region.
+3. Start in Production mode.
+4. Open Rules.
+5. Paste firestore.rules from this folder.
+6. Publish.
+
+E. AUTHORIZED DOMAINS
+Authentication > Settings > Authorized domains.
+Add your deployed domain, e.g.
+- your-project.web.app
+- your-project.firebaseapp.com
+- your GitHub Pages / custom domain if used
+
+F. FIREBASE HOSTING (recommended)
+Install Firebase CLI:
+  npm install -g firebase-tools
+
+Login:
+  firebase login
+
+Inside this extracted game folder:
+  firebase init hosting firestore
+
+When asked:
+- Use existing project
+- Public directory: .
+- Configure as single-page app: Yes
+- Do NOT overwrite index.html
+
+Then deploy:
+  firebase deploy
+
+You can also manually create .firebaserc from .firebaserc.example and replace PASTE_PROJECT_ID.
+
+G. TEST MULTIPLAYER
+1. Open deployed app in normal browser.
+2. Google Login.
+3. Create Room.
+4. Open deployed app on another phone/account.
+5. Google Login.
+6. Join with 6-character room code.
+7. Host starts the game.
+8. Test movement, business, loan, deal, cashflow.
+
+IMPORTANT
+- This version is suitable for private/early testing.
+- Client-side game rules can still be manipulated by a technical user.
+- Before public paid launch, sensitive game mutations should move to trusted server-side logic / Cloud Functions.

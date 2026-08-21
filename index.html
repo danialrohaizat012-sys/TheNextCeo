@@ -244,6 +244,10 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
  .mobileHero{display:block;padding:8px;border-radius:12px;background:linear-gradient(135deg,#101e2b,#0a151f);border:1px solid #213a4c;margin-bottom:7px}
  .mobileHero img{display:block;width:180px;margin:auto}
 }
+.firebaseStatus{margin:10px 0;padding:10px;border-radius:11px;background:#0a1620;border:1px solid #294052;font-size:10px;color:#aabac5}
+.firebaseStatus.ok{border-color:#2ea777;color:#a8e7ca;background:#0d211b}
+.firebaseStatus.bad{border-color:#da5b68;color:#ffc0c6;background:#261116}
+.firebaseStatus b{display:block;margin-bottom:3px;color:#f0b94a}
 </style>
 </head>
 <body>
@@ -317,7 +321,7 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 
 <div class="modal show" id="gateModal"><div class="box">
   <img src="brand-logo.png" alt="Kelantan Next CEO Online" style="display:block;width:min(390px,88%);margin:0 auto 8px">
-  <p class="muted" style="text-align:center">Log masuk dengan Google untuk create atau join room bersama kawan.</p>
+  <p class="muted" style="text-align:center">Log masuk dengan Google untuk create atau join room bersama kawan.</p><div id="firebaseStatus" class="firebaseStatus"><b>FIREBASE</b>Checking project configuration...</div>
   <button id="gateLoginBtn" class="btn gold">CONTINUE WITH GOOGLE</button>
 </div></div>
 
@@ -345,15 +349,24 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 import {
   getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, onSnapshot,
   serverTimestamp, runTransaction, arrayUnion, increment
-} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 
 const app = initializeApp(firebaseConfig);
+const firebaseStatus = document.getElementById("firebaseStatus");
+const configReady = firebaseConfig?.apiKey && !String(firebaseConfig.apiKey).includes("PASTE_")
+  && firebaseConfig?.projectId && !String(firebaseConfig.projectId).includes("PASTE_");
+if(firebaseStatus){
+  firebaseStatus.classList.add(configReady ? "ok" : "bad");
+  firebaseStatus.innerHTML = configReady
+    ? `<b>FIREBASE READY</b>Project: ${firebaseConfig.projectId}`
+    : `<b>FIREBASE CONFIG REQUIRED</b>Isi firebase-config.js dahulu.`;
+}
 const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
@@ -406,7 +419,13 @@ function playerRef(uid){return doc(db,"rooms",roomId,"players",uid)}
 function code(){const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";return Array.from({length:6},()=>c[Math.floor(Math.random()*c.length)]).join("")}
 function closeModals(){document.querySelectorAll(".modal").forEach(m=>m.classList.remove("show"))}
 
-$("loginBtn").onclick=$("gateLoginBtn").onclick=()=>signInWithPopup(auth,provider).catch(e=>alert(e.message));
+$("loginBtn").onclick=$("gateLoginBtn").onclick=()=>{
+  if(!configReady) return alert("Firebase belum dikonfigurasi. Isi firebase-config.js dahulu.");
+  signInWithPopup(auth,provider).catch(e=>{
+    console.error(e);
+    alert("Google Login gagal: "+e.message);
+  });
+};
 $("logoutBtn").onclick=()=>signOut(auth);
 
 onAuthStateChanged(auth,async u=>{

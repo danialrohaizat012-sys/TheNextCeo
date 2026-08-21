@@ -1,0 +1,27 @@
+KELANTAN NEXT CEO ONLINE V0.4.1
+Firebase project connected: thenextceo-35473
+
+Already configured:
+- firebase-config.js
+- Firebase SDK 12.18.0
+- .firebaserc
+- firebase.json
+- Firestore rules file
+- Google Authentication code
+- multiplayer Firestore code
+
+Still required once in Firebase Console:
+1. Authentication > Sign-in method > Google > Enable.
+2. Firestore Database > Create database if not created.
+3. Firestore > Rules > publish firestore.rules.
+4. Authentication > Settings > Authorized domains:
+   add the domain where this game is deployed.
+
+Firebase Hosting deploy:
+  firebase login
+  firebase deploy
+
+After deploy, test with TWO different Google accounts/devices:
+- Account A: Create Room
+- Account B: Join Room
+- Host: Start Game
