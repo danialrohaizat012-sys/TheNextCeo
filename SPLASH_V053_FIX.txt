@@ -1,0 +1,23 @@
+KELANTAN NEXT CEO ONLINE V0.5.3 — PHONE SPLASH + CACHE FIX
+
+WHY V0.5.2 MAY NOT HAVE SHOWN:
+The previously installed PWA/service worker could serve a cached older index.html before the new service worker took control. That makes a newly uploaded splash appear to be "missing" even when the new file is on the server.
+
+FIXES:
+1. Splash artwork rebuilt to a 1080 x 2340 phone aspect ratio.
+2. Full approved design is preserved instead of being cropped.
+3. Bottom area is extended/darkened for the REAL functional loading bar.
+4. Minimum splash display time = 2.4 seconds, so it cannot flash away unnoticed.
+5. Visible BUILD V0.5.3 stamp confirms the correct version is running.
+6. Service worker now uses NETWORK-FIRST for HTML/navigation.
+7. New SW uses skipWaiting() + clients.claim() and deletes old caches.
+8. manifest start_url includes ?v=0.5.3 to help installed PWA refresh.
+9. Firebase config is network-first / no-store.
+
+FIRST TEST AFTER DEPLOY:
+- Close all tabs of the app.
+- Upload/deploy V0.5.3.
+- Open the normal HTTPS website once.
+- Refresh once.
+- You should see BUILD V0.5.3 on the splash.
+- If testing installed PWA and it still opens old build, uninstall that old PWA once and reinstall.

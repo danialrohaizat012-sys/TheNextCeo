@@ -1,7 +1,7 @@
 {
   "name": "Kelantan Next CEO Online",
   "short_name": "Next CEO",
-  "start_url": "./index.html",
+  "start_url": "./index.html?v=0.5.3",
   "scope": "./",
   "display": "standalone",
   "orientation": "any",
@@ -33,5 +33,6 @@
       "type": "image/png",
       "purpose": "maskable"
     }
-  ]
+  ],
+  "id": "./?app=kelantan-next-ceo"
 }

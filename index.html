@@ -34,8 +34,9 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
  transition:opacity .5s ease,transform .5s ease
 }
 .splashArtwork{
- position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;
- display:block;z-index:0;user-select:none;pointer-events:none
+ position:absolute;inset:0;width:100%;height:100%;
+ object-fit:contain;object-position:center;
+ display:block;z-index:0;user-select:none;pointer-events:none;background:#080a0c
 }
 .splashOverlay{
  position:absolute;inset:0;z-index:1;
@@ -44,7 +45,7 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
    radial-gradient(circle at 50% 68%,transparent 0 24%,rgba(4,7,9,.10) 55%,rgba(4,7,9,.34) 100%)
 }
 .splashLoader{
- position:absolute;z-index:4;left:50%;bottom:calc(32px + env(safe-area-inset-bottom,0px));
+ position:absolute;z-index:4;left:50%;bottom:calc(42px + env(safe-area-inset-bottom,0px));
  transform:translateX(-50%);width:min(430px,86vw);text-align:center
 }
 .splashLoadLabel{
@@ -75,7 +76,7 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
  display:none
 }
 @media(max-width:680px){
- .splashArtwork{object-fit:cover;object-position:center top}
+ .splashArtwork{object-fit:cover;object-position:center center}
  .splashLoader{bottom:calc(22px + env(safe-area-inset-bottom,0px));width:min(360px,88vw)}
  .splashLoadLabel{font-size:11px}
  .splashProgress{height:11px}
@@ -182,17 +183,23 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 .firebaseStatus.bad{border-color:#da5b68;color:#ffc0c6;background:#261116}
 .firebaseStatus b{display:block;margin-bottom:3px;color:#f0b94a}
 </style>
+<script>
+(function(){
+  document.documentElement.dataset.kncBuild="0.5.3";
+  window.__KNC_SPLASH_BOOT__=performance.now();
+})();
+</script>
 </head>
 <body>
 <div id="splash" aria-live="polite" aria-label="Loading Kelantan Next CEO">
-  <img class="splashArtwork" src="commercial-splash.jpg" alt="">
+  <img class="splashArtwork" src="commercial-splash-phone.jpg" alt="">
   <div class="splashOverlay"></div>
   <div class="splashLoader">
     <div class="splashLoadLabel"><span>MEMUATKAN...</span><span id="splashPercent">0%</span></div>
     <div class="splashProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <span class="splashProgressBar" id="splashProgressBar"></span>
     </div>
-    <div class="splashTask" id="splashTask">MEMULAKAN APLIKASI</div>
+    <div class="splashTask" id="splashTask">MEMULAKAN APLIKASI</div><div style="margin-top:7px;color:#72808a;font-size:7px;font-weight:900;letter-spacing:1.2px">BUILD V0.5.3</div>
     <button type="button" class="splashSkip" id="splashSkip">TERUSKAN</button>
   </div>
 </div>
@@ -711,7 +718,7 @@ function setSplashProgress(value,label){
 async function finishSplash(){
   if(splashClosed)return;
   const elapsed=performance.now()-splashStartedAt;
-  if(elapsed<1300) await new Promise(r=>setTimeout(r,1300-elapsed));
+  if(elapsed<2400) await new Promise(r=>setTimeout(r,2400-elapsed));
   setSplashProgress(100,"MARKET READY");
   await new Promise(r=>setTimeout(r,250));
   splashClosed=true;
