@@ -1,0 +1,18 @@
+KELANTAN NEXT CEO ONLINE V0.5.4
+
+FIX:
+The static loading bar was part of the generated splash IMAGE itself.
+V0.5.3 then drew the real functional bar on top, creating two bars.
+
+V0.5.4 physically removes the baked loading section from the source artwork:
+- Crops the original artwork before "MEMUATKAN..."
+- Extends a clean black/lime lower section
+- Keeps ONLY the code-driven functional loading bar
+- No static percentage
+- No static loading progress
+- No duplicate loading UI
+- Phone ratio preserved
+- Build stamp updated to V0.5.4
+- PWA cache version bumped and old splash assets removed
+
+After deploy, the splash should show exactly ONE loading bar, and that bar is functional.
