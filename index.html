@@ -321,8 +321,8 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 
 <div class="modal show" id="gateModal"><div class="box">
   <img src="brand-logo.png" alt="Kelantan Next CEO Online" style="display:block;width:min(390px,88%);margin:0 auto 8px">
-  <p class="muted" style="text-align:center">Log masuk dengan Google untuk create atau join room bersama kawan.</p><div id="firebaseStatus" class="firebaseStatus"><b>FIREBASE</b>Checking project configuration...</div>
-  <button id="gateLoginBtn" class="btn gold">CONTINUE WITH GOOGLE</button>
+  <p class="muted" style="text-align:center">Log masuk dengan Google untuk create atau join room bersama kawan.</p><div id="firebaseStatus" class="firebaseStatus"><b>FIREBASE</b>Checking project configuration...</div><div id="authDebug" class="firebaseStatus"><b>GOOGLE AUTH</b>Belum log masuk.</div>
+  <button id="gateLoginBtn" class="btn gold">CONTINUE WITH GOOGLE</button><div class="muted" style="text-align:center;margin-top:8px">Mobile/PWA akan dibawa ke Google dan kembali semula ke game selepas login.</div>
 </div></div>
 
 <div class="modal" id="homeModal"><div class="box">
@@ -350,7 +350,7 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 import {
   getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, onSnapshot,
   serverTimestamp, runTransaction, arrayUnion, increment
@@ -419,16 +419,76 @@ function playerRef(uid){return doc(db,"rooms",roomId,"players",uid)}
 function code(){const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";return Array.from({length:6},()=>c[Math.floor(Math.random()*c.length)]).join("")}
 function closeModals(){document.querySelectorAll(".modal").forEach(m=>m.classList.remove("show"))}
 
-$("loginBtn").onclick=$("gateLoginBtn").onclick=()=>{
-  if(!configReady) return alert("Firebase belum dikonfigurasi. Isi firebase-config.js dahulu.");
-  signInWithPopup(auth,provider).catch(e=>{
-    console.error(e);
-    alert("Google Login gagal: "+e.message);
-  });
-};
+const isStandalone = window.matchMedia?.("(display-mode: standalone)")?.matches || window.navigator.standalone === true;
+const isMobileBrowser = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+async function googleLogin(){
+  if(!configReady) return alert("Firebase belum dikonfigurasi.");
+  const authDebug=document.getElementById("authDebug");
+  if(authDebug){
+    authDebug.classList.remove("bad","ok");
+    authDebug.innerHTML="<b>GOOGLE AUTH</b>Membuka Google Sign-In...";
+  }
+
+  try{
+    // Installed PWA / mobile: redirect is substantially more reliable than popup.
+    if(isMobileBrowser || isStandalone){
+      await signInWithRedirect(auth,provider);
+      return;
+    }
+
+    // Desktop: popup gives the cleanest experience.
+    await signInWithPopup(auth,provider);
+  }catch(e){
+    console.error("Google login error:", e);
+    if(authDebug){
+      authDebug.classList.add("bad");
+      authDebug.innerHTML="<b>GOOGLE AUTH ERROR</b>"+(e.code||"")+"<br>"+e.message;
+    }
+
+    // If popup was blocked, transparently retry with redirect.
+    if(e.code==="auth/popup-blocked" || e.code==="auth/operation-not-supported-in-this-environment"){
+      try{
+        await signInWithRedirect(auth,provider);
+        return;
+      }catch(e2){
+        console.error("Redirect fallback error:", e2);
+      }
+    }
+    alert("Google Login gagal: "+(e.code||"")+". "+e.message);
+  }
+}
+
+$("loginBtn").onclick=$("gateLoginBtn").onclick=googleLogin;
 $("logoutBtn").onclick=()=>signOut(auth);
 
+// Resolve mobile/PWA redirect after returning from Google.
+getRedirectResult(auth).then(result=>{
+  const authDebug=document.getElementById("authDebug");
+  if(result?.user && authDebug){
+    authDebug.classList.add("ok");
+    authDebug.innerHTML="<b>GOOGLE AUTH CONNECTED</b>"+(result.user.email||result.user.displayName||"Signed in");
+  }
+}).catch(e=>{
+  console.error("Google redirect result error:",e);
+  const authDebug=document.getElementById("authDebug");
+  if(authDebug){
+    authDebug.classList.add("bad");
+    authDebug.innerHTML="<b>GOOGLE REDIRECT ERROR</b>"+(e.code||"")+"<br>"+e.message;
+  }
+});
+
 onAuthStateChanged(auth,async u=>{
+ const authDebug=document.getElementById("authDebug");
+ if(authDebug){
+   authDebug.classList.remove("bad","ok");
+   if(u){
+     authDebug.classList.add("ok");
+     authDebug.innerHTML="<b>GOOGLE AUTH CONNECTED</b>"+(u.email||u.displayName||"Signed in");
+   }else{
+     authDebug.innerHTML="<b>GOOGLE AUTH</b>Belum log masuk.";
+   }
+ }
  user=u;
  if(!u){$("gateModal").classList.add("show");$("homeModal").classList.remove("show");$("gameLayout").style.display="none";$("loginBtn").style.display="";$("logoutBtn").style.display="none";$("userName").textContent="Belum log masuk";$("avatar").src="";return}
  $("gateModal").classList.remove("show");$("loginBtn").style.display="none";$("logoutBtn").style.display="";$("userName").textContent=u.displayName||"Founder";$("avatar").src=u.photoURL||"";

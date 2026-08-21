@@ -1,0 +1,22 @@
+V0.4.3 GOOGLE AUTH FIX
+
+The previous V0.4.2 package accidentally still contained the original popup-only login code.
+This build fixes the actual source.
+
+Behavior:
+- iPhone / Android / installed PWA: signInWithRedirect()
+- Desktop: signInWithPopup()
+- Popup blocked: fallback to redirect
+- getRedirectResult() resolves the return from Google
+- Visible auth diagnostic displays Firebase error codes
+
+Before testing:
+Firebase Console > Authentication > Sign-in method > Google = Enabled
+Firebase Console > Authentication > Settings > Authorized domains:
+Add the EXACT hostname you deploy to.
+
+For Firebase Hosting:
+thenextceo-35473.web.app
+thenextceo-35473.firebaseapp.com
+
+Deploy this build to a fresh path/build, reload hard, and uninstall/reinstall PWA if testing installed mode.
