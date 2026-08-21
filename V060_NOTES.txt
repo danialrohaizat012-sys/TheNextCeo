@@ -1,0 +1,11 @@
+KELANTAN NEXT CEO : START UP — V0.6.0
+
+- Removed redundant banner below header.
+- Pawn starts at outer START/PERMULAAN tile.
+- Pawn is a proper board-game pawn silhouette, not a circle.
+- Added 60-space perimeter track.
+- Two independently random dice (1–6 each).
+- Cinematic 3D/4D-style dual-dice roll with bounce, shadow, light, vibration and clack sound.
+- Example 4 + 2 = pawn automatically advances 6 tiles.
+- Pawn moves one tile at a time and each step syncs to Firestore so online players can watch it move.
+- After movement, turn enters ACTION phase.

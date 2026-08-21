@@ -112,7 +112,31 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 .board>img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none}
 .node{position:absolute;transform:translate(-50%,-50%);z-index:10;width:27px;height:27px;border-radius:50%;border:3px solid #172838;background:#fff3cc;box-shadow:0 4px 10px #0008;transition:.15s}
 .node.reachable{outline:4px solid #4f88d78c;animation:pulse 1s infinite}@keyframes pulse{50%{transform:translate(-50%,-50%) scale(1.13)}}
-.pawn{position:absolute;transform:translate(-50%,-50%);z-index:15;width:28px;height:28px;border-radius:50%;border:3px solid white;display:grid;place-items:center;font-size:10px;font-weight:1000;box-shadow:0 5px 12px #0009;transition:left .4s,top .4s}
+.pawn{
+ position:absolute;z-index:24;width:28px;height:39px;transform:translate(-50%,-76%);
+ transition:left .26s cubic-bezier(.2,.85,.25,1),top .26s cubic-bezier(.2,.85,.25,1);
+ filter:drop-shadow(0 6px 5px rgba(0,0,0,.55));pointer-events:none
+}
+.pawn::before{
+ content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);
+ width:15px;height:15px;border-radius:50%;background:var(--pawn-color,#b52b2f);
+ border:2px solid rgba(255,255,255,.78);
+ box-shadow:inset -3px -4px 5px rgba(0,0,0,.20),inset 2px 2px 4px rgba(255,255,255,.28)
+}
+.pawn::after{
+ content:"";position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+ width:27px;height:26px;
+ background:linear-gradient(90deg,rgba(0,0,0,.18),transparent 32%,rgba(255,255,255,.18) 53%,transparent 68%,rgba(0,0,0,.18)),var(--pawn-color,#b52b2f);
+ clip-path:polygon(38% 0,62% 0,69% 35%,88% 72%,92% 85%,84% 100%,16% 100%,8% 85%,12% 72%,31% 35%);
+ border-radius:4px 4px 8px 8px
+}
+.trackStepFlash{
+ position:absolute;z-index:19;width:32px;height:32px;border-radius:9px;
+ transform:translate(-50%,-50%);border:2px solid rgba(240,185,74,.92);
+ box-shadow:0 0 0 5px rgba(240,185,74,.18),0 0 22px rgba(240,185,74,.5);
+ animation:trackPulse .34s ease both;pointer-events:none
+}
+@keyframes trackPulse{0%{opacity:0;transform:translate(-50%,-50%) scale(.65)}45%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.25)}}
 .building{position:absolute;transform:translate(-50%,-100%);z-index:12;width:25px;height:25px;border-radius:7px;background:#fff7e4;border:2px solid #233a4a;display:grid;place-items:center;font-size:12px;box-shadow:0 4px 9px #0008}
 
 .actions{
@@ -158,7 +182,7 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
  .boardpanel{padding:5px}
  .boardhead{padding:3px 3px 6px}.boardhead h2{font-size:11px}.boardhead .muted{font-size:7.5px}
  .board{border-radius:10px;border-width:1px;box-shadow:0 8px 22px #0008}
- .node{width:19px;height:19px;border-width:2px}.pawn{width:22px;height:22px;font-size:8px;border-width:2px}.building{width:19px;height:19px;font-size:9px}
+ .node{width:19px;height:19px;border-width:2px}.pawn{width:23px;height:33px}.building{width:19px;height:19px;font-size:9px}
  .actions{
    grid-template-columns:repeat(6,minmax(72px,1fr));overflow-x:auto;display:flex;
    padding:6px 2px 2px;gap:5px;position:sticky;bottom:calc(4px + var(--safe-bottom));
@@ -251,73 +275,31 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 }
 
 
-/* ===== V0.5.9 REAL DICE ROLL ===== */
-.diceRollOverlay{
- position:fixed;inset:0;z-index:4500;display:none;align-items:center;justify-content:center;
- background:rgba(4,6,8,.70);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
- opacity:0;transition:opacity .18s ease
-}
+/* ===== V0.6.0 CINEMATIC DOUBLE DICE ===== */
+.diceRollOverlay{position:fixed;inset:0;z-index:4500;display:none;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 48%,rgba(131,26,30,.18),transparent 30%),rgba(3,5,7,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;transition:opacity .18s ease}
 .diceRollOverlay.show{display:flex;opacity:1}
-.diceRollStage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;perspective:900px}
-.diceRollWho{
- color:#f2e7cf;font-family:Georgia,serif;font-size:14px;font-weight:800;letter-spacing:1.5px;
- text-transform:uppercase;text-shadow:0 2px 10px #000
-}
-.dice3d{
- width:92px;height:92px;position:relative;transform-style:preserve-3d;
- transform:rotateX(-18deg) rotateY(24deg);
- filter:drop-shadow(0 22px 22px rgba(0,0,0,.55))
-}
-.dice3d.rolling{animation:diceTumble 1.35s cubic-bezier(.16,.74,.2,1) forwards}
-@keyframes diceTumble{
- 0%{transform:translateY(-135px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(.72)}
- 16%{transform:translateY(-40px) rotateX(250deg) rotateY(180deg) rotateZ(95deg) scale(.96)}
- 38%{transform:translateY(18px) rotateX(590deg) rotateY(430deg) rotateZ(210deg) scale(1.04)}
- 52%{transform:translateY(-20px) rotateX(760deg) rotateY(570deg) rotateZ(275deg) scale(1)}
- 70%{transform:translateY(5px) rotateX(930deg) rotateY(720deg) rotateZ(330deg) scale(1)}
- 84%{transform:translateY(-6px) rotateX(1010deg) rotateY(795deg) rotateZ(350deg) scale(1)}
- 100%{transform:translateY(0) rotateX(1080deg) rotateY(900deg) rotateZ(360deg) scale(1)}
-}
-.diceFace{
- position:absolute;width:92px;height:92px;border-radius:17px;
- background:linear-gradient(145deg,#fffaf0,#e8dec9);
- border:2px solid #b89658;box-shadow:inset -7px -8px 14px rgba(82,58,28,.16),inset 4px 4px 9px rgba(255,255,255,.86);
- backface-visibility:hidden
-}
-.diceFace.front{transform:translateZ(46px)}
-.diceFace.back{transform:rotateY(180deg) translateZ(46px)}
-.diceFace.right{transform:rotateY(90deg) translateZ(46px)}
-.diceFace.left{transform:rotateY(-90deg) translateZ(46px)}
-.diceFace.top{transform:rotateX(90deg) translateZ(46px)}
-.diceFace.bottom{transform:rotateX(-90deg) translateZ(46px)}
-.pip{position:absolute;width:15px;height:15px;border-radius:50%;background:#451419;box-shadow:inset 2px 2px 3px rgba(0,0,0,.5)}
-.pip.tl{left:16px;top:16px}.pip.tc{left:37px;top:16px}.pip.tr{right:16px;top:16px}
-.pip.ml{left:16px;top:37px}.pip.mc{left:37px;top:37px}.pip.mr{right:16px;top:37px}
-.pip.bl{left:16px;bottom:16px}.pip.bc{left:37px;bottom:16px}.pip.br{right:16px;bottom:16px}
-.diceResult{
- min-width:160px;text-align:center;padding:10px 18px;border-radius:999px;
- color:#f4e6c9;background:linear-gradient(135deg,#6f171b,#3a0c0f);
- border:1px solid #c99b4b;font-size:13px;font-weight:1000;letter-spacing:.8px;
- box-shadow:0 10px 25px rgba(0,0,0,.34);opacity:0;transform:translateY(8px) scale(.95);
- transition:.2s ease
-}
-.diceResult.show{opacity:1;transform:none}
-.diceGround{
- position:absolute;width:150px;height:28px;border-radius:50%;background:rgba(0,0,0,.38);
- filter:blur(7px);transform:translateY(68px);animation:groundPulse 1.35s ease both
-}
-@keyframes groundPulse{0%{opacity:.12;transform:translateY(68px) scale(.6)}50%{opacity:.55;transform:translateY(68px) scale(1.1)}100%{opacity:.36;transform:translateY(68px) scale(.9)}}
-@media(max-width:680px){
- .dice3d,.diceFace{width:78px;height:78px}.diceFace{border-radius:14px}
- .diceFace.front{transform:translateZ(39px)}.diceFace.back{transform:rotateY(180deg) translateZ(39px)}
- .diceFace.right{transform:rotateY(90deg) translateZ(39px)}.diceFace.left{transform:rotateY(-90deg) translateZ(39px)}
- .diceFace.top{transform:rotateX(90deg) translateZ(39px)}.diceFace.bottom{transform:rotateX(-90deg) translateZ(39px)}
- .pip{width:12px;height:12px}.pip.tl{left:13px;top:13px}.pip.tc{left:31px;top:13px}.pip.tr{right:13px;top:13px}
- .pip.ml{left:13px;top:31px}.pip.mc{left:31px;top:31px}.pip.mr{right:13px;top:31px}
- .pip.bl{left:13px;bottom:13px}.pip.bc{left:31px;bottom:13px}.pip.br{right:13px;bottom:13px}
-}
-@media(prefers-reduced-motion:reduce){.dice3d.rolling{animation:none}.diceGround{animation:none}}
-
+.diceRollStage{display:flex;flex-direction:column;align-items:center;gap:24px;perspective:1100px}
+.diceRollWho{color:#efe1c6;font-family:Georgia,serif;font-size:14px;font-weight:900;letter-spacing:1.6px;text-transform:uppercase;text-shadow:0 2px 12px #000}
+.diceArena{position:relative;width:270px;height:165px;perspective:1100px}
+.diceShadow{position:absolute;left:50%;bottom:15px;transform:translateX(-50%);width:205px;height:30px;border-radius:50%;background:rgba(0,0,0,.50);filter:blur(9px);animation:arenaShadow 1.55s ease both}
+@keyframes arenaShadow{0%{opacity:.12;transform:translateX(-50%) scale(.55)}55%{opacity:.72;transform:translateX(-50%) scale(1.18)}100%{opacity:.42;transform:translateX(-50%) scale(.92)}}
+.dieWrap{position:absolute;top:18px;width:88px;height:88px;transform-style:preserve-3d}
+.dieWrap.one{left:35px}.dieWrap.two{right:35px}
+.dieWrap.rolling.one{animation:dieOneTumble 1.55s cubic-bezier(.12,.76,.18,1) forwards}
+.dieWrap.rolling.two{animation:dieTwoTumble 1.55s cubic-bezier(.12,.76,.18,1) forwards}
+@keyframes dieOneTumble{0%{transform:translate3d(-50px,-165px,120px) rotateX(0) rotateY(0) rotateZ(0) scale(.7)}22%{transform:translate3d(20px,-72px,70px) rotateX(330deg) rotateY(240deg) rotateZ(130deg) scale(.95)}46%{transform:translate3d(-7px,44px,18px) rotateX(710deg) rotateY(590deg) rotateZ(310deg) scale(1.05)}63%{transform:translate3d(9px,3px,9px) rotateX(910deg) rotateY(760deg) rotateZ(410deg) scale(1)}80%{transform:translate3d(-4px,22px,3px) rotateX(1050deg) rotateY(840deg) rotateZ(480deg)}100%{transform:translate3d(0,28px,0) rotateX(1080deg) rotateY(1080deg) rotateZ(540deg)}}
+@keyframes dieTwoTumble{0%{transform:translate3d(55px,-180px,135px) rotateX(0) rotateY(0) rotateZ(0) scale(.7)}20%{transform:translate3d(-24px,-68px,60px) rotateX(-290deg) rotateY(360deg) rotateZ(-150deg) scale(.96)}45%{transform:translate3d(8px,47px,12px) rotateX(-680deg) rotateY(650deg) rotateZ(-330deg) scale(1.06)}64%{transform:translate3d(-10px,0,7px) rotateX(-880deg) rotateY(820deg) rotateZ(-430deg)}81%{transform:translate3d(5px,24px,2px) rotateX(-1020deg) rotateY(930deg) rotateZ(-500deg)}100%{transform:translate3d(0,28px,0) rotateX(-1080deg) rotateY(1080deg) rotateZ(-540deg)}}
+.die3d{width:88px;height:88px;position:relative;transform-style:preserve-3d}
+.dieFace{position:absolute;width:88px;height:88px;border-radius:16px;background:linear-gradient(145deg,#fffaf0 0%,#eadfc9 76%,#d5c49e 100%);border:2px solid #b89150;box-shadow:inset -8px -9px 14px rgba(72,45,15,.14),inset 5px 5px 9px rgba(255,255,255,.92);backface-visibility:hidden}
+.dieFace.front{transform:translateZ(44px)}.dieFace.back{transform:rotateY(180deg) translateZ(44px)}.dieFace.right{transform:rotateY(90deg) translateZ(44px)}.dieFace.left{transform:rotateY(-90deg) translateZ(44px)}.dieFace.top{transform:rotateX(90deg) translateZ(44px)}.dieFace.bottom{transform:rotateX(-90deg) translateZ(44px)}
+.pip{position:absolute;width:14px;height:14px;border-radius:50%;background:#50151a;box-shadow:inset 2px 2px 3px rgba(0,0,0,.48)}
+.pip.tl{left:15px;top:15px}.pip.tc{left:35px;top:15px}.pip.tr{right:15px;top:15px}.pip.ml{left:15px;top:35px}.pip.mc{left:35px;top:35px}.pip.mr{right:15px;top:35px}.pip.bl{left:15px;bottom:15px}.pip.bc{left:35px;bottom:15px}.pip.br{right:15px;bottom:15px}
+.diceImpactFlash{position:absolute;left:50%;bottom:20px;width:170px;height:70px;transform:translateX(-50%);background:radial-gradient(ellipse,rgba(229,185,104,.28),transparent 65%);filter:blur(7px);opacity:0;animation:impactFlash 1.55s ease both}
+@keyframes impactFlash{0%,43%{opacity:0}48%{opacity:1}62%{opacity:.18}100%{opacity:0}}
+.diceResult{min-width:205px;text-align:center;padding:11px 20px;border-radius:999px;color:#f5e8cd;background:linear-gradient(135deg,#77191d,#3a0c0f);border:1px solid #c99b4b;font-size:14px;font-weight:1000;letter-spacing:.7px;box-shadow:0 12px 28px rgba(0,0,0,.38);opacity:0;transform:translateY(8px) scale(.95);transition:.22s ease}
+.diceResult.show{opacity:1;transform:none}.diceBreakdown{font-size:11px;color:#d9c6a0;margin-top:3px;font-weight:800}
+@media(max-width:680px){.diceArena{width:235px;height:150px}.dieWrap{width:74px;height:74px}.dieWrap.one{left:31px}.dieWrap.two{right:31px}.die3d,.dieFace{width:74px;height:74px}.dieFace{border-radius:13px}.dieFace.front{transform:translateZ(37px)}.dieFace.back{transform:rotateY(180deg) translateZ(37px)}.dieFace.right{transform:rotateY(90deg) translateZ(37px)}.dieFace.left{transform:rotateY(-90deg) translateZ(37px)}.dieFace.top{transform:rotateX(90deg) translateZ(37px)}.dieFace.bottom{transform:rotateX(-90deg) translateZ(37px)}.pip{width:11px;height:11px}.pip.tl{left:12px;top:12px}.pip.tc{left:30px;top:12px}.pip.tr{right:12px;top:12px}.pip.ml{left:12px;top:30px}.pip.mc{left:30px;top:30px}.pip.mr{right:12px;top:30px}.pip.bl{left:12px;bottom:12px}.pip.bc{left:30px;bottom:12px}.pip.br{right:12px;bottom:12px}}
+@media(prefers-reduced-motion:reduce){.dieWrap.rolling{animation-duration:.15s}.diceShadow,.diceImpactFlash{animation:none}}
 </style>
 <script>
 (function(){
@@ -351,10 +333,7 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
   <button id="logoutBtn" class="pill" style="display:none">Exit</button>
 </div>
   </div>
-
-  <div class="mobileHero"><img src="brand-logo.png" alt="Kelantan Next CEO Online"></div>
-
-  <div class="mobileTabs" id="mobileTabs">
+<div class="mobileTabs" id="mobileTabs">
     <button data-tab="marketCardWrap" class="active">MARKET</button>
     <button data-tab="playersWrap">FOUNDERS</button>
     <button data-tab="portfolioWrap">PORTFOLIO</button>
@@ -392,18 +371,26 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 <div class="diceRollOverlay" id="diceRollOverlay" aria-hidden="true">
   <div class="diceRollStage">
     <div class="diceRollWho" id="diceRollWho">ROLLING DICE</div>
-    <div style="position:relative">
-      <div class="diceGround"></div>
-      <div class="dice3d" id="dice3d" aria-label="Animated dice">
-        <div class="diceFace front" id="diceFront"></div>
-        <div class="diceFace back"><span class="pip tl"></span><span class="pip tr"></span><span class="pip bl"></span><span class="pip br"></span><span class="pip ml"></span><span class="pip mr"></span></div>
-        <div class="diceFace right"><span class="pip tl"></span><span class="pip tr"></span><span class="pip mc"></span><span class="pip bl"></span><span class="pip br"></span></div>
-        <div class="diceFace left"><span class="pip tl"></span><span class="pip tr"></span><span class="pip bl"></span><span class="pip br"></span></div>
-        <div class="diceFace top"><span class="pip tl"></span><span class="pip br"></span><span class="pip mc"></span></div>
-        <div class="diceFace bottom"><span class="pip mc"></span></div>
-      </div>
+    <div class="diceArena">
+      <div class="diceShadow"></div><div class="diceImpactFlash"></div>
+      <div class="dieWrap one" id="dieWrap1"><div class="die3d">
+        <div class="dieFace front" id="dieFront1"></div>
+        <div class="dieFace back"><span class="pip tl"></span><span class="pip tr"></span><span class="pip ml"></span><span class="pip mr"></span><span class="pip bl"></span><span class="pip br"></span></div>
+        <div class="dieFace right"><span class="pip tl"></span><span class="pip tr"></span><span class="pip mc"></span><span class="pip bl"></span><span class="pip br"></span></div>
+        <div class="dieFace left"><span class="pip tl"></span><span class="pip tr"></span><span class="pip bl"></span><span class="pip br"></span></div>
+        <div class="dieFace top"><span class="pip tl"></span><span class="pip mc"></span><span class="pip br"></span></div>
+        <div class="dieFace bottom"><span class="pip mc"></span></div>
+      </div></div>
+      <div class="dieWrap two" id="dieWrap2"><div class="die3d">
+        <div class="dieFace front" id="dieFront2"></div>
+        <div class="dieFace back"><span class="pip tl"></span><span class="pip tr"></span><span class="pip ml"></span><span class="pip mr"></span><span class="pip bl"></span><span class="pip br"></span></div>
+        <div class="dieFace right"><span class="pip tl"></span><span class="pip tr"></span><span class="pip mc"></span><span class="pip bl"></span><span class="pip br"></span></div>
+        <div class="dieFace left"><span class="pip tl"></span><span class="pip tr"></span><span class="pip bl"></span><span class="pip br"></span></div>
+        <div class="dieFace top"><span class="pip tl"></span><span class="pip mc"></span><span class="pip br"></span></div>
+        <div class="dieFace bottom"><span class="pip mc"></span></div>
+      </div></div>
     </div>
-    <div class="diceResult" id="diceResult">DICE: 1</div>
+    <div class="diceResult" id="diceResult"><div id="diceTotal">TOTAL: 2</div><div class="diceBreakdown" id="diceBreakdown">1 + 1</div></div>
   </div>
 </div>
 
@@ -490,6 +477,18 @@ const nodes=[
 {id:"krai",name:"Kuala Krai",x:46,y:75,adj:["tm","machang","gm"]},
 {id:"gm",name:"Gua Musang",x:41,y:87,adj:["krai"]}
 ];
+// 60-space outer track. Position 0 = START/PERMULAAN.
+const TRACK = (() => {
+  const pts=[];
+  for(let i=0;i<16;i++) pts.push({x:5.2 + (89.6*i/15), y:4.5});
+  for(let i=1;i<=15;i++) pts.push({x:94.8, y:4.5 + (90.4*i/15)});
+  for(let i=1;i<=15;i++) pts.push({x:94.8 - (89.6*i/15), y:94.9});
+  for(let i=1;i<=14;i++) pts.push({x:5.2, y:94.9 - (90.4*i/15)});
+  return pts.slice(0,60);
+})();
+function trackPoint(pos){const n=((Number(pos)||0)%TRACK.length+TRACK.length)%TRACK.length;return TRACK[n]}
+function trackLabel(pos){const n=((Number(pos)||0)%60+60)%60;return n===0?"START":`PETAK ${n+1}`}
+
 const B=[
 ["Marketplace Seller",6000,3000,1000,1,7000,"Retail"],["Creative Freelancer",7000,3500,900,1,8000,"Digital"],
 ["Street Burger Venture",8000,4000,1800,2,9000,"F&B"],["Mobile Repair Kiosk",10000,4500,1800,2,12000,"Gadget"],
@@ -636,6 +635,7 @@ $("createRoomBtn").onclick=async()=>{
      debt:0,
      rep:0,
      loc:"kb",
+     trackPos:0,
      biz:[],
      loans:[],
      joinedAt:serverTimestamp()
@@ -704,6 +704,7 @@ $("joinRoomBtn").onclick=async()=>{
      debt:0,
      rep:0,
      loc:"kb",
+     trackPos:0,
      biz:[],
      loans:[],
      joinedAt:serverTimestamp()
@@ -753,96 +754,82 @@ function renderRoomState(){
  $("roomTitle").textContent=`ROOM ${roomId}`;
  $("phasePill").textContent=room?.phase||"READY";
  const t=players.find(p=>p.uid===room?.turnUid);
- $("turnText").textContent=`${t?.name||"Founder"} • ${room?.phase||"READY"} • Movement ${room?.move||0}`;
+ $("turnText").textContent=`${t?.name||"Founder"} • ${room?.phase||"READY"}${room?.dice1&&room?.dice2?` • 🎲 ${room.dice1}+${room.dice2}=${room.dice1+room.dice2}`:` • Movement ${room?.move||0}`}`;
  $("marketCard").innerHTML=room?.market?`<b>${room.market.name}</b><span>${room.market.text}</span>`:`<b>Belum dibuka</b><span>Host mulakan round.</span>`;
  render();
 }
 function render(){
  if(!room||!players.length)return;
  const board=$("board");board.querySelectorAll(".node,.pawn,.building").forEach(e=>e.remove());
- nodes.forEach(n=>{const e=document.createElement("button");e.className="node";e.style.left=n.x+"%";e.style.top=n.y+"%";e.title=n.name;
-   if(isMyTurn()&&room.phase==="MOVE"&&(N(myPlayer().loc).adj.includes(n.id)))e.classList.add("reachable");
-   e.onclick=()=>moveTo(n.id);board.appendChild(e)});
- players.forEach((p,i)=>{const n=N(p.loc),e=document.createElement("div");e.className="pawn";e.style.left=`calc(${n.x}% + ${(i%3-1)*10}px)`;e.style.top=`calc(${n.y}% + ${Math.floor(i/3)*10-8}px)`;e.style.background=COLORS[i%COLORS.length];e.textContent=i+1;board.appendChild(e);
+ nodes.forEach(n=>{const e=document.createElement("button");e.className="node";e.style.left=n.x+"%";e.style.top=n.y+"%";e.title=n.name;e.disabled=true;e.setAttribute("aria-hidden","true");board.appendChild(e)});
+ players.forEach((p,i)=>{const tp=trackPoint(p.trackPos||0),e=document.createElement("div");e.className="pawn";e.style.left=`calc(${tp.x}% + ${(i%3-1)*7}px)`;e.style.top=`calc(${tp.y}% + ${Math.floor(i/3)*6}px)`;e.style.setProperty("--pawn-color",COLORS[i%COLORS.length]);e.title=`${p.name} • ${trackLabel(p.trackPos||0)}`;board.appendChild(e);
    (p.biz||[]).slice(0,8).forEach((b,j)=>{const bn=N(b.loc),q=document.createElement("div");q.className="building";q.style.left=`calc(${bn.x}% + ${(j%3-1)*14}px)`;q.style.top=`calc(${bn.y}% - ${14+Math.floor(j/3)*12}px)`;q.textContent="🏪";board.appendChild(q)})});
- $("players").innerHTML=players.map((p,i)=>{const nw=p.cash+(p.biz||[]).reduce((a,b)=>a+(b.value||0),0)-(p.debt||0);return `<div class="player ${p.uid===room.turnUid?"active":""}"><b>${p.name}</b><div class="money">${fmt(p.cash)}</div><small>Net ${fmt(nw)} • Debt ${fmt(p.debt)} • ${N(p.loc).name}</small></div>`}).join("");
+ $("players").innerHTML=players.map((p,i)=>{const nw=p.cash+(p.biz||[]).reduce((a,b)=>a+(b.value||0),0)-(p.debt||0);return `<div class="player ${p.uid===room.turnUid?"active":""}"><b>${p.name}</b><div class="money">${fmt(p.cash)}</div><small>Net ${fmt(nw)} • Debt ${fmt(p.debt)} • ${trackLabel(p.trackPos||0)}</small></div>`}).join("");
  const me=myPlayer();$("portfolio").innerHTML=(me?.biz||[]).length?(me.biz.map((b,j)=>`<div class="biz"><b>${b.name}</b><small>${N(b.loc).name} • Staff ${b.staffNow||0}/${b.staff} ${b.manager?"• Manager":""}<br>Value ${fmt(b.value)}</small><button data-hire="${j}">+ Staff</button>${(b.staffNow||0)>=b.staff&&!b.manager?`<button class="manager" data-manager="${j}">Manager RM5k</button>`:""}</div>`).join("")):`<div class="muted">Belum ada business.</div>`;
  document.querySelectorAll("[data-hire]").forEach(b=>b.onclick=()=>hire(+b.dataset.hire));document.querySelectorAll("[data-manager]").forEach(b=>b.onclick=()=>manager(+b.dataset.manager));
- $("marketBtn").disabled=!isHost();$("rollBtn").disabled=!isMyTurn();$("businessBtn").disabled=!isMyTurn();$("loanBtn").disabled=!isMyTurn();$("dealBtn").disabled=!isMyTurn();$("cashflowBtn").disabled=!isHost();
+ $("marketBtn").disabled=!isHost();$("rollBtn").disabled=!isMyTurn()||!["ROLL","READY"].includes(room?.phase);$("businessBtn").disabled=!isMyTurn()||room?.phase!=="ACTION";$("loanBtn").disabled=!isMyTurn()||room?.phase!=="ACTION";$("dealBtn").disabled=!isMyTurn()||room?.phase!=="ACTION";$("cashflowBtn").disabled=!isHost();
 }
 
 $("marketBtn").onclick=async()=>{
  if(!isHost())return;const m=markets[Math.floor(Math.random()*markets.length)];
  const nextRound=(room.round||0)+1;const first=players[(nextRound-1)%players.length];
- await updateDoc(roomRef(),{round:nextRound,market:m,phase:"ROLL",turnUid:first.uid,move:0,dice:0});
+ await updateDoc(roomRef(),{round:nextRound,market:m,phase:"ROLL",turnUid:first.uid,move:0,dice:0,dice1:0,dice2:0});
  log(`Round ${nextRound}: ${m.name}`);
 };
 
 function dicePips(value){
- const positions={
-   1:["mc"],
-   2:["tl","br"],
-   3:["tl","mc","br"],
-   4:["tl","tr","bl","br"],
-   5:["tl","tr","mc","bl","br"],
-   6:["tl","tr","ml","mr","bl","br"]
- };
+ const positions={1:["mc"],2:["tl","br"],3:["tl","mc","br"],4:["tl","tr","bl","br"],5:["tl","tr","mc","bl","br"],6:["tl","tr","ml","mr","bl","br"]};
  return (positions[value]||[]).map(pos=>`<span class="pip ${pos}"></span>`).join("");
 }
-
-async function animateDiceRoll(value){
- const overlay=document.getElementById("diceRollOverlay");
- const dice=document.getElementById("dice3d");
- const front=document.getElementById("diceFront");
- const result=document.getElementById("diceResult");
- const who=document.getElementById("diceRollWho");
- const me=myPlayer?.();
- if(!overlay||!dice)return;
-
- who.textContent=(me?.name||"FOUNDER")+" IS ROLLING";
- front.innerHTML=dicePips(value);
- result.textContent="DICE: "+value;
- result.classList.remove("show");
-
- overlay.style.display="flex";
- overlay.setAttribute("aria-hidden","false");
- requestAnimationFrame(()=>overlay.classList.add("show"));
-
- // Restart CSS animation every roll.
- dice.classList.remove("rolling");
- void dice.offsetWidth;
- dice.classList.add("rolling");
-
- // Tiny vibration on supported phones, best-effort only.
- try{ navigator.vibrate?.([25,35,20]); }catch(_){}
-
- await new Promise(r=>setTimeout(r,1120));
- result.classList.add("show");
- await new Promise(r=>setTimeout(r,520));
-
- overlay.classList.remove("show");
- overlay.setAttribute("aria-hidden","true");
- await new Promise(r=>setTimeout(r,190));
- overlay.style.display="none";
- dice.classList.remove("rolling");
+function diceClack(strength=.12){
+ try{
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+  const ctx=new AC(),osc=ctx.createOscillator(),gain=ctx.createGain();
+  osc.type="triangle";osc.frequency.setValueAtTime(105,ctx.currentTime);osc.frequency.exponentialRampToValueAtTime(48,ctx.currentTime+.055);
+  gain.gain.setValueAtTime(strength,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.07);
+  osc.connect(gain);gain.connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+.075);setTimeout(()=>ctx.close().catch(()=>{}),140);
+ }catch(_){}
 }
-
+async function animateDoubleDice(d1,d2){
+ const overlay=$("diceRollOverlay"),w1=$("dieWrap1"),w2=$("dieWrap2"),f1=$("dieFront1"),f2=$("dieFront2"),result=$("diceResult");
+ if(!overlay||!w1||!w2)return;
+ $("diceRollWho").textContent=(myPlayer()?.name||"FOUNDER")+" IS ROLLING";
+ f1.innerHTML=dicePips(d1);f2.innerHTML=dicePips(d2);
+ $("diceTotal").textContent=`TOTAL: ${d1+d2}`;$("diceBreakdown").textContent=`${d1} + ${d2}`;
+ result.classList.remove("show");overlay.style.display="flex";overlay.setAttribute("aria-hidden","false");
+ requestAnimationFrame(()=>overlay.classList.add("show"));
+ w1.classList.remove("rolling");w2.classList.remove("rolling");void w1.offsetWidth;w1.classList.add("rolling");w2.classList.add("rolling");
+ try{navigator.vibrate?.([22,28,18,40,25])}catch(_){}
+ setTimeout(()=>diceClack(.08),650);setTimeout(()=>diceClack(.15),850);setTimeout(()=>diceClack(.09),1080);
+ await new Promise(r=>setTimeout(r,1420));result.classList.add("show");await new Promise(r=>setTimeout(r,560));
+ overlay.classList.remove("show");overlay.setAttribute("aria-hidden","true");await new Promise(r=>setTimeout(r,190));overlay.style.display="none";
+ w1.classList.remove("rolling");w2.classList.remove("rolling");
+}
+async function animatePawnSteps(steps){
+ let pos=Number(myPlayer()?.trackPos||0);
+ for(let i=0;i<steps;i++){
+  pos=(pos+1)%TRACK.length;
+  const ownIndex=players.findIndex(p=>p.uid===user.uid);
+  if(ownIndex>=0)players[ownIndex]={...players[ownIndex],trackPos:pos};
+  render();
+  const point=trackPoint(pos),flash=document.createElement("div");flash.className="trackStepFlash";flash.style.left=point.x+"%";flash.style.top=point.y+"%";$("board").appendChild(flash);setTimeout(()=>flash.remove(),360);
+  await updateDoc(playerRef(user.uid),{trackPos:pos});
+  try{navigator.vibrate?.(10)}catch(_){}
+  await new Promise(r=>setTimeout(r,265));
+ }
+ return pos;
+}
 $("rollBtn").onclick=async()=>{
  if(!isMyTurn())return toast("Bukan turn anda");
- const btn=$("rollBtn");
- btn.disabled=true;
- const d=1+Math.floor(Math.random()*6);
-
- // Show the physical-style roll first, then commit the result to the shared room.
- await animateDiceRoll(d);
- await updateDoc(roomRef(),{dice:d,move:d,phase:"MOVE"});
- toast(`Dadu: ${d}`);
+ $("rollBtn").disabled=true;
+ const d1=1+Math.floor(Math.random()*6),d2=1+Math.floor(Math.random()*6),total=d1+d2;
+ await updateDoc(roomRef(),{dice1:d1,dice2:d2,dice:total,move:total,phase:"ROLLING"});
+ await animateDoubleDice(d1,d2);
+ await updateDoc(roomRef(),{phase:"MOVING"});
+ await animatePawnSteps(total);
+ await updateDoc(roomRef(),{move:0,phase:"ACTION"});
+ toast(`${d1} + ${d2} = ${total} langkah`);
 };
-async function moveTo(id){
- if(!isMyTurn()||room.phase!=="MOVE"||room.move<=0)return;
- const me=myPlayer(),cur=N(me.loc);if(!cur.adj.includes(id))return toast("Kena ikut laluan bersambung");
- await updateDoc(playerRef(user.uid),{loc:id});const left=room.move-1;await updateDoc(roomRef(),{move:left,phase:left===0?"ACTION":"MOVE"});
-}
 $("businessBtn").onclick=()=>{
  if(!isMyTurn())return;const me=myPlayer(),seed=((room.round||0)*5+nodes.findIndex(n=>n.id===me.loc)*3)%B.length;
  const offers=[B[seed%B.length],B[(seed+3)%B.length],B[(seed+7)%B.length],B[(seed+11)%B.length]];
@@ -887,7 +874,7 @@ $("cashflowBtn").onclick=async()=>{
    await updateDoc(playerRef(p.uid),{cash:p.cash+cf-repay,debt:Math.max(0,(p.debt||0)-repay),loans});
  }
  const idx=players.findIndex(p=>p.uid===room.turnUid),next=players[(idx+1)%players.length];
- await updateDoc(roomRef(),{turnUid:next.uid,phase:"ROLL",move:0,dice:0});
+ await updateDoc(roomRef(),{turnUid:next.uid,phase:"ROLL",move:0,dice:0,dice1:0,dice2:0});
  log("Cashflow settled.");
 };
 
