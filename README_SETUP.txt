@@ -1,33 +1,28 @@
-KELANTAN NEXT CEO ONLINE V0.1
-Google Login + Private Multiplayer Rooms
+KELANTAN NEXT CEO ONLINE V0.2 — MOBILE/PWA EDITION
 
-SETUP FIREBASE (Spark/free boleh untuk testing):
-1. Firebase Console > Create Project.
-2. Authentication > Sign-in method > Google > Enable.
-3. Firestore Database > Create database.
-4. Project Settings > Your apps > Add Web App.
-5. Copy firebaseConfig ke firebase-config.js.
-6. Firestore > Rules > paste kandungan firestore.rules > Publish.
-7. Authentication > Settings > Authorized domains:
-   - localhost (untuk local dev)
-   - domain GitHub Pages / Firebase Hosting anda.
-8. Deploy folder ini ke Firebase Hosting / GitHub Pages / Netlify.
-   Google login biasanya TIDAK sesuai diuji hanya dengan double-click file://index.html.
+Upgrade:
+- New game logo assets
+- PWA icons 192 / 512 + Apple Touch icon
+- Animated splash screen
+- Install App prompt
+- Phone-first responsive UI
+- Safe-area support for iPhone notch/home indicator
+- Horizontal mobile action dock
+- Mobile tabs for Market / Founders / Portfolio / Feed
+- Larger touch targets and 16px mobile form inputs
+- Existing Google Login + Firebase realtime rooms retained
 
-MULTIPLAYER V0.1:
-- Google Login
-- Create private room
-- 6-character room code
-- Join room
-- Lobby
-- Host starts game
-- Realtime players
-- Synced turn / market / dice / movement
-- Synced cash / debt / business / staff / manager
-- Bank loans
-- Basic cash deal between players
-- Host-resolved cashflow
+Firebase setup:
+1. Create Firebase project (Spark/free is enough for initial testing).
+2. Enable Authentication > Google.
+3. Create Firestore.
+4. Paste your Web App config into firebase-config.js.
+5. Publish firestore.rules.
+6. Add your deployed domain to Authentication > Authorized domains.
+7. Deploy this folder to Firebase Hosting / GitHub Pages / Netlify.
+8. Open on phone and use "Install App" / Add to Home Screen.
 
-IMPORTANT:
-Rules ini prototype. Sebelum public launch, move important financial/game mutations
-to trusted server logic / Cloud Functions for stronger anti-cheat.
+For public/commercial launch:
+- Harden Firestore rules.
+- Move sensitive mutations to trusted server logic / Cloud Functions.
+- Add proper deal accept/reject/counter system and reconnect handling.
