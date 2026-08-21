@@ -219,9 +219,6 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 }
 
 
-.splashCountdown{
- margin-top:8px;color:#6f241f;font-size:12px;font-weight:900;letter-spacing:.3px
-}
 .splashLoader{
  background:rgba(248,239,221,.92);
  border:1px solid rgba(132,92,36,.20);
@@ -270,7 +267,7 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
     <div class="splashProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <span class="splashProgressBar" id="splashProgressBar"></span>
     </div>
-    <div class="splashCountdown">Bersedia dalam <b>4 saat</b></div><div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V0.5.7</div><div class="splashCredit">Developed by BinaLab</div>
+    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V0.5.8</div><div class="splashCredit">Developed by BinaLab</div>
     <button type="button" class="splashSkip" id="splashSkip">TERUSKAN</button>
   </div>
 </div>
@@ -798,7 +795,7 @@ function setSplashProgress(value,label){
 async function finishSplash(){
   if(splashClosed)return;
   const elapsed=performance.now()-splashStartedAt;
-  if(elapsed<3600) await new Promise(r=>setTimeout(r,3600-elapsed));
+  if(elapsed<4000) await new Promise(r=>setTimeout(r,4000-elapsed));
   setSplashProgress(100,"MARKET READY");
   await new Promise(r=>setTimeout(r,250));
   splashClosed=true;

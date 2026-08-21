@@ -1,4 +1,4 @@
-const CACHE="knc-startup-v057-final-splash";
+const CACHE="knc-startup-v058-4sec-splash";
 const STATIC=[
   "./manifest.json",
   "./board.png",

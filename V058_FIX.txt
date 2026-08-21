@@ -1,0 +1,5 @@
+V0.5.8
+- Removed visible 'Bersedia dalam 4 saat' wording.
+- Splash itself now remains visible for approximately 4 seconds.
+- Functional progress/loading status remains.
+- Developed by BinaLab remains.
