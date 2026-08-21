@@ -496,24 +496,150 @@ onAuthStateChanged(auth,async u=>{
 });
 
 $("createRoomBtn").onclick=async()=>{
- roomId=code();
- await setDoc(doc(db,"rooms",roomId),{code:roomId,hostUid:user.uid,status:"lobby",createdAt:serverTimestamp(),round:0,phase:"READY",market:null,turnUid:user.uid,move:0,dice:0});
- await setDoc(playerRef(user.uid),{uid:user.uid,name:guestName||"Founder",photo:"",cash:15000,debt:0,rep:0,loc:"kb",biz:[],loans:[],joinedAt:serverTimestamp()});
- enterRoom(roomId);
+ const debug=document.getElementById("roomDebug");
+ const btn=$("createRoomBtn");
+
+ if(!user){
+   if(debug){debug.classList.add("bad");debug.innerHTML="<b>ROOM ERROR</b>Guest session belum ready.";}
+   return toast("Guest session belum ready");
+ }
+
+ btn.disabled=true;
+ btn.textContent="CREATING ROOM...";
+
+ try{
+   roomId=code();
+
+   if(debug){
+     debug.classList.remove("bad","ok");
+     debug.innerHTML="<b>ROOM SERVER</b>Creating "+roomId+"...";
+   }
+
+   // Create room first.
+   await setDoc(doc(db,"rooms",roomId),{
+     code:roomId,
+     hostUid:user.uid,
+     status:"lobby",
+     createdAt:serverTimestamp(),
+     round:0,
+     phase:"READY",
+     market:null,
+     turnUid:user.uid,
+     move:0,
+     dice:0
+   });
+
+   // Then create host seat.
+   await setDoc(doc(db,"rooms",roomId,"players",user.uid),{
+     uid:user.uid,
+     name:guestName||"Founder",
+     photo:"",
+     cash:15000,
+     debt:0,
+     rep:0,
+     loc:"kb",
+     biz:[],
+     loans:[],
+     joinedAt:serverTimestamp()
+   });
+
+   // Confirm both documents actually exist before opening lobby.
+   const [roomSnap,playerSnap]=await Promise.all([
+     getDoc(doc(db,"rooms",roomId)),
+     getDoc(doc(db,"rooms",roomId,"players",user.uid))
+   ]);
+
+   if(!roomSnap.exists() || !playerSnap.exists()){
+     throw new Error("Room document verification failed.");
+   }
+
+   if(debug){
+     debug.classList.add("ok");
+     debug.innerHTML="<b>ROOM READY</b>"+roomId;
+   }
+
+   enterRoom(roomId);
+
+ }catch(e){
+   console.error("Create room failed:",e);
+   roomId=null;
+
+   if(debug){
+     debug.classList.remove("ok");
+     debug.classList.add("bad");
+     debug.innerHTML="<b>CREATE ROOM ERROR</b>"+(e.code||"")+"<br>"+e.message;
+   }
+
+   alert("Create Room gagal: "+(e.code||"")+" "+e.message);
+ }finally{
+   btn.disabled=false;
+   btn.textContent="CREATE PRIVATE ROOM";
+ }
 };
+
 $("joinRoomBtn").onclick=async()=>{
- const c=$("joinCode").value.trim().toUpperCase(); if(c.length!==6)return toast("Masukkan 6 aksara room code");
- const snap=await getDoc(doc(db,"rooms",c)); if(!snap.exists())return toast("Room tak dijumpai");
- roomId=c;
- await setDoc(playerRef(user.uid),{uid:user.uid,name:guestName||"Founder",photo:"",cash:15000,debt:0,rep:0,loc:"kb",biz:[],loans:[],joinedAt:serverTimestamp()},{merge:true});
- enterRoom(c);
+ const debug=document.getElementById("roomDebug");
+ const c=$("joinCode").value.trim().toUpperCase();
+
+ if(c.length!==6)return toast("Masukkan 6 aksara room code");
+ if(!user)return toast("Guest session belum ready");
+
+ try{
+   if(debug){
+     debug.classList.remove("bad","ok");
+     debug.innerHTML="<b>ROOM SERVER</b>Looking for "+c+"...";
+   }
+
+   const snap=await getDoc(doc(db,"rooms",c));
+   if(!snap.exists()){
+     if(debug){debug.classList.add("bad");debug.innerHTML="<b>ROOM NOT FOUND</b>"+c;}
+     return toast("Room tak dijumpai");
+   }
+
+   roomId=c;
+
+   await setDoc(doc(db,"rooms",c,"players",user.uid),{
+     uid:user.uid,
+     name:guestName||"Founder",
+     photo:"",
+     cash:15000,
+     debt:0,
+     rep:0,
+     loc:"kb",
+     biz:[],
+     loans:[],
+     joinedAt:serverTimestamp()
+   },{merge:true});
+
+   if(debug){
+     debug.classList.add("ok");
+     debug.innerHTML="<b>JOINED ROOM</b>"+c;
+   }
+
+   enterRoom(c);
+
+ }catch(e){
+   console.error("Join room failed:",e);
+   if(debug){
+     debug.classList.remove("ok");
+     debug.classList.add("bad");
+     debug.innerHTML="<b>JOIN ROOM ERROR</b>"+(e.code||"")+"<br>"+e.message;
+   }
+   alert("Join Room gagal: "+(e.code||"")+" "+e.message);
+ }
 };
 
 function enterRoom(id){
  roomId=id;closeModals();$("lobbyModal").classList.add("show");$("roomCodeText").textContent=id;
  if(unsubRoom)unsubRoom(); if(unsubPlayers)unsubPlayers();
- unsubRoom=onSnapshot(roomRef(),s=>{room=s.data(); if(!room)return; renderRoomState(); if(room.status==="playing"){closeModals();$("gameLayout").style.display="grid"}});
- unsubPlayers=onSnapshot(collection(db,"rooms",id,"players"),snap=>{players=snap.docs.map(d=>d.data()); renderLobby(); render();});
+ unsubRoom=onSnapshot(roomRef(),
+   s=>{room=s.data(); if(!room)return; renderRoomState(); if(room.status==="playing"){closeModals();$("gameLayout").style.display="grid"}},
+   e=>{console.error("Room listener error",e);alert("Room sync error: "+(e.code||"")+" "+e.message);}
+ );
+ unsubPlayers=onSnapshot(collection(db,"rooms",id,"players"),
+   snap=>{players=snap.docs.map(d=>d.data()); renderLobby(); render();},
+   e=>{console.error("Players listener error",e);alert("Player sync error: "+(e.code||"")+" "+e.message);}
+ );
 }
 function renderLobby(){
  $("lobbyPlayers").innerHTML=players.map(p=>`<div class="lobbyplayer"><span>${p.name}</span><b>${p.uid===room?.hostUid?"HOST":"READY"}</b></div>`).join("");

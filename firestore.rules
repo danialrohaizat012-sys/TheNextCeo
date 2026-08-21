@@ -1,54 +1,11 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // Anonymous Firebase Auth counts as signed-in.
-    function signedIn() {
-      return request.auth != null;
-    }
-
-    function roomData(roomId) {
-      return get(/databases/$(database)/documents/rooms/$(roomId)).data;
-    }
-
-    function isRoomMember(roomId) {
-      return signedIn()
-        && exists(/databases/$(database)/documents/rooms/$(roomId)/players/$(request.auth.uid));
-    }
-
-    function isHost(roomId) {
-      return signedIn() && roomData(roomId).hostUid == request.auth.uid;
-    }
-
     match /rooms/{roomId} {
-      // Any signed-in user may read a room so they can join by room code.
-      allow read: if signedIn();
-
-      // Only the creator may create a room with themselves as host.
-      allow create: if signedIn()
-        && request.resource.data.hostUid == request.auth.uid;
-
-      // Host controls round/turn/game-level state.
-      allow update: if isHost(roomId);
-
-      // Host may delete room.
-      allow delete: if isHost(roomId);
+      allow read, write: if request.auth != null;
 
       match /players/{uid} {
-        // Room members can see one another.
-        allow read: if isRoomMember(roomId);
-
-        // Player may create their own seat.
-        allow create: if signedIn() && uid == request.auth.uid;
-
-        // Player may update their own state.
-        // Host may update any player for cashflow / game resolution.
-        allow update: if signedIn()
-          && (uid == request.auth.uid || isHost(roomId));
-
-        // Player may leave; host can remove players.
-        allow delete: if signedIn()
-          && (uid == request.auth.uid || isHost(roomId));
+        allow read, write: if request.auth != null;
       }
     }
   }
