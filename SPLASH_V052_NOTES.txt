@@ -1,0 +1,20 @@
+KELANTAN NEXT CEO ONLINE V0.5.2
+
+Splash redesign:
+- Uses the newly approved black/lime illustrated design.
+- Full-screen artwork, no slideshow.
+- Loading bar is FUNCTIONAL, not a fake looping animation.
+
+Progress milestones:
+8%  app boot
+20% interface ready
+43% board artwork decoded
+62% Firebase config/server stage
+78% anonymous auth/multiplayer state stage
+90% PWA preparation
+100% market ready
+
+The splash will not close until the main loading tasks have completed (with safe timeout fallbacks).
+If loading takes unusually long, a Continue button appears after 5 seconds.
+
+This build keeps Guest Multiplayer / Create Room fixes from V0.5.1.
