@@ -1,0 +1,21 @@
+V0.9.3 CLEAN CONTROLS + AUTO MARKET
+
+WHY MARKET BUTTONS WERE CONFUSING
+There were two separate MARKET surfaces:
+1. MARKET action button beside ROLL, used by host to manually start a market/round.
+2. MARKET mobile tab beside FOUNDERS, used only to view the current market card.
+They looked like gameplay actions but served different purposes.
+
+CHANGES
+- Removed MARKET action button.
+- Removed duplicate MARKET/FOUNDERS/PORTFOLIO/FEED utility tabs from the top.
+- Market is now automatic:
+  * Round 1 market is generated when game starts.
+  * New market is generated automatically when turns wrap back to the first active Founder.
+- CURRENT MARKET remains as a passive information card.
+- Removed dead CASHFLOW action button.
+- Bottom nav is the primary navigation: Board / Portfolio / Deal / Players / More.
+- More now opens a proper menu: Rules / Sound / CEO Action / NextCEO Pay / Game Feed.
+- Rules and Sound now have explicit click handlers.
+- Mobile action buttons are larger and touch-optimized.
+- END TURN spans the mobile action row for clarity.

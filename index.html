@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Next CEO">
 <title>Kelantan Next CEO Online</title>
-<link rel="manifest" href="manifest.json?v=0.9.2">
+<link rel="manifest" href="manifest.json?v=0.9.4">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
@@ -593,6 +593,56 @@ img{height:auto}
 #ventureMarketClose:active{transform:scale(.9)}
 #rollBtn.turnUsed,#gxRollBtn:disabled{opacity:.42!important;filter:saturate(.45)}
 
+
+/* ===== V0.9.3 CLEAN CONTROLS ===== */
+.moreGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.actions{
+ grid-template-columns:repeat(5,minmax(0,1fr))!important;
+}
+.actions button,.gx-navbtn,.mobileUtility button,.btn{
+ touch-action:manipulation;
+ -webkit-tap-highlight-color:transparent;
+}
+.actions button:not(:disabled),.gx-navbtn:not(:disabled),.mobileUtility button:not(:disabled),.btn:not(:disabled){
+ cursor:pointer;
+}
+.actions button:active:not(:disabled),.mobileUtility button:active:not(:disabled),.btn:active:not(:disabled){
+ transform:scale(.97);
+}
+@media(max-width:680px){
+ .mobileUtility{display:none}
+ .actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .actions button{min-height:44px!important;font-size:9px!important}
+ #endTurnBtn{grid-column:1/-1}
+ .moreGrid{grid-template-columns:1fr}
+}
+@media(min-width:681px){
+ .mobileUtility{display:flex}
+}
+
+
+/* ===== V0.9.4 MINIMAL CONTROL SYSTEM ===== */
+.coreActions{
+ display:grid!important;
+ grid-template-columns:repeat(4,minmax(0,1fr))!important;
+ gap:7px!important;
+ margin-top:8px;
+}
+.coreActions button{
+ min-height:44px;
+ border-radius:11px;
+ font-size:9px;
+ font-weight:1000;
+}
+#endTurnBtn{grid-column:1/-1}
+.moreGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:680px){
+ .coreActions{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .coreActions button{min-height:46px!important}
+ #endTurnBtn{grid-column:1/-1}
+ .moreGrid{grid-template-columns:1fr}
+}
+
 </style>
 <script>
 (function(){
@@ -637,7 +687,7 @@ window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_
     <div class="splashProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <span class="splashProgressBar" id="splashProgressBar"></span>
     </div>
-    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V0.9.2</div><div class="splashCredit">Developed by BinaLab</div>
+    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V0.9.4</div><div class="splashCredit">Developed by BinaLab</div>
     <button type="button" class="splashSkip" id="splashSkip">TERUSKAN</button>
   </div>
 </div>
@@ -653,35 +703,22 @@ window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_
   <button id="logoutBtn" class="pill" style="display:none">Exit</button>
 </div>
   </div>
-<div class="mobileTabs" id="mobileTabs">
-    <button data-tab="marketCardWrap" class="active">MARKET</button>
-    <button data-tab="playersWrap">FOUNDERS</button>
-    <button data-tab="portfolioWrap">PORTFOLIO</button>
-    <button data-tab="logWrap">FEED</button>
-    <button type="button" id="rulesBtn">RULES</button>
-    <button type="button" id="soundBtn">🔊 SOUND</button>
-<button type="button" id="ceoBtn">🧠 CEO ACTION</button>
-<button type="button" id="nextPayBtn">📱 PAY</button>
-  </div>
-
-  <div class="layout" id="gameLayout" style="display:none">
+<div class="layout" id="gameLayout" style="display:none">
     <section>
       <div class="panel boardpanel">
         <div class="boardhead"><div><h2 id="roomTitle">ROOM</h2><div id="turnText" class="muted"></div></div><div id="phasePill" class="pill">READY</div></div>
         <div class="board" id="board"><div id="trackLabels" class="trackLabels" aria-hidden="true"></div><img src="board.png" alt="Kelantan Next CEO board" fetchpriority="high" decoding="async"></div>
-        <div class="actions">
-          <button class="gold" id="marketBtn">🌍 MARKET</button>
-          <button id="rollBtn">🎲 ROLL</button>
+        <div class="actions coreActions">
+          <button id="rollBtn" class="gold">🎲 ROLL</button>
           <button id="businessBtn">🏪 BUSINESS</button>
           <button id="loanBtn">🏦 BANK</button>
           <button id="dealBtn">🤝 DEAL</button>
-          <button id="cashflowBtn">💰 CASHFLOW</button>
           <button id="endTurnBtn" class="gold">✅ END TURN</button>
         </div>
       </div>
     </section>
     <aside class="side">
-      <div class="panel card mobileShow" id="marketCardWrap"><h3>🌍 MARKET</h3><div id="marketCard" class="market"><b>Belum dibuka</b><span>Host mulakan round.</span></div></div>
+      <div class="panel card mobileShow" id="marketCardWrap"><h3>🌍 CURRENT MARKET</h3><div id="marketCard" class="market"><b>Menunggu game bermula</b><span>Market akan berubah automatik setiap round.</span></div></div>
       <div class="panel card" id="playersWrap"><h3>👥 FOUNDERS</h3><div id="players" class="players"></div></div>
       <div class="panel card" id="portfolioWrap"><h3>🏢 PORTFOLIO SAYA</h3><div id="portfolio" class="portfolio"></div></div>
       <div class="panel card" id="logWrap"><h3>📜 GAME FEED</h3><div id="log" class="log"></div></div>
@@ -849,6 +886,20 @@ window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_
   <div class="soundHead"><div><div class="soundKicker">TALENT MARKET</div><h2>Recruit Team</h2></div><button class="rulesCloseX" id="talentClose">×</button></div>
   <div id="talentGrid" class="talentGrid"></div>
  </div>
+</div>
+
+<div class="modal" id="moreModal">
+ <div class="box">
+  <div class="soundHead"><div><div class="soundKicker">GAME MENU</div><h2>☰ More</h2></div><button type="button" class="rulesCloseX" id="moreClose">×</button></div>
+  <div class="moreGrid">
+    <button type="button" class="btn light" id="moreCEO">🧠 CEO Action</button>
+    <button type="button" class="btn light" id="morePay">📱 NextCEO Pay</button>
+    <button type="button" class="btn light" id="moreFeed">📜 Game Feed</button>
+    <button type="button" class="btn light" id="moreRules">📖 Rules</button>
+    <button type="button" class="btn light" id="moreSound">🔊 Sound</button>
+  </div>
+ </div>
+</div>
 </div>
 <div class="modal" id="rulesModal">
   <div class="box rulesBox">
@@ -1641,7 +1692,14 @@ function renderLobby(){
 }
 $("startGameBtn").onclick=async()=>{
  if(players.length<2)return toast("Perlu sekurang-kurangnya 2 pemain untuk test online");
- await updateDoc(roomRef(),{status:"playing",turnUid:players[0].uid,round:0,phase:"READY",move:0,dice:0,market:null,ventureOwners:{},deals:{},turnSerial:0,lastRolledTurnSerial:-1,rollConsumedUid:null});
+ const firstMarket=markets[Math.floor(Math.random()*markets.length)];
+ await updateDoc(roomRef(),{
+   status:"playing",turnUid:players[0].uid,round:1,phase:"ROLL",
+   move:0,dice:0,dice1:0,dice2:0,
+   market:firstMarket,ventureOwners:{},deals:{},
+   turnSerial:1,lastRolledTurnSerial:-1,rollConsumedUid:null
+ });
+ log(`Round 1: ${firstMarket.name}`);
 };
 $("leaveRoomBtn").onclick=async()=>{if(roomId&&user)await deleteDoc(playerRef(user.uid));location.reload()};
 
@@ -1650,7 +1708,7 @@ function renderRoomState(){
  $("phasePill").textContent=(room?.rollConsumedUid===room?.turnUid&&room?.phase==="ACTION")?"ACTION • ROLL USED":(room?.phase||"READY");
  const t=players.find(p=>p.uid===room?.turnUid);
  $("turnText").textContent=`${t?.name||"Founder"} • ${room?.phase||"READY"}${room?.dice1&&room?.dice2?` • 🎲 ${room.dice1}+${room.dice2}=${room.dice1+room.dice2}`:` • Movement ${room?.move||0}`}`;
- $("marketCard").innerHTML=room?.market?`<b>${room.market.name}</b><span>${room.market.text}</span>`:`<b>Belum dibuka</b><span>Host mulakan round.</span>`;
+ $("marketCard").innerHTML=room?.market?`<b>${room.market.name}</b><span>${room.market.text}</span>`:`<b>Menunggu game bermula</b><span>Market berubah automatik setiap round.</span>`;
  render();
 }
 function render(){
@@ -1663,7 +1721,6 @@ function render(){
  $("players").innerHTML=players.map((p,i)=>{const nw=p.cash+(p.biz||[]).reduce((a,b)=>a+(b.value||0),0)-(p.debt||0);return `<div class="player ${p.uid===room.turnUid?"active":""}"><b>${p.name}</b><div class="money">${fmt(p.cash)}</div><small>Net ${fmt(nw)} • Debt ${fmt(p.debt)} • ${trackLabel(p.trackPos||0)}</small></div>`}).join("");
  const me=myPlayer();$("portfolio").innerHTML=(me?.biz||[]).length?(me.biz.map((b,j)=>`<div class="biz"><b>${b.logo?`<img class="portfolioLogo" src="${b.logo}" alt="">`:""}${b.name}</b><small>${b.archetype||b.cat||""} • ${N(b.loc).name} • Staff ${b.staffNow||0}/${b.staff} ${b.manager?"• Manager":""}<br>Value ${fmt(b.value)} • CF est. ${fmt(estimatedBusinessCF(b))}</small><button data-hire="${j}">+ Staff</button>${(b.staffNow||0)>=b.staff&&!b.manager?`<button class="manager" data-manager="${j}">Lantik Manager</button>`:""}</div>`).join("")):`<div class="muted">Belum ada business.</div>`;
  document.querySelectorAll("[data-hire]").forEach(b=>b.onclick=()=>hire(+b.dataset.hire));document.querySelectorAll("[data-manager]").forEach(b=>b.onclick=()=>manager(+b.dataset.manager));
- $("marketBtn").disabled=!isHost() || (room?.status==="playing" && !["READY","ROUND_END"].includes(room?.phase||""));
  const rollAlreadyUsed=
    room?.rollConsumedUid===user?.uid ||
    Number(room?.lastRolledTurnSerial??-1)===Number(room?.turnSerial??0) ||
@@ -1675,23 +1732,9 @@ function render(){
  $("loanBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";
  $("dealBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";
  $("endTurnBtn").disabled=!isMyTurn()||room?.phase!=="ACTION";
- $("cashflowBtn").disabled=!isHost();
 }
 
-$("marketBtn").onclick=async()=>{
- if(!isHost())return;
- // Prevent MARKET from being abused to reset the current player's roll.
- if(room?.status==="playing" && !["READY","ROUND_END"].includes(room?.phase||""))return toast("Market hanya boleh dibuka pada permulaan round");
- const m=markets[Math.floor(Math.random()*markets.length)];
- const nextRound=(room.round||0)+1;const first=players[(nextRound-1)%players.length];
- await updateDoc(roomRef(),{
-   round:nextRound,market:m,phase:"ROLL",turnUid:first.uid,
-   turnSerial:Number(room.turnSerial||0)+1,
-   rollConsumedUid:null,
-   move:0,dice:0,dice1:0,dice2:0
- });
- log(`Round ${nextRound}: ${m.name}`);
-};
+
 
 function dicePips(value){
  const positions={1:["mc"],2:["tl","br"],3:["tl","mc","br"],4:["tl","tr","bl","br"],5:["tl","tr","mc","bl","br"],6:["tl","tr","ml","mr","bl","br"]};
@@ -1813,23 +1856,32 @@ async function endCurrentTurn(){
  const active=players.filter(p=>!p.bankrupt);
  if(active.length<2)return toast("Tiada Founder lain yang aktif");
  const curIndex=active.findIndex(p=>p.uid===user.uid);
- const next=active[(curIndex+1)%active.length];
+ const nextIndex=(curIndex+1)%active.length;
+ const next=active[nextIndex];
+ const wrapped=nextIndex===0;
  try{
    await runTransaction(db,async tx=>{
      const rRef=roomRef(),snap=await tx.get(rRef);
      if(!snap.exists())throw new Error("Room tak dijumpai");
      const rd=snap.data();
      if(rd.turnUid!==user.uid||rd.phase!=="ACTION")throw new Error("Turn sudah berubah");
-     tx.update(rRef,{
+     const patch={
        turnUid:next.uid,
        turnSerial:Number(rd.turnSerial||0)+1,
        phase:"ROLL",
        rollConsumedUid:null,
        move:0,dice:0,dice1:0,dice2:0
-     });
+     };
+     if(wrapped){
+       const m=markets[Math.floor(Math.random()*markets.length)];
+       patch.round=Number(rd.round||1)+1;
+       patch.market=m;
+     }
+     tx.update(rRef,patch);
    });
    closeModals();
-   toast(`Turn ${next.name}`);
+   if(wrapped)toast(`Round baru • ${next.name}`);
+   else toast(`Turn ${next.name}`);
    log(`➡️ Giliran ${next.name}`);
  }catch(e){console.error("End turn:",e);toast(e.message||"End Turn gagal")}
 }
@@ -2283,7 +2335,7 @@ function openNextPay(){
  $("payQRResult").innerHTML="";$("payConfirmArea").innerHTML="";
  $("nextPayModal").classList.add("show");
 }
-$("nextPayBtn")?.addEventListener("click",openNextPay);
+
 $("nextPayClose")?.addEventListener("click",()=>{stopPayScanner();$("nextPayModal").classList.remove("show")});
 document.querySelectorAll("[data-paytab]").forEach(b=>b.addEventListener("click",()=>{
  document.querySelectorAll("[data-paytab]").forEach(x=>x.classList.toggle("active",x===b));
@@ -2472,7 +2524,7 @@ function openCEO(){
  $("ceoActionBody").innerHTML=ceoUsed()?`<div class="notice">CEO Action untuk round ini sudah digunakan.</div>`:`<div class="notice">Pilih satu strategic action. Pilihan ini hanya boleh digunakan sekali setiap round.</div>`;
  $("ceoActionModal").classList.add("show");
 }
-$("ceoBtn")?.addEventListener("click",openCEO);$("ceoClose")?.addEventListener("click",()=>$("ceoActionModal").classList.remove("show"));
+$("ceoClose")?.addEventListener("click",()=>$("ceoActionModal").classList.remove("show"));
 $("talentClose")?.addEventListener("click",()=>$("talentModal").classList.remove("show"));
 
 function renderTalentMarket(){
@@ -2518,6 +2570,26 @@ async function upgradeVenture(id){
  SFX.buy?.();toast(`${biz[i].name} naik ke Level ${lv+1}`);$("ceoActionModal").classList.remove("show");
 }
 function talentOwnerCapacityBonus(p){return (p?.talents||[]).some(t=>t.id==="operations")?1:0}
+
+
+/* ===== V0.9.3 CONTROL RELIABILITY ===== */
+function openRules(){ $("rulesModal")?.classList.add("show") }
+function openSound(){ $("soundModal")?.classList.add("show") }
+$("rulesCloseX")?.addEventListener("click",()=>$("rulesModal")?.classList.remove("show"));
+$("rulesDone")?.addEventListener("click",()=>$("rulesModal")?.classList.remove("show"));
+$("soundCloseX")?.addEventListener("click",()=>$("soundModal")?.classList.remove("show"));
+
+$("moreClose")?.addEventListener("click",()=>$("moreModal")?.classList.remove("show"));
+$("moreRules")?.addEventListener("click",()=>{$("moreModal").classList.remove("show");openRules()});
+$("moreSound")?.addEventListener("click",()=>{$("moreModal").classList.remove("show");openSound()});
+$("moreCEO")?.addEventListener("click",()=>{$("moreModal").classList.remove("show");openCEO()});
+$("morePay")?.addEventListener("click",()=>{$("moreModal").classList.remove("show");openNextPay()});
+$("moreFeed")?.addEventListener("click",()=>{$("moreModal").classList.remove("show");gxShowMobilePanel("logWrap")});
+
+["rulesModal","soundModal","moreModal"].forEach(id=>{
+ const modal=$(id);if(!modal)return;
+ modal.addEventListener("click",e=>{if(e.target===modal)modal.classList.remove("show")});
+});
 
 /* ===== V0.7 EXPERIENCE BRIDGE ===== */
 const gxMoney=n=>{n=Number(n||0);return "RM"+Math.round(n).toLocaleString("en-MY")};
@@ -2579,9 +2651,7 @@ document.querySelectorAll(".gx-navbtn").forEach(btn=>btn.addEventListener("click
    return;
  }
  if(t==="feed"){
-   // More = game feed + quick controls. Feed is the useful landing point,
-   // while the existing top mobile controls remain available.
-   gxShowMobilePanel("logWrap");return;
+   $("moreModal")?.classList.add("show");return;
  }
 }));
 function gxLanding(title,desc,icon="✨"){

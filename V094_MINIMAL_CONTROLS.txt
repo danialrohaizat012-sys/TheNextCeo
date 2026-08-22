@@ -1,0 +1,33 @@
+V0.9.4 MINIMAL CONTROL SYSTEM
+
+REMOVED DUPLICATION
+- Removed standalone Rules / Sound / CEO / Pay utility strip.
+- Removed duplicate top/mobile utility navigation.
+- No separate Market action button.
+- No dead Cashflow button.
+
+PRIMARY GAME CONTROLS ONLY
+- ROLL
+- BUSINESS
+- BANK
+- DEAL
+- END TURN
+
+PRIMARY NAVIGATION
+- Board
+- Portfolio
+- Deal
+- Players
+- More
+
+MORE MENU
+- CEO Action
+- NextCEO Pay
+- Game Feed
+- Rules
+- Sound
+
+UX PRINCIPLE
+Core gameplay actions stay visible.
+Secondary/system actions live inside More.
+No duplicate buttons for the same function.
