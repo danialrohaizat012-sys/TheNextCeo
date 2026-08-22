@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Next CEO">
 <title>Kelantan Next CEO Online</title>
-<link rel="manifest" href="manifest.json?v=0.6.8">
+<link rel="manifest" href="manifest.json?v=0.6.9">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
@@ -323,6 +323,10 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 
 /* ===== V0.6.8 PORTFOLIO NEGOTIATION ===== */
 .dealBox{width:min(560px,94vw)!important}.dealLabel{display:block;margin:12px 0 6px;font-size:9px;font-weight:1000;letter-spacing:1px;color:#d9ad62}.dealPortfolio{display:grid;gap:8px;max-height:220px;overflow:auto}.dealBiz{padding:11px;border:1px solid #294354;border-radius:12px;background:#0a1721;cursor:pointer}.dealBiz.selected{border-color:#d2a052;box-shadow:0 0 0 2px rgba(210,160,82,.18)}.dealBiz b{color:#f0dfc0;font-size:11px}.dealBiz small{display:block;color:#9eabb3;margin-top:4px}.dealEmpty{padding:15px;border:1px dashed #385061;border-radius:12px;color:#9eabb3;text-align:center;font-size:10px}.dealIncomingKicker{font-size:9px;font-weight:1000;letter-spacing:1.5px;color:#d9ad62}.incomingDealCard{margin:13px 0;padding:15px;border-radius:14px;background:linear-gradient(135deg,#101f2a,#09141d);border:1px solid #8b683b}.incomingDealCard h3{margin:0 0 7px;color:#f0dfc0}.incomingDealCard .price{font-size:23px;font-weight:1000;color:#e3b866;margin:10px 0}.incomingDealCard p{color:#aeb8bf;font-size:10px;line-height:1.5}.dealDecision{display:grid;grid-template-columns:1fr 1.4fr;gap:8px}
+
+/* ===== V0.6.9 VENTURE MARKETPLACE ===== */
+.ventureBox{width:min(900px,96vw)!important;max-height:92vh;overflow:hidden;padding:0!important;background:#08141d!important}.ventureTop{padding:18px 18px 10px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.ventureTop h2{margin:3px 0 4px}.ventureKicker{font-size:8px;font-weight:1000;letter-spacing:1.7px;color:#dcae60}.ventureX{border:0;background:#132634;color:#fff;width:34px;height:34px;border-radius:50%;font-size:22px}.ventureFilters{display:flex;gap:6px;overflow:auto;padding:5px 18px 12px;scrollbar-width:none}.ventureFilter{white-space:nowrap;border:1px solid #294353;background:#0d1d28;color:#aeb9c0;padding:7px 10px;border-radius:999px;font-size:8px;font-weight:900}.ventureFilter.active{background:#d7aa5a;color:#07131c;border-color:#d7aa5a}.ventureMarket{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0 18px 20px;max-height:68vh;overflow:auto}.ventureCard{overflow:hidden;border:1px solid #263d4b;border-radius:17px;background:linear-gradient(160deg,#10222e,#09151e);box-shadow:0 12px 30px rgba(0,0,0,.22)}.ventureVisual{height:150px;background:#f5f3ed;display:flex;align-items:center;justify-content:center;padding:12px;position:relative}.ventureVisual img{width:100%;height:100%;object-fit:contain}.ventureFallback{font-size:54px}.ventureTier{position:absolute;top:9px;left:9px;background:rgba(5,15,22,.86);color:#e9bf75;border:1px solid rgba(233,191,117,.4);padding:5px 7px;border-radius:999px;font-size:7px;font-weight:1000;letter-spacing:.7px}.ventureBody{padding:12px}.ventureCat{font-size:7px;color:#7f98a8;font-weight:1000;letter-spacing:1px;text-transform:uppercase}.ventureName{font-size:16px;font-weight:1000;color:#f4ead8;margin:4px 0}.ventureArch{font-size:8px;color:#e0b76d;font-weight:900}.ventureStats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0}.ventureStat{padding:7px;background:#07131b;border-radius:9px}.ventureStat span{display:block;color:#718795;font-size:6px;font-weight:900}.ventureStat b{font-size:9px;color:#edf1f2}.ventureAbility{padding:8px;border:1px solid #284252;border-radius:10px;margin-bottom:10px}.ventureAbility b{display:block;font-size:8px;color:#dcb269}.ventureAbility small{color:#96a7b1;font-size:7px;line-height:1.35;display:block;margin-top:3px}.ventureBuy{width:100%;border:0;border-radius:10px;background:linear-gradient(135deg,#f0c16e,#d69c3e);padding:10px;font-size:9px;font-weight:1000;color:#0b1720}.ventureBuy:disabled{opacity:.35}.logoComing{font-size:7px;color:#81929b;margin-top:5px}.portfolioLogo{width:28px;height:28px;object-fit:contain;border-radius:6px;background:#fff;margin-right:7px;vertical-align:middle}
+@media(max-width:620px){.ventureMarket{display:flex;overflow-x:auto;overflow-y:auto;scroll-snap-type:x mandatory;padding-bottom:24px}.ventureCard{min-width:82vw;scroll-snap-align:center}.ventureVisual{height:180px}}
 </style>
 <script>
 (function(){
@@ -522,7 +526,10 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
   <button id="tileActionBtn" class="btn gold" style="display:none">TERUSKAN</button>
   <button id="tileCloseBtn" class="btn light">OK</button>
 </div></div>
-<div class="modal" id="businessModal"><div class="box"><h2>Business Opportunities</h2><div id="offers" class="shop"></div><button class="btn light closeBtn">Tutup</button></div></div>
+<div class="modal" id="businessModal"><div class="box ventureBox">
+<div class="ventureTop"><div><div class="ventureKicker">KELANTAN VENTURE MARKET</div><h2>Choose Your Next Venture</h2><p class="muted">Game stats sahaja • bukan valuation atau data kewangan sebenar brand.</p></div><button class="ventureX closeBtn" aria-label="Tutup">×</button></div>
+<div id="ventureFilters" class="ventureFilters"></div><div id="offers" class="ventureMarket"></div>
+</div></div>
 <div class="modal" id="loanModal"><div class="box"><h2>Business Financing</h2><div id="loans"></div><button class="btn light closeBtn">Tutup</button></div></div>
 <div class="modal" id="dealModal"><div class="box dealBox">
 <h2>🤝 NEGO DEAL</h2><p class="muted">Pilih Founder, pilih business dalam portfolio dia, kemudian buat tawaran harga.</p>
@@ -643,15 +650,24 @@ function renderTrackLabels(){
  TRACK.forEach((t,i)=>{const printed=["START","EVENT","OPPORTUNITY","DEAL","TARGET","MARKET","LOAN","REST","TRAINING"].includes(t.type);if(printed)return;const el=document.createElement("div");el.className=`trackTileLabel ${trackEdge(i)}`;el.style.left=t.x+"%";el.style.top=t.y+"%";el.textContent=TRACK_FUNCTION_NAMES[t.type]||t.type;w.appendChild(el)});
 }
 const B=[
-["Marketplace Seller",6000,3000,1000,1,7000,"Retail"],["Creative Freelancer",7000,3500,900,1,8000,"Digital"],
-["Street Burger Venture",8000,4000,1800,2,9000,"F&B"],["Mobile Repair Kiosk",10000,4500,1800,2,12000,"Gadget"],
-["Independent Coffee House",30000,10000,6000,3,38000,"F&B"],["Creative Digital Agency",25000,9500,4500,3,34000,"Digital"],
-["Gadget Service Centre",35000,12000,7000,3,45000,"Gadget"],["Neighbourhood Mart",45000,13500,8500,3,55000,"Retail"],
-["East Coast Logistics",50000,15000,9500,3,62000,"Logistics"],["Nasken Coffee (Concept)",60000,14000,10000,3,75000,"F&B"],
-["Factory Mobile (Concept)",80000,18000,13000,3,100000,"Gadget"],["Multi-Outlet Café Group",110000,28000,18000,3,140000,"F&B"],
-["Regional Distribution Co.",150000,36000,24000,3,190000,"Logistics"],["Central Production Kitchen",180000,40000,27000,3,230000,"Manufacturing"],
-["Kelantan Manufacturing Plant",320000,70000,48000,3,410000,"Manufacturing"],["National Franchise Network",450000,95000,65000,3,580000,"Franchise"]
-].map((x,i)=>({id:"b"+i,name:x[0],cost:x[1],rev:x[2],op:x[3],staff:x[4],value:x[5],cat:x[6]}));
+{id:"fixmobile",name:"FIXMOBILE",cost:18000,rev:7200,op:3800,staff:2,value:24000,cat:"Tech",archetype:"RETAIL + SERVICE",ability:"Repair Rush",abilityText:"Service business: cashflow kekal baik walaupun modal sederhana.",logo:"",tier:"STARTUP"},
+{id:"ayenas",name:"Ayenas",cost:22000,rev:9000,op:5000,staff:3,value:29000,cat:"F&B",archetype:"HIGH TURNOVER F&B",ability:"Ayam Bakar Rush",abilityText:"Kuat ketika demand, festival dan hujung minggu.",logo:"venture-assets/ayenas.jpeg",tier:"GROWTH"},
+{id:"mos",name:"MOS Karting",cost:65000,rev:19000,op:11500,staff:4,value:82000,cat:"Entertainment",archetype:"EXPERIENCE BUSINESS",ability:"Weekend Grid",abilityText:"Experience business yang kuat pada weekend, school holiday dan group event.",logo:"venture-assets/mos-karting.jpeg",tier:"ESTABLISHED"},
+{id:"sayap",name:"Sayap Niaga",cost:70000,rev:22000,op:14500,staff:3,value:90000,cat:"Automotive",archetype:"HIGH-TICKET TRADING",ability:"Big Ticket",abilityText:"Modal tinggi tetapi satu jualan boleh memberi upside besar.",logo:"venture-assets/sayap-niaga.png",tier:"ESTABLISHED"},
+{id:"kedua",name:"Kedua Kopi",cost:12000,rev:5600,op:2800,staff:1,value:16000,cat:"F&B",archetype:"LEAN MOBILE BUSINESS",ability:"Mobile Advantage",abilityText:"Overhead dan staff requirement rendah.",logo:"venture-assets/kedua-kopi.jpeg",tier:"STARTUP"},
+{id:"nasrom",name:"Perodua Nasrom",cost:90000,rev:27000,op:18000,staff:4,value:115000,cat:"Automotive",archetype:"COMMISSION DEALER",ability:"Dealer Network",abilityText:"High-ticket automotive dengan potensi commission yang konsisten.",logo:"venture-assets/perodua-nasrom.jpeg",tier:"ICONIC"},
+{id:"uruz",name:"Uruz Consultancy",cost:28000,rev:10500,op:4800,staff:3,value:37000,cat:"Services",archetype:"RECURRING PROFESSIONAL SERVICE",ability:"Recurring Clients",abilityText:"Professional service dengan recurring client income yang stabil.",logo:"venture-assets/uruz.jpeg",tier:"GROWTH"},
+{id:"meney",name:"Meney Gaming",cost:30000,rev:12500,op:7000,staff:3,value:40000,cat:"Tech",archetype:"RETAIL + TRADE-IN + SERVICE",ability:"Triple Revenue",abilityText:"Jualan, trade-in dan repair memberi beberapa jalan untuk jana cash.",logo:"venture-assets/meney-gaming.jpeg",tier:"GROWTH"},
+{id:"garden",name:"Garden of Light",cost:85000,rev:24000,op:14000,staff:4,value:108000,cat:"Events",archetype:"BOOKING / EVENT VENUE",ability:"Prime Weekend",abilityText:"Booking bernilai tinggi tetapi lebih sensitif kepada season dan cancellation.",logo:"venture-assets/garden-of-light.jpeg",tier:"ESTABLISHED"},
+{id:"zul",name:"Zul Aircond & Wiring",cost:16000,rev:6800,op:3200,staff:2,value:21000,cat:"Services",archetype:"SKILLED PROJECT SERVICE",ability:"Technical Callout",abilityText:"Project service dengan overhead sederhana dan margin kemahiran.",logo:"",fallback:"⚡",tier:"STARTUP"},
+{id:"astonian",name:"Astonian College",cost:95000,rev:26000,op:16500,staff:5,value:122000,cat:"Education",archetype:"RECURRING EDUCATION",ability:"Student Intake",abilityText:"Intake pelajar memberi recurring revenue, tetapi operasi memerlukan staff besar.",logo:"venture-assets/astonian.jpeg",tier:"ICONIC"},
+{id:"azam",name:"Azam Auto & Bodyworks",cost:42000,rev:15000,op:8500,staff:4,value:54000,cat:"Automotive",archetype:"WORKSHOP / SERVICE",ability:"Workshop Margin",abilityText:"Repair dan bodywork menghasilkan service margin yang kukuh.",logo:"venture-assets/azam-auto.jpeg",tier:"GROWTH"},
+{id:"allfamous",name:"All Famous Bundle",cost:20000,rev:8000,op:4300,staff:2,value:27000,cat:"Retail",archetype:"INVENTORY TRADING",ability:"Treasure Stock",abilityText:"Inventory boleh beri margin tinggi tetapi ada risiko slow-moving stock.",logo:"venture-assets/all-famous.jpeg",tier:"GROWTH"},
+{id:"amin",name:"Amin Studio",cost:15000,rev:6200,op:2900,staff:2,value:20000,cat:"Creative",archetype:"CREATIVE BOOKING SERVICE",ability:"Booking Session",abilityText:"Booking-based creative business dengan modal lebih ringan.",logo:"",fallback:"📸",tier:"STARTUP"},
+{id:"izara",name:"Izara Cookies",cost:75000,rev:22500,op:14000,staff:5,value:96000,cat:"Manufacturing",archetype:"PRODUCTION SCALE",ability:"OEM Contract",abilityText:"OEM dan bulk order memberi scaling besar, tetapi production cost juga tinggi.",logo:"",fallback:"🍪",tier:"ESTABLISHED"},
+{id:"ajc",name:"AJC Construction",cost:120000,rev:34000,op:22000,staff:5,value:155000,cat:"Construction",archetype:"PROJECT-BASED HIGH VALUE",ability:"Project Win",abilityText:"Payout projek tinggi dengan risiko delay dan kos bahan.",logo:"venture-assets/ajc.jpeg",tier:"ICONIC"},
+{id:"nasken",name:"Nasken Coffee",cost:60000,rev:17500,op:10500,staff:4,value:78000,cat:"F&B",archetype:"ESTABLISHED F&B BRAND",ability:"Brand Power",abilityText:"Brand strength membantu ketika payday, festival dan demand tinggi.",logo:"venture-assets/nasken-coffee.jpeg",tier:"ESTABLISHED"}
+];
 const PREBUSINESS_DECK=[
 {name:"Program Usahawan Kelantan",text:"Jumpa mentor. Reputasi +1.",rep:1},{name:"Survey Pasaran",text:"Faham demand customer. Reputasi +1.",rep:1},{name:"Pitching Session",text:"Partner suka idea. +RM1,000.",cash:1000},{name:"Idea Validation",text:"Feedback awal elak kesilapan.",cash:0},{name:"Networking Founder",text:"Jumpa founder tempatan. Reputasi +1.",rep:1},{name:"Booth Komuniti",text:"Jual kecil-kecilan. +RM800.",cash:800},{name:"Business Competition",text:"Menang saguhati. +RM1,500 dan Rep +1.",cash:1500,rep:1},{name:"Prototype Gagal",text:"Prototype tak menjadi. -RM500.",cash:-500},{name:"Mentor Review",text:"Model bisnes bertambah baik. Rep +2.",rep:2},{name:"Early Deposit",text:"Customer pertama bayar deposit. +RM1,200.",cash:1200},{name:"Domain & Branding",text:"Kos branding awal. -RM600.",cash:-600},{name:"Referral Kawan",text:"Dapat peluang baru. +RM700.",cash:700},{name:"Demo Day",text:"Pitch mendapat perhatian. Rep +1.",rep:1},{name:"Sample Sold",text:"Sample pertama terjual. +RM900.",cash:900},{name:"Salah Target Market",text:"Eksperimen awal gagal. -RM400.",cash:-400},{name:"Founder Meetup",text:"Dapat connection penting. Rep +1.",rep:1}];
 const BUSINESS_EVENT_DECK=[
@@ -731,13 +747,24 @@ function showTileModal(tile,outcome,actionLabel="",actionFn=null){
 }
 $("tileCloseBtn").onclick=()=>$("tileModal").classList.remove("show");
 
-async function openBusinessFromTile(){
- $("tileModal").classList.remove("show");
- const me=myPlayer(),seed=((room.round||0)*5+(me.trackPos||0)*3)%B.length;
- const offers=[B[seed%B.length],B[(seed+3)%B.length],B[(seed+7)%B.length],B[(seed+11)%B.length]];
- $("offers").innerHTML=offers.map(b=>'<div class="offer"><h4>'+b.name+'</h4><div class="muted">Open '+fmt(b.cost)+' • Value '+fmt(b.value)+'<br>CF +'+fmt(b.rev-b.op)+' • Staff '+b.staff+'</div><button data-buy="'+b.id+'">OPEN BUSINESS</button></div>').join("");
+
+let ventureFilter="ALL";
+function ventureCardHTML(b){
+ const me=myPlayer(),can=(me?.cash||0)>=b.cost&&ownerCapacityUsed(me)<2;
+ const visual=b.logo?`<img src="${b.logo}" alt="${b.name} logo">`:`<div><div class="ventureFallback">${b.fallback||"🏢"}</div><div class="logoComing">OFFICIAL LOGO COMING SOON</div></div>`;
+ return `<article class="ventureCard" data-cat="${b.cat}"><div class="ventureVisual">${visual}<span class="ventureTier">${b.tier}</span></div><div class="ventureBody"><div class="ventureCat">${b.cat}</div><div class="ventureName">${b.name}</div><div class="ventureArch">${b.archetype}</div><div class="ventureStats"><div class="ventureStat"><span>ENTRY</span><b>${fmt(b.cost)}</b></div><div class="ventureStat"><span>BASE CF</span><b>+${fmt(b.rev-b.op)}</b></div><div class="ventureStat"><span>STAFF</span><b>${b.staff}</b></div></div><div class="ventureAbility"><b>✦ ${b.ability}</b><small>${b.abilityText}</small></div><button class="ventureBuy" data-buy="${b.id}" ${can?"":"disabled"}>${(me?.cash||0)<b.cost?"NEED "+fmt(b.cost-(me?.cash||0)):ownerCapacityUsed(me)>=2?"OWNER CAPACITY FULL":"START / ACQUIRE VENTURE"}</button></div></article>`;
+}
+function renderVentureMarket(){
+ const cats=["ALL",...new Set(B.map(b=>b.cat))];
+ $("ventureFilters").innerHTML=cats.map(c=>`<button class="ventureFilter ${ventureFilter===c?"active":""}" data-vfilter="${c}">${c}</button>`).join("");
+ const pool=ventureFilter==="ALL"?B:B.filter(b=>b.cat===ventureFilter);
+ $("offers").innerHTML=pool.map(ventureCardHTML).join("");
+ document.querySelectorAll("[data-vfilter]").forEach(x=>x.onclick=()=>{ventureFilter=x.dataset.vfilter;renderVentureMarket()});
  document.querySelectorAll("[data-buy]").forEach(x=>x.onclick=()=>buy(x.dataset.buy));
- $("businessModal").classList.add("show");
+}
+function openVentureMarket(){ventureFilter="ALL";renderVentureMarket();$("businessModal").classList.add("show")}
+async function openBusinessFromTile(){
+ $("tileModal").classList.remove("show");openVentureMarket();
 }
 
 async function resolveLandingTile(pos){
@@ -1046,7 +1073,7 @@ function render(){
  players.forEach((p,i)=>{const tp=trackPoint(p.trackPos||0),e=document.createElement("div");e.className="pawn";e.style.left=`calc(${tp.x}% + ${(i%3-1)*7}px)`;e.style.top=`calc(${tp.y}% + ${Math.floor(i/3)*6}px)`;e.style.setProperty("--pawn-color",COLORS[i%COLORS.length]);e.title=`${p.name} • ${trackLabel(p.trackPos||0)}`;board.appendChild(e);
    (p.biz||[]).slice(0,8).forEach((b,j)=>{const bn=N(b.loc),q=document.createElement("div");q.className="building";q.style.left=`calc(${bn.x}% + ${(j%3-1)*14}px)`;q.style.top=`calc(${bn.y}% - ${14+Math.floor(j/3)*12}px)`;q.textContent="🏪";board.appendChild(q)})});
  $("players").innerHTML=players.map((p,i)=>{const nw=p.cash+(p.biz||[]).reduce((a,b)=>a+(b.value||0),0)-(p.debt||0);return `<div class="player ${p.uid===room.turnUid?"active":""}"><b>${p.name}</b><div class="money">${fmt(p.cash)}</div><small>Net ${fmt(nw)} • Debt ${fmt(p.debt)} • ${trackLabel(p.trackPos||0)}</small></div>`}).join("");
- const me=myPlayer();$("portfolio").innerHTML=(me?.biz||[]).length?(me.biz.map((b,j)=>`<div class="biz"><b>${b.name}</b><small>${N(b.loc).name} • Staff ${b.staffNow||0}/${b.staff} ${b.manager?"• Manager":""}<br>Value ${fmt(b.value)} • CF est. ${fmt(estimatedBusinessCF(b))}</small><button data-hire="${j}">+ Staff</button>${(b.staffNow||0)>=b.staff&&!b.manager?`<button class="manager" data-manager="${j}">Lantik Manager</button>`:""}</div>`).join("")):`<div class="muted">Belum ada business.</div>`;
+ const me=myPlayer();$("portfolio").innerHTML=(me?.biz||[]).length?(me.biz.map((b,j)=>`<div class="biz"><b>${b.logo?`<img class="portfolioLogo" src="${b.logo}" alt="">`:""}${b.name}</b><small>${b.archetype||b.cat||""} • ${N(b.loc).name} • Staff ${b.staffNow||0}/${b.staff} ${b.manager?"• Manager":""}<br>Value ${fmt(b.value)} • CF est. ${fmt(estimatedBusinessCF(b))}</small><button data-hire="${j}">+ Staff</button>${(b.staffNow||0)>=b.staff&&!b.manager?`<button class="manager" data-manager="${j}">Lantik Manager</button>`:""}</div>`).join("")):`<div class="muted">Belum ada business.</div>`;
  document.querySelectorAll("[data-hire]").forEach(b=>b.onclick=()=>hire(+b.dataset.hire));document.querySelectorAll("[data-manager]").forEach(b=>b.onclick=()=>manager(+b.dataset.manager));
  $("marketBtn").disabled=!isHost();$("rollBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||!["ROLL","READY"].includes(room?.phase);$("businessBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";$("loanBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";$("dealBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";$("cashflowBtn").disabled=!isHost();
 }
@@ -1122,12 +1149,7 @@ $("rollBtn").onclick=async()=>{
  toast(`${d1} + ${d2} = ${total} langkah`);
  await resolveLandingTile(finalPos);
 };
-$("businessBtn").onclick=()=>{
- if(!isMyTurn())return;const me=myPlayer(),seed=((room.round||0)*5+(me.trackPos||0)*3)%B.length;
- const offers=[B[seed%B.length],B[(seed+3)%B.length],B[(seed+7)%B.length],B[(seed+11)%B.length]];
- $("offers").innerHTML=offers.map(b=>`<div class="offer"><h4>${b.name}</h4><div class="muted">Open ${fmt(b.cost)} • Value ${fmt(b.value)}<br>CF +${fmt(b.rev-b.op)} • Staff ${b.staff}</div><button data-buy="${b.id}">OPEN BUSINESS</button></div>`).join("");
- document.querySelectorAll("[data-buy]").forEach(x=>x.onclick=()=>buy(x.dataset.buy));$("businessModal").classList.add("show");
-};
+$("businessBtn").onclick=()=>{if(!isMyTurn())return;openVentureMarket();};
 async function buy(id){
  const b=B.find(x=>x.id===id),me=myPlayer();if(me.bankrupt)return toast("Anda sudah bankrupt");if(me.cash<b.cost)return toast("Cash tak cukup");const owned=ownerCapacityUsed(me);if(owned>=2)return toast("Owner Capacity penuh • lantik Manager dahulu");
  await updateDoc(playerRef(user.uid),{cash:me.cash-b.cost,biz:arrayUnion({...b,loc:businessLocationForTrack(me.trackPos||0),staffNow:0,manager:false})});$("businessModal").classList.remove("show");log(`${me.name} buka ${b.name}`);

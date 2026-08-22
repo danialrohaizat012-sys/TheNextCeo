@@ -1,0 +1,6 @@
+V0.6.9 REAL VENTURE MARKETPLACE
+17 real ventures with fictional GAME STATS for balancing.
+Visual logo marketplace, industry filters, archetypes, abilities, mobile swipe cards.
+Missing official logos use category visual only: Zul Aircond & Wiring, Amin Studio, Izara Cookies.
+FIXMOBILE is included in gameplay but its logo asset was not available in this runtime build; it uses the generic visual until the logo is re-added.
+No displayed acquisition/revenue/value numbers claim to be real company financial information.
