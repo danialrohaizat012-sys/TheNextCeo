@@ -1,0 +1,1 @@
+V1.0.0: 22-section detailed rules, turn guidance, RM1m progress, richer Players, richer Portfolio, functional Game Feed logging, landing feedback, room resume marker. QR/roll lock/minimal controls retained.

@@ -1,0 +1,4 @@
+V0.9.5
+CURRENT TURN now reads the actual active Founder from players + room.turnUid.
+Shows active Founder's name, cash, number of ventures (biz.length), and net worth (cash + venture values - debt).
+HUD changes automatically when turn changes.

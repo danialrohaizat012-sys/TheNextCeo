@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Next CEO">
 <title>Kelantan Next CEO Online</title>
-<link rel="manifest" href="manifest.json?v=0.9.4">
+<link rel="manifest" href="manifest.json?v=1.0.0">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
@@ -643,7 +643,7 @@ img{height:auto}
  .moreGrid{grid-template-columns:1fr}
 }
 
-</style>
+.gx-turnguide{font-size:9px;font-weight:900;color:#f4c95d;margin-top:5px}.gx-goalbar{height:5px;background:#132c38;border-radius:99px;overflow:hidden;margin-top:6px}.gx-goalbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#d7aa3d,#f5df82);transition:width .35s}.gx-goaltext{font-size:7px;color:#91a6b0;margin-top:3px}.ruleFlow{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap}.ruleFlow span{padding:7px 9px;border:1px solid #294756;border-radius:9px;background:#0b1b25;font-size:8px;font-weight:900}.player{position:relative}.player.active:before{content:"CURRENT TURN";position:absolute;right:8px;top:7px;font-size:6px;font-weight:1000;color:#f3c95b}.leaderBadge{margin-left:5px;padding:2px 5px;border-radius:99px;background:#e6bb50;color:#101820;font-size:6px}.playerStats{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:6px}.playerStats span{background:#0b1821;border:1px solid #203947;border-radius:7px;padding:5px 3px;text-align:center;font-size:7px}.bizTop{display:flex;justify-content:space-between;gap:7px}.bizValue{font-size:8px;font-weight:1000;color:#e7c55d}.bizMeta{display:flex;gap:4px;flex-wrap:wrap;margin:5px 0}.bizMeta i{font-style:normal;font-size:6px;padding:3px 5px;border:1px solid #294250;border-radius:99px}.staffBar{height:4px;border-radius:99px;background:#162c37;overflow:hidden;margin:5px 0}.staffBar i{display:block;height:100%;background:#c8a748}.tileBox{animation:tileArrival .22s ease-out}@keyframes tileArrival{from{transform:translateY(12px) scale(.97);opacity:.5}to{transform:none;opacity:1}}</style>
 <script>
 (function(){
   document.documentElement.dataset.kncBuild="0.5.3";
@@ -687,7 +687,7 @@ window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_
     <div class="splashProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <span class="splashProgressBar" id="splashProgressBar"></span>
     </div>
-    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V0.9.4</div><div class="splashCredit">Developed by BinaLab</div>
+    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V1.0.0</div><div class="splashCredit">Developed by BinaLab</div>
     <button type="button" class="splashSkip" id="splashSkip">TERUSKAN</button>
   </div>
 </div>
@@ -913,43 +913,35 @@ window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_
     </div>
 
     <div class="rulesScroll">
-      <section class="ruleHero">
-        <b>🏆 MATLAMAT</b>
-        <span>Setiap Founder hanya boleh <strong>ROLL sekali setiap turn</strong>. Selepas action, tekan <strong>END TURN</strong>. Jadi Founder pertama yang mencapai <strong>RM1,000,000 net worth</strong> dan mendarat di petak MATLAMAT.</span>
-      </section>
-
-      <div class="rulesGrid">
-        <section class="ruleCard"><b>1. MULA GAME</b><p>Seorang player create room dan kongsi Room Code. Kawan join menggunakan code yang sama. Host mulakan round.</p></section>
-        <section class="ruleCard"><b>2. TURN PLAYER</b><p>Player bermain mengikut giliran. Bila turn anda, tekan Roll Dice. Jangan tutup game ketika pawn sedang bergerak.</p></section>
-        <section class="ruleCard"><b>3. DUA DADU</b><p>Dua dadu adalah random 1–6. Jumlah kedua-duanya menentukan movement. Contoh 4 + 2 = pawn bergerak tepat 6 petak.</p></section>
-        <section class="ruleCard"><b>4. MOVEMENT</b><p>Pawn bergerak clockwise di petak luar board. Function hanya berlaku pada petak terakhir tempat pawn mendarat.</p></section>
-        <section class="ruleCard"><b>5. START</b><p>Semua Founder bermula di START. Setiap kali lengkap satu pusingan dan melepasi START, terima RM5,000 modal pusingan.</p></section>
-        <section class="ruleCard"><b>6. BUSINESS</b><p>Petak Business membuka peluang membeli bisnes. Jika cash cukup, bisnes masuk portfolio dan boleh menjana cashflow.</p></section>
-        <section class="ruleCard"><b>7. CASHFLOW</b><p>Cashflow bergantung kepada portfolio. Petak Cashflow boleh memberi payout daripada operasi bisnes anda.</p></section>
-        <section class="ruleCard"><b>8. LOAN</b><p>Petak Loan membenarkan pembiayaan. Loan menambah cash tetapi juga hutang. Gunakan leverage dengan waras.</p></section>
-        <section class="ruleCard"><b>9. DEAL</b><p>NEGO DEAL membolehkan anda pilih Founder lain, lihat business dalam portfolio mereka, pilih business yang mahu dibeli dan tetapkan harga offer. Seller akan menerima popup untuk ACCEPT atau REJECT. Cash dan business hanya berpindah selepas seller menerima offer.</p></section>
-        <section class="ruleCard"><b>10. EVENT & PASAR</b><p>Event ikut tahap Founder. Sebelum ada business, event fokus idea, pitching, survey dan networking. Risiko operasi seperti banjir, stok rosak, mesin rosak dan supplier delay hanya aktif selepas anda mempunyai business.</p></section>
-        <section class="ruleCard"><b>11. REPUTASI</b><p>Networking dan latihan boleh meningkatkan Reputasi. Sesetengah kejadian boleh menurunkannya.</p></section>
-        <section class="ruleCard"><b>12. MATLAMAT RM1 JUTA</b><p>Net worth = cash + nilai portfolio − hutang. Capai sekurang-kurangnya RM1 juta dan mendarat di MATLAMAT untuk menang.</p></section>
-      <section class="ruleCard"><b>13. BALANCE BISNES</b><p>Business yang kurang staff hanya menghasilkan sebahagian revenue. Manager membebaskan Owner Capacity dan memberi bonus operasi kecil.</p></section>
-        <section class="ruleCard"><b>14. BANKRUPTCY</b><p>Jika cash anda kosong dan jumlah hutang melebihi cash + nilai semua business, anda bankrupt dan tersingkir daripada giliran.</p></section>
-      </div>
-
-      <section class="ruleTypes">
-        <h3>Fungsi Petak</h3>
-        <div class="ruleLegend">
-          <span>🚀 START</span><span>🏢 BUSINESS</span><span>💡 PELUANG</span><span>💸 KOS</span>
-          <span>🎓 LATIHAN</span><span>🌍 PASAR</span><span>💰 CASH</span><span>📦 SUPPLIER</span>
-          <span>🤝 NETWORK</span><span>⚡ EVENT</span><span>📣 MARKETING</span><span>🏦 LOAN</span>
-          <span>🤝 DEAL</span><span>📈 INVEST</span><span>👥 STAFF</span><span>🌊 BANJIR</span>
-          <span>☕ REHAT</span><span>🏆 MATLAMAT</span>
-        </div>
-      </section>
-
-      <section class="ruleNote">
-        <b>Nota:</b> Nasib menentukan dadu dan event, tetapi keputusan cash, loan, business dan deal menentukan siapa yang benar-benar membina empayar.
-      </section>
-    </div>
+<section class="ruleHero"><b>🏆 MISI KELANTAN NEXT CEO</b><span>Bina empayar sehingga <strong>Net Worth RM1,000,000</strong>, kemudian mendarat di <strong>MATLAMAT</strong>. Cash sahaja tidak cukup. Portfolio, debt, team dan keputusan strategik semuanya dikira.</span></section>
+<section class="ruleTypes"><h3>⚡ Quick Start</h3><div class="ruleFlow"><span>1️⃣ JOIN</span><b>→</b><span>2️⃣ ROLL SEKALI</span><b>→</b><span>3️⃣ RESOLVE PETAK</span><b>→</b><span>4️⃣ ACTION</span><b>→</b><span>5️⃣ END TURN</span></div></section>
+<div class="rulesGrid">
+<section class="ruleCard"><b>1. SETUP</b><p>Create Private Room dan kongsi Room Code. Minimum 2 Founder. Semua bermula di START dengan RM15,000, tiada debt dan tiada venture.</p></section>
+<section class="ruleCard"><b>2. TURN</b><p>CURRENT TURN menunjukkan Founder aktif. Hanya Founder itu boleh melakukan action turn.</p></section>
+<section class="ruleCard"><b>3. DUA DADU</b><p>Setiap turn hanya <strong>satu roll</strong>. Dua dadu rawak 1–6 dijumlahkan. Roll kedua dikunci sehingga giliran seterusnya.</p></section>
+<section class="ruleCard"><b>4. LANDING</b><p>Kesan hanya berlaku pada petak terakhir. Popup menerangkan outcome sebelum Founder meneruskan action.</p></section>
+<section class="ruleCard"><b>5. ACTION PHASE</b><p>Selepas landing, gunakan BUSINESS, BANK atau DEAL jika perlu. CEO Action tersedia sekali setiap round. Kemudian tekan END TURN.</p></section>
+<section class="ruleCard"><b>6. END TURN</b><p>Menyerahkan permainan kepada Founder seterusnya. Bila rotation lengkap, round dan Current Market baharu bermula automatik.</p></section>
+<section class="ruleCard"><b>7. START</b><p>Lengkap satu pusingan penuh dan lepas START untuk bonus RM5,000.</p></section>
+<section class="ruleCard"><b>8. VENTURE</b><p>Beli venture jika cash dan Owner Capacity mencukupi. Venture milik Founder lain hanya boleh diperoleh melalui Nego Deal.</p></section>
+<section class="ruleCard"><b>9. OWNER CAPACITY</b><p>Asasnya Founder mengurus 2 venture tanpa Manager. Manager membebaskan capacity; Talent tertentu boleh menambah capacity.</p></section>
+<section class="ruleCard"><b>10. STAFF & MANAGER</b><p>Kekurangan staff mengurangkan kecekapan. Lengkapkan staffing dan lantik Manager untuk scaling.</p></section>
+<section class="ruleCard"><b>11. CASHFLOW</b><p>Revenue, operating cost, staffing dan Manager mempengaruhi cashflow. Petak CASHFLOW membayar hasil operasi portfolio.</p></section>
+<section class="ruleCard"><b>12. BANK / LOAN</b><p>Loan menambah cash dan debt. Debt mengurangkan Net Worth. Leverage mempercepat expansion tetapi menambah risiko.</p></section>
+<section class="ruleCard"><b>13. NEGO DEAL</b><p>Pilih Founder, venture dan harga offer. Seller boleh ACCEPT atau REJECT. Offer sahaja tidak memindahkan venture.</p></section>
+<section class="ruleCard"><b>14. QR PAYMENT</b><p>Selepas ACCEPT, seller tunjuk QR dan buyer scan menggunakan phone buyer. Selepas confirm, cash dan venture berpindah. PAY ONLINE untuk permainan jarak jauh.</p></section>
+<section class="ruleCard"><b>15. CEO ACTION</b><p>Satu strategic action setiap round: Network, Recruit, Marketing, Save Cash atau Invest/Upgrade.</p></section>
+<section class="ruleCard"><b>16. TALENT</b><p>Talent memberi kelebihan tetapi mempunyai recruitment cost dan salary. Team membantu scaling tetapi menambah komitmen.</p></section>
+<section class="ruleCard"><b>17. EVENT</b><p>Sebelum ada venture, event fokus pitching, validation dan networking. Risiko operasi berat aktif selepas venture wujud.</p></section>
+<section class="ruleCard"><b>18. CURRENT MARKET</b><p>Keadaan ekonomi round semasa. Ia berubah automatik dan boleh memberi bonus atau tekanan kepada kategori venture.</p></section>
+<section class="ruleCard"><b>19. REPUTATION</b><p>Training, networking dan outcome tertentu mengubah Reputation, iaitu kredibiliti Founder dalam game.</p></section>
+<section class="ruleCard"><b>20. NET WORTH</b><p><strong>Cash + nilai semua Venture − Debt.</strong> Nilai venture ialah game stat, bukan valuation sebenar syarikat.</p></section>
+<section class="ruleCard"><b>21. BANKRUPTCY</b><p>Jika cash habis dan debt melebihi asset, Founder bankrupt dan keluar daripada rotation aktif.</p></section>
+<section class="ruleCard"><b>22. MENANG</b><p>Capai RM1,000,000 Net Worth dan kemudian mendarat di MATLAMAT. Jika belum cukup, baki sasaran dipaparkan.</p></section>
+</div>
+<section class="ruleTypes"><h3>🗺️ Fungsi Petak</h3><div class="ruleLegend"><span>🚀 START • bonus lap</span><span>🏢 BUSINESS • venture</span><span>💡 PELUANG • opportunity</span><span>💸 KOS • operating cost</span><span>🎓 LATIHAN • reputation</span><span>🌍 PASAR • market event</span><span>💰 CASH • reward</span><span>📦 SUPPLIER • outcome</span><span>🤝 NETWORK • reputation</span><span>⚡ EVENT • random event</span><span>📣 MARKETING • campaign</span><span>🏦 LOAN • financing</span><span>🤝 DEAL • negotiation</span><span>📈 INVEST • risk/reward</span><span>👥 STAFF • staffing</span><span>🌊 BANJIR • operating risk</span><span>☕ REHAT • safe</span><span>🏆 MATLAMAT • win check</span></div></section>
+<section class="ruleNote"><b>Prinsip:</b> Dadu menentukan tempat anda tiba. Keputusan cash, venture, debt, team dan negotiation menentukan siapa menjadi Next CEO.</section>
+</div></div>
 
     <button type="button" class="btn gold rulesDone" id="rulesDone">FAHAM, JOM MAIN</button>
   </div>
@@ -1059,7 +1051,7 @@ const db = getFirestore(app);
 
 const $=id=>document.getElementById(id);
 const fmt=n=>"RM"+Math.round(n||0).toLocaleString("en-MY");
-const toast=t=>{const e=$("toast");e.textContent=t;e.style.display="block";setTimeout(()=>e.style.display="none",1700)};
+const toast=t=>{const e=$("toast");e.textContent=t;e.style.display="block";setTimeout(()=>e.style.display="none",1700)};const gameHistory=[];function log(message){const text=String(message||"").trim();if(!text)return;gameHistory.unshift({text,time:Date.now()});if(gameHistory.length>60)gameHistory.length=60;const el=$("log");if(el)el.innerHTML=gameHistory.map(x=>`<div class="logItem"><small>${new Date(x.time).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</small> ${x.text}</div>`).join("")}
 // ===== V0.6.12 WEB AUDIO ENGINE =====
 // No copyrighted audio files are bundled. Music/SFX are generated live with WebAudio.
 let audioCtx=null,musicGain=null,sfxGain=null,musicTimer=null,musicStep=0;
@@ -1389,7 +1381,7 @@ async function openBusinessFromTile(){
 }
 
 async function resolveLandingTile(pos){
- const tile=trackPoint(pos),me=myPlayer();if(!tile||!me)return;
+ const tile=trackPoint(pos),me=myPlayer();if(!tile||!me)return;log(`📍 ${me.name} landed on ${tile.title||tile.type}`);
  switch(tile.type){
   case "START":showTileModal(tile,"Bonus RM5,000 diberi bila lengkap satu pusingan.");break;
   case "BUSINESS":showTileModal(tile,"Lokasi peluang: <b>"+N(businessLocationForTrack(pos)).name+"</b>.","LIHAT PELUANG",openBusinessFromTile);break;
@@ -1659,7 +1651,7 @@ $("joinRoomBtn").onclick=async()=>{
 };
 
 function enterRoom(id){
- roomId=id;closeModals();$("lobbyModal").classList.add("show");$("roomCodeText").textContent=id;
+ roomId=id;localStorage.setItem("knc_last_room",id);closeModals();$("lobbyModal").classList.add("show");$("roomCodeText").textContent=id;
  if(unsubRoom)unsubRoom(); if(unsubPlayers)unsubPlayers();
  unsubRoom=onSnapshot(roomRef(),
    s=>{room=s.data(); if(!room)return; renderRoomState(); if(room.status==="playing"){closeModals();$("gameLayout").style.display="grid"}},
@@ -1701,7 +1693,7 @@ $("startGameBtn").onclick=async()=>{
  });
  log(`Round 1: ${firstMarket.name}`);
 };
-$("leaveRoomBtn").onclick=async()=>{if(roomId&&user)await deleteDoc(playerRef(user.uid));location.reload()};
+$("leaveRoomBtn").onclick=async()=>{localStorage.removeItem("knc_last_room");if(roomId&&user)await deleteDoc(playerRef(user.uid));location.reload()};
 
 function renderRoomState(){
  $("roomTitle").textContent=`ROOM ${roomId}`;
@@ -1718,8 +1710,9 @@ function render(){
 
  players.forEach((p,i)=>{const tp=trackPoint(p.trackPos||0),e=document.createElement("div");e.className="pawn";e.style.left=`calc(${tp.x}% + ${(i%3-1)*7}px)`;e.style.top=`calc(${tp.y}% + ${Math.floor(i/3)*6}px)`;e.style.setProperty("--pawn-color",COLORS[i%COLORS.length]);e.title=`${p.name} • ${trackLabel(p.trackPos||0)}`;board.appendChild(e);
    (p.biz||[]).slice(0,8).forEach((b,j)=>{const bn=N(b.loc),q=document.createElement("div");q.className="building";q.style.left=`calc(${bn.x}% + ${(j%3-1)*14}px)`;q.style.top=`calc(${bn.y}% - ${14+Math.floor(j/3)*12}px)`;q.textContent="🏪";board.appendChild(q)})});
- $("players").innerHTML=players.map((p,i)=>{const nw=p.cash+(p.biz||[]).reduce((a,b)=>a+(b.value||0),0)-(p.debt||0);return `<div class="player ${p.uid===room.turnUid?"active":""}"><b>${p.name}</b><div class="money">${fmt(p.cash)}</div><small>Net ${fmt(nw)} • Debt ${fmt(p.debt)} • ${trackLabel(p.trackPos||0)}</small></div>`}).join("");
- const me=myPlayer();$("portfolio").innerHTML=(me?.biz||[]).length?(me.biz.map((b,j)=>`<div class="biz"><b>${b.logo?`<img class="portfolioLogo" src="${b.logo}" alt="">`:""}${b.name}</b><small>${b.archetype||b.cat||""} • ${N(b.loc).name} • Staff ${b.staffNow||0}/${b.staff} ${b.manager?"• Manager":""}<br>Value ${fmt(b.value)} • CF est. ${fmt(estimatedBusinessCF(b))}</small><button data-hire="${j}">+ Staff</button>${(b.staffNow||0)>=b.staff&&!b.manager?`<button class="manager" data-manager="${j}">Lantik Manager</button>`:""}</div>`).join("")):`<div class="muted">Belum ada business.</div>`;
+ const ranked=[...players].sort((a,b)=>currentNetWorth(b)-currentNetWorth(a)),leaderUid=ranked[0]?.uid;
+ $("players").innerHTML=players.map(p=>{const nw=currentNetWorth(p),vc=(p.biz||[]).length;return `<div class="player ${p.uid===room.turnUid?"active":""}"><b>${p.name}${p.uid===leaderUid?`<span class="leaderBadge">LEADER</span>`:""}</b><div class="playerStats"><span>💰<br>${fmt(p.cash)}</span><span>🏢<br>${vc}</span><span>📈<br>${fmt(nw)}</span></div><small>Debt ${fmt(p.debt)} • Rep ${p.rep||0} • ${trackLabel(p.trackPos||0)}${p.bankrupt?" • BANKRUPT":""}</small></div>`}).join("");
+ const me=myPlayer();$("portfolio").innerHTML=(me?.biz||[]).length?me.biz.map((b,j)=>{const sn=b.staffNow||0,need=Math.max(1,b.staff||1),pct=Math.min(100,Math.round(sn/need*100));return `<div class="biz"><div class="bizTop"><b>${b.logo?`<img class="portfolioLogo" src="${b.logo}" alt="">`:""}${b.name}</b><span class="bizValue">${fmt(b.value)}</span></div><div class="bizMeta"><i>${b.archetype||b.cat||"VENTURE"}</i><i>${N(b.loc).name}</i><i>LV ${b.level||1}</i>${b.manager?"<i>MANAGER</i>":""}</div><small>Staff ${sn}/${need} • CF est. ${fmt(estimatedBusinessCF(b))}</small><div class="staffBar"><i style="width:${pct}%"></i></div><button data-hire="${j}">+ Staff</button>${sn>=need&&!b.manager?`<button class="manager" data-manager="${j}">Lantik Manager</button>`:""}</div>`}).join(""):`<div class="muted">Belum ada venture. Cari peluang BUSINESS untuk bina portfolio.</div>`;
  document.querySelectorAll("[data-hire]").forEach(b=>b.onclick=()=>hire(+b.dataset.hire));document.querySelectorAll("[data-manager]").forEach(b=>b.onclick=()=>manager(+b.dataset.manager));
  const rollAlreadyUsed=
    room?.rollConsumedUid===user?.uid ||
@@ -1731,7 +1724,7 @@ function render(){
  $("businessBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";
  $("loanBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";
  $("dealBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";
- $("endTurnBtn").disabled=!isMyTurn()||room?.phase!=="ACTION";
+ $("endTurnBtn").disabled=!isMyTurn()||room?.phase!=="ACTION";const guide=$("turnGuide"),goal=$("goalProgress"),goalText=$("goalText"),active=players.find(p=>p.uid===room?.turnUid);if(guide){if(!isMyTurn())guide.textContent=`Menunggu ${active?.name||"Founder"} selesaikan turn.`;else if(["ROLL","READY"].includes(room?.phase)&&!rollAlreadyUsed)guide.textContent="STEP 1 • ROLL dua dadu sekali.";else if(["ROLLING","MOVING"].includes(room?.phase))guide.textContent="STEP 2 • Pawn sedang bergerak...";else if(room?.phase==="ACTION")guide.textContent="STEP 3 • Pilih action jika perlu, kemudian END TURN."}const anw=currentNetWorth(active||{});if(goal)goal.style.width=Math.min(100,Math.max(0,anw/10000))+"%";if(goalText)goalText.textContent=`${fmt(anw)} / RM1,000,000 • ${Math.min(100,Math.floor(anw/10000))}%`;
 }
 
 
@@ -1843,7 +1836,7 @@ $("rollBtn").onclick=async()=>{
    await updateDoc(roomRef(),{phase:"MOVING"});
    const finalPos=await animatePawnSteps(total);
    await updateDoc(roomRef(),{move:0,phase:"ACTION"});
-   toast(`${d1} + ${d2} = ${total} langkah`);
+   toast(`${d1} + ${d2} = ${total} langkah`);log(`🎲 ${myPlayer()?.name||"Founder"} rolled ${d1}+${d2}=${total} → ${trackLabel(finalPos)}`);
    await resolveLandingTile(finalPos);
  }catch(e){
    console.error("Roll:",e);
@@ -2597,26 +2590,35 @@ function gxFindRoll(){
  return [...document.querySelectorAll("button")].find(b=>/roll|move/i.test((b.textContent||"").trim()) && b.id!=="gxRollBtn");
 }
 function gxReadState(){
- let me=null, players=[];
+ let founder=null;
  try{
-  if(typeof room!=="undefined"&&room?.players)players=Object.values(room.players);
-  else if(typeof state!=="undefined"&&state?.players)players=Object.values(state.players);
+   if(typeof players!=="undefined" && Array.isArray(players) && players.length){
+     const activeUid=(typeof room!=="undefined"&&room?.turnUid)||null;
+     founder=players.find(p=>p?.uid===activeUid)||players[0]||null;
+   }
  }catch(_){}
- try{
-  const nm=(typeof myName!=="undefined"&&myName)||(localStorage.getItem("founderName"))||"Founder";
-  me=players.find(x=>x?.name===nm)||players[0]||{};
- }catch(_){me=players[0]||{}}
- const cash=Number(me?.cash??me?.money??0), ventures=Array.isArray(me?.portfolio)?me.portfolio.length:Object.keys(me?.portfolio||{}).length;
- const worth=Number(me?.netWorth??me?.networth??cash);
- return {name:me?.name||"Founder",cash,ventures,worth};
+ if(!founder)return {name:"Menunggu Founder",cash:0,ventures:0,worth:0,founder:null};
+ const cash=Number(founder.cash||0);
+ const biz=Array.isArray(founder.biz)?founder.biz:[];
+ const ventures=biz.length;
+ const worth=(typeof currentNetWorth==="function")
+   ?Number(currentNetWorth(founder)||0)
+   :cash+biz.reduce((sum,b)=>sum+Number(b?.value||0),0)-Number(founder.debt||0);
+ return {name:founder.name||"Founder",cash,ventures,worth,founder};
 }
 function gxRefresh(){
  const s=gxReadState();
  gxTurnName.textContent=s.name;
- gxCash.textContent="💰 "+gxMoney(s.cash);
- gxVentures.textContent="🏢 "+s.ventures+" Venture"+(s.ventures===1?"":"s");
- gxWorth.textContent="📈 "+gxMoney(s.worth)+" NW";
- try{const me=myPlayer?.();if(me){const bonus=diversifiedPortfolioBonus(me);gxWorth.title=`Projected venture income ${fmt(portfolioProjectedIncome(me))}${bonus?` • Diversification +${Math.round(bonus*100)}%`:""}`}}catch(_){}
+ gxCash.textContent="💰 CASH "+gxMoney(s.cash);
+ gxVentures.textContent="🏢 "+s.ventures+" VENTURE"+(s.ventures===1?"":"S");
+ gxWorth.textContent="📈 NET WORTH "+gxMoney(s.worth);
+ try{
+   const f=s.founder;
+   if(f){
+     const bonus=diversifiedPortfolioBonus(f);
+     gxWorth.title=`Venture value ${fmt((f.biz||[]).reduce((a,b)=>a+Number(b.value||0),0))} • Debt ${fmt(f.debt||0)}${bonus?` • Diversification +${Math.round(bonus*100)}%`:""}`;
+   }
+ }catch(_){}
  gxProgress.style.width=Math.max(2,Math.min(100,(s.worth/1000000)*100))+"%";
  const real=gxFindRoll(); gxRollBtn.disabled=!real||real.disabled;
 }
