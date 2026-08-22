@@ -1,0 +1,12 @@
+KELANTAN NEXT CEO : START UP — V0.6.5
+
+SMART LOGIC
+• Founder belum ada business tidak boleh terkena kerugian operasi yang tidak logik.
+• Event awal fokus Idea Validation, Survey Pasaran, Pitching, Networking dan Booth Komuniti.
+• Banjir, kerosakan stok/mesin, supplier delay dan risiko operasi hanya memberi kerugian selepas Founder memiliki business.
+• Petak Banjir, Supplier, Marketing dan Kos juga berubah mengikut stage Founder.
+
+BOARD LABELS
+• Setiap petak perimeter kini memaparkan FUNCTION sebenar terus atas board.
+• Label termasuk BUSINESS, PELUANG, KOS, LATIHAN, PASAR, CASH, SUPPLIER, NETWORK, EVENT, MARKETING, CASHFLOW, REHAT, LOAN, KOMPAUN, DEAL, INVEST, STAFF, BANJIR dan MATLAMAT.
+• Label dan movement menggunakan koordinat TRACK yang sama.

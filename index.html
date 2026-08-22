@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Next CEO">
 <title>Kelantan Next CEO Online</title>
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json?v=0.6.5">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
@@ -314,6 +314,12 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 .ruleNote{margin:12px 0 4px;padding:12px;border-left:3px solid #c89545;background:#151a1d;color:#bfc5c8;font-size:10px;line-height:1.55}.ruleNote b{color:#efc87f}.rulesDone{margin:10px 18px 18px!important;width:calc(100% - 36px)!important}
 @media(max-width:680px){.rulesBox{width:96vw!important;max-height:92vh!important}.rulesHead{padding:16px 15px 12px}.rulesHead h2{font-size:21px}.rulesScroll{padding:12px 13px 5px;max-height:66vh}.rulesGrid{grid-template-columns:1fr}.ruleCard{padding:10px}.ruleCard p{font-size:10px}.rulesDone{margin:8px 13px 13px!important;width:calc(100% - 26px)!important}}
 
+/* V0.6.5 visible tile functions */
+.trackLabels{position:absolute;inset:0;z-index:12;pointer-events:none}
+.trackTileLabel{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;text-align:center;font-size:6px;font-weight:1000;line-height:1;color:#17130e;text-shadow:0 1px rgba(255,255,255,.4);padding:1px;box-sizing:border-box;overflow:hidden}
+.trackTileLabel.top,.trackTileLabel.bottom{width:7%;height:6.7%}.trackTileLabel.left,.trackTileLabel.right{width:7%;height:8.3%;font-size:5.4px}
+.trackTileLabel.special{color:#fff3d3;text-shadow:0 1px 2px #000}
+@media(max-width:680px){.trackTileLabel{font-size:5px}.trackTileLabel.left,.trackTileLabel.right{font-size:4.6px}}
 </style>
 <script>
 (function(){
@@ -359,7 +365,7 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
     <section>
       <div class="panel boardpanel">
         <div class="boardhead"><div><h2 id="roomTitle">ROOM</h2><div id="turnText" class="muted"></div></div><div id="phasePill" class="pill">READY</div></div>
-        <div class="board" id="board"><img src="board.png" alt="Kelantan Next CEO board"></div>
+        <div class="board" id="board"><div id="trackLabels" class="trackLabels" aria-hidden="true"></div><img src="board.png" alt="Kelantan Next CEO board"></div>
         <div class="actions">
           <button class="gold" id="marketBtn">🌍 MARKET</button>
           <button id="rollBtn">🎲 ROLL</button>
@@ -478,7 +484,7 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
         <section class="ruleCard"><b>7. CASHFLOW</b><p>Cashflow bergantung kepada portfolio. Petak Cashflow boleh memberi payout daripada operasi bisnes anda.</p></section>
         <section class="ruleCard"><b>8. LOAN</b><p>Petak Loan membenarkan pembiayaan. Loan menambah cash tetapi juga hutang. Gunakan leverage dengan waras.</p></section>
         <section class="ruleCard"><b>9. DEAL</b><p>Petak Deal membuka negotiation dengan Founder lain. Gunakan rundingan untuk mempercepat strategi anda.</p></section>
-        <section class="ruleCard"><b>10. EVENT & PASAR</b><p>Event boleh positif atau negatif: geran, viral, banjir, kompaun MPKB, supplier lambat, mesin rosak dan lain-lain.</p></section>
+        <section class="ruleCard"><b>10. EVENT & PASAR</b><p>Event ikut tahap Founder. Sebelum ada business, event fokus idea, pitching, survey dan networking. Risiko operasi seperti banjir, stok rosak, mesin rosak dan supplier delay hanya aktif selepas anda mempunyai business.</p></section>
         <section class="ruleCard"><b>11. REPUTASI</b><p>Networking dan latihan boleh meningkatkan Reputasi. Sesetengah kejadian boleh menurunkannya.</p></section>
         <section class="ruleCard"><b>12. MATLAMAT RM1 JUTA</b><p>Net worth = cash + nilai portfolio − hutang. Capai sekurang-kurangnya RM1 juta dan mendarat di MATLAMAT untuk menang.</p></section>
       <section class="ruleCard"><b>13. BALANCE BISNES</b><p>Business yang kurang staff hanya menghasilkan sebahagian revenue. Manager membebaskan Owner Capacity dan memberi bonus operasi kecil.</p></section>
@@ -616,6 +622,12 @@ function trackLabel(pos){
   return trackPoint(pos).label;
 }
 
+const TRACK_FUNCTION_NAMES={START:"START",BUSINESS:"BUSINESS",OPPORTUNITY:"PELUANG",COST:"KOS",TRAINING:"LATIHAN",MARKET:"PASAR",CASH:"CASH",SUPPLIER:"SUPPLIER",NETWORK:"NETWORK",EVENT:"EVENT",MARKETING:"MARKETING",CASHFLOW:"CASHFLOW",REST:"REHAT",LOAN:"LOAN",COMPOUND:"KOMPAUN",DEAL:"DEAL",INVEST:"INVEST",STAFF:"STAFF",FLOOD:"BANJIR",TARGET:"MATLAMAT"};
+function trackEdge(i){if(i<=12)return"top";if(i<=20)return"right";if(i<=30)return"bottom";return"left"}
+function renderTrackLabels(){
+ const w=$("trackLabels");if(!w)return;w.innerHTML="";
+ TRACK.forEach((t,i)=>{const el=document.createElement("div"),special=["START","EVENT","OPPORTUNITY","DEAL","TARGET","MARKET","LOAN","REST"].includes(t.type);el.className=`trackTileLabel ${trackEdge(i)}${special?" special":""}`;el.style.left=t.x+"%";el.style.top=t.y+"%";el.textContent=TRACK_FUNCTION_NAMES[t.type]||t.type;w.appendChild(el)});
+}
 const B=[
 ["Marketplace Seller",6000,3000,1000,1,7000,"Retail"],["Creative Freelancer",7000,3500,900,1,8000,"Digital"],
 ["Street Burger Venture",8000,4000,1800,2,9000,"F&B"],["Mobile Repair Kiosk",10000,4500,1800,2,12000,"Gadget"],
@@ -627,15 +639,27 @@ const B=[
 ["Kelantan Manufacturing Plant",320000,70000,48000,3,410000,"Manufacturing"],["National Franchise Network",450000,95000,65000,3,580000,"Franchise"]
 ].map((x,i)=>({id:"b"+i,name:x[0],cost:x[1],rev:x[2],op:x[3],staff:x[4],value:x[5],cat:x[6]}));
 const LOCAL_EVENTS=[
- {name:"MPKB Datang Check",text:"Dokumen premis tak lengkap. Kompaun RM1,500.",cash:-1500},
- {name:"Hujan Lebat & Banjir Kilat",text:"Operasi terganggu dan stok rosak. -RM2,500.",cash:-2500},
- {name:"TikTok Viral",text:"Content bisnes meletup. +RM3,000 jualan.",cash:3000},
- {name:"Corporate Order",text:"Dapat order syarikat. +RM2,500.",cash:2500},
- {name:"Supplier Lambat",text:"Penghantaran terganggu. -RM1,000.",cash:-1000},
- {name:"Geran Usahawan",text:"Permohonan berjaya. +RM4,000.",cash:4000},
- {name:"Mesin Rosak",text:"Repair kecemasan. -RM1,800.",cash:-1800},
- {name:"Musim Perayaan",text:"Demand meningkat. +RM2,000.",cash:2000}
+ {name:"MPKB Datang Check",text:"Dokumen premis tak lengkap. Kompaun RM1,500.",cash:-1500,requiresBusiness:true},
+ {name:"Hujan Lebat & Banjir Kilat",text:"Operasi terganggu dan stok rosak. -RM2,500.",cash:-2500,requiresBusiness:true},
+ {name:"TikTok Viral",text:"Content bisnes meletup. +RM3,000 jualan.",cash:3000,requiresBusiness:true},
+ {name:"Corporate Order",text:"Dapat order syarikat. +RM2,500.",cash:2500,requiresBusiness:true},
+ {name:"Supplier Lambat",text:"Penghantaran terganggu. -RM1,000.",cash:-1000,requiresBusiness:true},
+ {name:"Geran Usahawan",text:"Permohonan berjaya. +RM4,000.",cash:4000,requiresBusiness:true},
+ {name:"Mesin Rosak",text:"Repair kecemasan. -RM1,800.",cash:-1800,requiresBusiness:true},
+ {name:"Musim Perayaan",text:"Demand meningkat. +RM2,000.",cash:2000,requiresBusiness:true},
+ {name:"Program Usahawan Kelantan",text:"Jumpa mentor dan tambah network. Reputasi +1.",rep:1,preBusiness:true},
+ {name:"Survey Pasaran",text:"Anda memahami customer sebelum launch. Reputasi +1.",rep:1,preBusiness:true},
+ {name:"Pitching Session",text:"Pitch menarik bakal partner. +RM1,000 modal.",cash:1000,preBusiness:true},
+ {name:"Idea Validation",text:"Feedback customer membantu anda elak kesilapan awal. Tiada kerugian.",cash:0,preBusiness:true},
+ {name:"Networking Founder",text:"Jumpa usahawan tempatan. Reputasi +1.",rep:1,preBusiness:true},
+ {name:"Booth Komuniti",text:"Cuba jual secara kecil-kecilan. +RM800.",cash:800,preBusiness:true}
 ];
+function hasOperatingBusiness(p){return Array.isArray(p?.biz)&&p.biz.length>0}
+function randomContextEvent(p){
+ const hasBiz=hasOperatingBusiness(p);
+ const pool=LOCAL_EVENTS.filter(x=>hasBiz?!x.preBusiness:!x.requiresBusiness);
+ return pool[Math.floor(Math.random()*pool.length)];
+}
 const OPPORTUNITIES=[
  {name:"Walk-In Besar",text:"Customer borong masuk. +RM2,000.",cash:2000},
  {name:"Silap Pricing",text:"Margin tersalah kira. -RM1,000.",cash:-1000},
@@ -724,14 +748,21 @@ async function resolveLandingTile(pos){
   case "START":showTileModal(tile,"Bonus RM5,000 diberi bila lengkap satu pusingan.");break;
   case "BUSINESS":showTileModal(tile,"Lokasi peluang: <b>"+N(businessLocationForTrack(pos)).name+"</b>.","LIHAT PELUANG",openBusinessFromTile);break;
   case "OPPORTUNITY":{const e=OPPORTUNITIES[Math.floor(Math.random()*OPPORTUNITIES.length)];await applyPlayerDelta({cash:e.cash||0,rep:e.rep||0});showTileModal(tile,"<b>"+e.name+"</b><br>"+e.text);log(me.name+": "+e.name);break}
-  case "COST":await applyPlayerDelta({cash:-1000});showTileModal(tile,"Kos operasi: <b>-RM1,000</b>.");break;
+  case "COST":
+ if(!hasOperatingBusiness(me))showTileModal(tile,"Belum ada business aktif. <b>Tiada kos operasi dikenakan.</b>");
+ else{await applyPlayerDelta({cash:-1000});showTileModal(tile,"Kos operasi: <b>-RM1,000</b>.");}
+ break;
   case "TRAINING":if((me.cash||0)>=1000){await applyPlayerDelta({cash:-1000,rep:1});showTileModal(tile,"Bayar <b>RM1,000</b> • Reputasi <b>+1</b>.")}else showTileModal(tile,"Cash tak cukup untuk latihan.");break;
   case "MARKET":
-  case "EVENT":{const e=LOCAL_EVENTS[Math.floor(Math.random()*LOCAL_EVENTS.length)];await applyPlayerDelta({cash:e.cash||0,rep:e.rep||0});showTileModal(tile,"<b>"+e.name+"</b><br>"+e.text);log(me.name+": "+e.name);break}
+  case "EVENT":{const e=randomContextEvent(me);await applyPlayerDelta({cash:e.cash||0,rep:e.rep||0});showTileModal(tile,"<b>"+e.name+"</b><br>"+e.text);log(me.name+": "+e.name);break}
   case "CASH":{const amount=tile.label==="46"?2000:(tile.label==="11"?1000:1500);await applyPlayerDelta({cash:amount});showTileModal(tile,"Cash masuk: <b>+"+fmt(amount)+"</b>.");break}
-  case "SUPPLIER":{const good=Math.random()<.5,amount=good?1200:-1400;await applyPlayerDelta({cash:amount});showTileModal(tile,good?"Supplier bagi harga khas. <b>+RM1,200</b>.":"Harga supplier naik. <b>-RM1,400</b>.");break}
+  case "SUPPLIER":{
+ if(!hasOperatingBusiness(me)){await applyPlayerDelta({rep:1});showTileModal(tile,"Belum ada business. Supplier beri quotation dan contact. <b>Reputasi +1</b>.");break}
+ const good=Math.random()<.5,amount=good?1200:-1400;await applyPlayerDelta({cash:amount});showTileModal(tile,good?"Supplier bagi harga khas. <b>+RM1,200</b>.":"Harga supplier naik. <b>-RM1,400</b>.");break}
   case "NETWORK":await applyPlayerDelta({rep:1});showTileModal(tile,"Connection bertambah. <b>Reputasi +1</b>.");break;
-  case "MARKETING":{const win=Math.random()<.55,amount=win?3000:-1000;await applyPlayerDelta({cash:amount});showTileModal(tile,win?"Campaign viral. <b>+RM3,000</b>.":"Campaign tak convert. <b>-RM1,000</b>.");break}
+  case "MARKETING":{
+ if(!hasOperatingBusiness(me)){await applyPlayerDelta({rep:1});showTileModal(tile,"Belum ada produk. Anda bina audience dan personal brand dahulu. <b>Reputasi +1</b>.");break}
+ const win=Math.random()<.55,amount=win?3000:-1000;await applyPlayerDelta({cash:amount});showTileModal(tile,win?"Campaign viral. <b>+RM3,000</b>.":"Campaign tak convert. <b>-RM1,000</b>.");break}
   case "CASHFLOW":{const cf=(me.biz||[]).reduce((a,b)=>a+((b.rev||0)-(b.op||0)),0),pay=Math.max(0,Math.round(cf*.5));if(pay)await applyPlayerDelta({cash:pay});showTileModal(tile,pay?"Kutip 50% cashflow: <b>+"+fmt(pay)+"</b>.":"Belum ada cashflow untuk dikutip.");break}
   case "REST":showTileModal(tile,"Petak selamat. <b>Tiada kos, tiada risiko.</b>");break;
   case "LOAN":showTileModal(tile,"Anda boleh menilai pembiayaan bank.","BUKA BANK",()=>{$("tileModal").classList.remove("show");$("loanBtn").click()});break;
@@ -739,7 +770,10 @@ async function resolveLandingTile(pos){
   case "DEAL":showTileModal(tile,"Masa untuk negotiate dengan Founder lain.","BUKA NEGOTIATION",()=>{$("tileModal").classList.remove("show");$("dealBtn").click()});break;
   case "INVEST":{if((me.cash||0)<2000){showTileModal(tile,"Perlu RM2,000 untuk melabur.");break}const ok=Math.random()<.5;await applyPlayerDelta({cash:ok?3000:-2000});showTileModal(tile,ok?"Pelaburan menjadi. <b>+RM3,000</b>.":"Pelaburan gagal. <b>-RM2,000</b>.");break}
   case "STAFF":{const biz=[...(me.biz||[])],i=biz.findIndex(b=>(b.staffNow||0)<(b.staff||0));if(i<0){showTileModal(tile,"Tiada kekosongan staff.");break}biz[i]={...biz[i],staffNow:(biz[i].staffNow||0)+1};await applyPlayerDelta({biz});showTileModal(tile,"1 staff percuma masuk ke <b>"+biz[i].name+"</b>.");break}
-  case "FLOOD":await applyPlayerDelta({cash:-2000});showTileModal(tile,"Banjir ganggu operasi. <b>-RM2,000</b>.");break;
+  case "FLOOD":
+ if(!hasOperatingBusiness(me)){await applyPlayerDelta({rep:1});showTileModal(tile,"Hujan lebat berlaku tetapi anda belum mempunyai premis atau stok. <b>Tiada kerugian.</b><br>Belajar risiko lokasi: <b>Reputasi +1</b>.");}
+ else{await applyPlayerDelta({cash:-2000});showTileModal(tile,"Banjir ganggu operasi dan stok. <b>-RM2,000</b>.");}
+ break;
   case "TARGET":{const nw=currentNetWorth(me);if(nw>=1000000){showTileModal(tile,"Net worth: <b>"+fmt(nw)+"</b><br>🏆 <b>ANDA KELANTAN NEXT CEO!</b>");await updateDoc(roomRef(),{status:"finished",winnerUid:user.uid,winnerName:me.name})}else showTileModal(tile,"Net worth: <b>"+fmt(nw)+"</b><br>Perlu lagi <b>"+fmt(1000000-nw)+"</b> untuk menang.");break}
  }
 }
