@@ -1,0 +1,9 @@
+V0.6.10 LOGO FIX
+
+Root cause protection:
+- Venture logos are now embedded directly inside index.html as base64 data URIs.
+- They no longer depend on relative /venture-assets file paths.
+- This prevents GitHub Pages upload/path/cache mistakes from causing blank logo cards.
+- Available FIXMOBILE traced logo is embedded too.
+- Missing-logo businesses still use category fallback visuals.
+- Image onerror fallback prevents empty cards.
