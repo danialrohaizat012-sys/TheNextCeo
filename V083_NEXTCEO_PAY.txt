@@ -1,0 +1,26 @@
+V0.8.3 NEXTCEO PAY
+
+QR IN-GAME PAYMENT
+- Player selects recipient, amount and purpose.
+- Game creates a Firestore payment request with 5-minute expiry.
+- QR contains only room + transaction ID; authoritative amount/recipient remain in Firestore.
+- Recipient scans QR and sees payment details before accepting.
+- Firestore transaction atomically checks:
+  * request still pending
+  * QR not expired
+  * correct receiver
+  * payer still has sufficient in-game cash
+- On acceptance, cash moves live from payer to receiver and payment becomes one-time 'paid'.
+
+SCAN
+- Uses device camera via getUserMedia.
+- jsQR loaded dynamically for QR recognition.
+- Manual Transaction Code fallback included.
+
+QR GENERATION
+- qrcode library loaded dynamically.
+- If QR library fails, Transaction Code still works.
+
+SECURITY / GAME LOGIC
+- This transfers IN-GAME CASH only. It does not touch real bank accounts or real money.
+- Expiry and single-use state prevent replaying old screenshots.
