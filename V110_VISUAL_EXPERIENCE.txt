@@ -1,0 +1,1 @@
+V1.1.0: premium visual treatment, hero dice animation, turn cinematic, landing cinematic, cash delta animation, leaderboard emphasis, portfolio depth, goal glow, enhanced splash. Gameplay logic retained.

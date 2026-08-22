@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Next CEO">
 <title>Kelantan Next CEO Online</title>
-<link rel="manifest" href="manifest.json?v=1.0.0">
+<link rel="manifest" href="manifest.json?v=1.1.1">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
@@ -643,7 +643,26 @@ img{height:auto}
  .moreGrid{grid-template-columns:1fr}
 }
 
-.gx-turnguide{font-size:9px;font-weight:900;color:#f4c95d;margin-top:5px}.gx-goalbar{height:5px;background:#132c38;border-radius:99px;overflow:hidden;margin-top:6px}.gx-goalbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#d7aa3d,#f5df82);transition:width .35s}.gx-goaltext{font-size:7px;color:#91a6b0;margin-top:3px}.ruleFlow{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap}.ruleFlow span{padding:7px 9px;border:1px solid #294756;border-radius:9px;background:#0b1b25;font-size:8px;font-weight:900}.player{position:relative}.player.active:before{content:"CURRENT TURN";position:absolute;right:8px;top:7px;font-size:6px;font-weight:1000;color:#f3c95b}.leaderBadge{margin-left:5px;padding:2px 5px;border-radius:99px;background:#e6bb50;color:#101820;font-size:6px}.playerStats{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:6px}.playerStats span{background:#0b1821;border:1px solid #203947;border-radius:7px;padding:5px 3px;text-align:center;font-size:7px}.bizTop{display:flex;justify-content:space-between;gap:7px}.bizValue{font-size:8px;font-weight:1000;color:#e7c55d}.bizMeta{display:flex;gap:4px;flex-wrap:wrap;margin:5px 0}.bizMeta i{font-style:normal;font-size:6px;padding:3px 5px;border:1px solid #294250;border-radius:99px}.staffBar{height:4px;border-radius:99px;background:#162c37;overflow:hidden;margin:5px 0}.staffBar i{display:block;height:100%;background:#c8a748}.tileBox{animation:tileArrival .22s ease-out}@keyframes tileArrival{from{transform:translateY(12px) scale(.97);opacity:.5}to{transform:none;opacity:1}}</style>
+.gx-turnguide{font-size:9px;font-weight:900;color:#f4c95d;margin-top:5px}.gx-goalbar{height:5px;background:#132c38;border-radius:99px;overflow:hidden;margin-top:6px}.gx-goalbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#d7aa3d,#f5df82);transition:width .35s}.gx-goaltext{font-size:7px;color:#91a6b0;margin-top:3px}.ruleFlow{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap}.ruleFlow span{padding:7px 9px;border:1px solid #294756;border-radius:9px;background:#0b1b25;font-size:8px;font-weight:900}.player{position:relative}.player.active:before{content:"CURRENT TURN";position:absolute;right:8px;top:7px;font-size:6px;font-weight:1000;color:#f3c95b}.leaderBadge{margin-left:5px;padding:2px 5px;border-radius:99px;background:#e6bb50;color:#101820;font-size:6px}.playerStats{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:6px}.playerStats span{background:#0b1821;border:1px solid #203947;border-radius:7px;padding:5px 3px;text-align:center;font-size:7px}.bizTop{display:flex;justify-content:space-between;gap:7px}.bizValue{font-size:8px;font-weight:1000;color:#e7c55d}.bizMeta{display:flex;gap:4px;flex-wrap:wrap;margin:5px 0}.bizMeta i{font-style:normal;font-size:6px;padding:3px 5px;border:1px solid #294250;border-radius:99px}.staffBar{height:4px;border-radius:99px;background:#162c37;overflow:hidden;margin:5px 0}.staffBar i{display:block;height:100%;background:#c8a748}.tileBox{animation:tileArrival .22s ease-out}@keyframes tileArrival{from{transform:translateY(12px) scale(.97);opacity:.5}to{transform:none;opacity:1}}
+/* V1.1 VISUAL EXPERIENCE */
+.panel,.card,.gx-turnhud{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 14px 38px rgba(0,0,0,.18)}
+.gx-turnhud{border-color:rgba(226,189,85,.28)!important}.gx-turnname{text-shadow:0 0 22px rgba(226,189,85,.16)}
+.coreActions button{box-shadow:inset 0 1px rgba(255,255,255,.06),0 7px 18px rgba(0,0,0,.18);transition:.14s}
+.coreActions button:not(:disabled):active{transform:translateY(2px) scale(.98)}
+#rollBtn:not(:disabled){animation:rollReady 1.7s ease-in-out infinite}@keyframes rollReady{50%{box-shadow:0 0 24px rgba(226,189,85,.28)}}
+.diceBox.rolling,.die.rolling{animation:diceHero .58s cubic-bezier(.2,.9,.3,1)}@keyframes diceHero{0%{transform:none}35%{transform:translateY(-18px) rotate(18deg) scale(1.12)}70%{transform:translateY(3px) rotate(-7deg) scale(.96)}100%{transform:none}}
+.modal.show .box{animation:modalHero .26s cubic-bezier(.2,.85,.25,1)}@keyframes modalHero{from{transform:translateY(22px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+.cinematic{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle,rgba(14,35,45,.72),rgba(2,7,11,.95));opacity:0;visibility:hidden;transition:.2s;pointer-events:none}
+.cinematic.show{opacity:1;visibility:visible}.cinInner{text-align:center}.cinematic.show .cinInner{animation:cinPop 1.25s cubic-bezier(.15,.85,.25,1)}
+@keyframes cinPop{0%{transform:scale(.82);opacity:0}18%,78%{transform:scale(1);opacity:1}100%{transform:scale(1.04);opacity:0}}
+.cinKicker{font-size:9px;letter-spacing:4px;color:#d6b44f;font-weight:1000}.cinTitle{font-size:clamp(24px,6vw,52px);font-weight:1000;color:white;margin:5px 0;text-shadow:0 0 34px rgba(226,189,85,.25)}.cinSub{font-size:10px;color:#a9bbc3;font-weight:800}
+.moneyFloat{position:fixed;z-index:100000;left:50%;top:20%;transform:translateX(-50%);font-size:24px;font-weight:1000;pointer-events:none;opacity:0;text-shadow:0 6px 18px rgba(0,0,0,.5)}
+.moneyFloat.good{color:#8ce2a8;animation:moneyUp 1.2s ease}.moneyFloat.bad{color:#ff9696;animation:moneyUp 1.2s ease}@keyframes moneyUp{0%{opacity:0;transform:translate(-50%,15px) scale(.8)}20%,70%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,-30px) scale(1.06)}}
+.player.active{box-shadow:0 0 0 1px rgba(226,189,85,.35),0 10px 25px rgba(0,0,0,.2);transform:translateY(-1px)}.leaderBadge{animation:leaderGlow 1.8s infinite}@keyframes leaderGlow{50%{filter:brightness(1.35);box-shadow:0 0 13px rgba(226,189,85,.35)}}
+.biz{transition:.18s}.biz:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(0,0,0,.25)}.gx-goalbar i{box-shadow:0 0 13px rgba(226,189,85,.45)}
+.splashLogo,.splashMark,.splashBrand{animation:splashLuxury 1.6s cubic-bezier(.2,.8,.2,1) both}@keyframes splashLuxury{0%{opacity:0;transform:translateY(10px) scale(.94);filter:blur(8px)}45%{opacity:1;filter:blur(0)}100%{transform:none}}
+
+</style>
 <script>
 (function(){
   document.documentElement.dataset.kncBuild="0.5.3";
@@ -687,7 +706,7 @@ window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_
     <div class="splashProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <span class="splashProgressBar" id="splashProgressBar"></span>
     </div>
-    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V1.0.0</div><div class="splashCredit">Developed by BinaLab</div>
+    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V1.1.1</div><div class="splashCredit">Developed by BinaLab</div>
     <button type="button" class="splashSkip" id="splashSkip">TERUSKAN</button>
   </div>
 </div>
@@ -761,7 +780,7 @@ window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_
   </div>
 </div>
 
-<div class="audioToast" id="audioToast">AUDIO READY</div><div class="toast" id="toast"></div>
+<div class="audioToast" id="audioToast">AUDIO READY</div><div class="toast" id="toast"></div><div class="cinematic" id="cinematic"><div class="cinInner"><div class="cinKicker" id="cinKicker">NEXT CEO</div><div class="cinTitle" id="cinTitle">FOUNDER'S TURN</div><div class="cinSub" id="cinSub"></div></div></div><div class="moneyFloat" id="moneyFloat"></div>
 
 <div class="modal show founderGate" id="gateModal">
   <div class="founderScreen">
@@ -1051,7 +1070,11 @@ const db = getFirestore(app);
 
 const $=id=>document.getElementById(id);
 const fmt=n=>"RM"+Math.round(n||0).toLocaleString("en-MY");
-const toast=t=>{const e=$("toast");e.textContent=t;e.style.display="block";setTimeout(()=>e.style.display="none",1700)};const gameHistory=[];function log(message){const text=String(message||"").trim();if(!text)return;gameHistory.unshift({text,time:Date.now()});if(gameHistory.length>60)gameHistory.length=60;const el=$("log");if(el)el.innerHTML=gameHistory.map(x=>`<div class="logItem"><small>${new Date(x.time).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</small> ${x.text}</div>`).join("")}
+const toast=t=>{const e=$("toast");e.textContent=t;e.style.display="block";setTimeout(()=>e.style.display="none",1700)};let lastVisualTurnUid=null,lastVisualCash={};
+function showCinematic(title,sub="",kicker="NEXT CEO",ms=1250){const el=$("cinematic");if(!el)return;$("cinTitle").textContent=title;$("cinSub").textContent=sub;$("cinKicker").textContent=kicker;el.classList.remove("show");void el.offsetWidth;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),ms)}
+function showMoneyDelta(amount){if(!amount)return;const el=$("moneyFloat");if(!el)return;el.textContent=(amount>0?"+":"−")+fmt(Math.abs(amount));el.className="moneyFloat "+(amount>0?"good":"bad");void el.offsetWidth;setTimeout(()=>el.className="moneyFloat",1250)}
+function visualTurnUpdate(){if(!room||!players?.length)return;const active=players.find(p=>p.uid===room.turnUid);if(active&&lastVisualTurnUid&&lastVisualTurnUid!==active.uid)showCinematic(`${active.name.toUpperCase()}'S TURN`,`${fmt(active.cash)} • ${(active.biz||[]).length} Ventures • NW ${fmt(currentNetWorth(active))}`,"CURRENT TURN");lastVisualTurnUid=active?.uid||lastVisualTurnUid;players.forEach(p=>{const prev=lastVisualCash[p.uid];if(prev!=null&&p.uid===user?.uid&&Number(p.cash)!==prev)showMoneyDelta(Number(p.cash)-prev);lastVisualCash[p.uid]=Number(p.cash||0)})}
+const gameHistory=[];function log(message){const text=String(message||"").trim();if(!text)return;gameHistory.unshift({text,time:Date.now()});if(gameHistory.length>60)gameHistory.length=60;const el=$("log");if(el)el.innerHTML=gameHistory.map(x=>`<div class="logItem"><small>${new Date(x.time).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})}</small> ${x.text}</div>`).join("")}
 // ===== V0.6.12 WEB AUDIO ENGINE =====
 // No copyrighted audio files are bundled. Music/SFX are generated live with WebAudio.
 let audioCtx=null,musicGain=null,sfxGain=null,musicTimer=null,musicStep=0;
@@ -1250,7 +1273,32 @@ const B=[
 {id:"amin",name:"Amin Studio",cost:15000,rev:6200,op:2900,staff:2,value:20000,cat:"Creative",archetype:"CREATIVE BOOKING SERVICE",ability:"Booking Session",abilityText:"Booking-based creative business dengan modal lebih ringan.",logo:"",fallback:"📸",tier:"STARTUP"},
 {id:"izara",name:"Izara Cookies",cost:75000,rev:22500,op:14000,staff:5,value:96000,cat:"Manufacturing",archetype:"PRODUCTION SCALE",ability:"OEM Contract",abilityText:"OEM dan bulk order memberi scaling besar, tetapi production cost juga tinggi.",logo:"",fallback:"🍪",tier:"ESTABLISHED"},
 {id:"ajc",name:"AJC Construction",cost:120000,rev:34000,op:22000,staff:5,value:155000,cat:"Construction",archetype:"PROJECT-BASED HIGH VALUE",ability:"Project Win",abilityText:"Payout projek tinggi dengan risiko delay dan kos bahan.",logo:"venture-clean/ajc.webp",tier:"ICONIC"},
-{id:"nasken",name:"Nasken Coffee",cost:60000,rev:17500,op:10500,staff:4,value:78000,cat:"F&B",archetype:"ESTABLISHED F&B BRAND",ability:"Brand Power",abilityText:"Brand strength membantu ketika payday, festival dan demand tinggi.",logo:"venture-clean/nasken.webp",tier:"ESTABLISHED"}
+{id:"nasken",name:"Nasken Coffee",cost:60000,rev:17500,op:10500,staff:4,value:78000,cat:"F&B",archetype:"ESTABLISHED F&B BRAND",ability:"Brand Power",abilityText:"Brand strength membantu ketika payday, festival dan demand tinggi.",logo:"venture-clean/nasken.webp",tier:"ESTABLISHED"},
+{id:"factorymobile",name:"Factory Mobile",cost:26000,rev:10500,op:5700,staff:3,value:35000,cat:"Tech",archetype:"DEVICE RETAIL + SERVICE",ability:"Device Ecosystem",abilityText:"Retail device dan servis memberi dua sumber revenue.",logo:"",fallback:"📱",tier:"GROWTH"},
+{id:"dapple",name:"D Apple Fried Chicken",cost:24000,rev:9800,op:5500,staff:3,value:32000,cat:"F&B",archetype:"QUICK SERVICE F&B",ability:"Fried Chicken Rush",abilityText:"High-turnover F&B yang kuat ketika peak hour dan delivery.",logo:"",fallback:"🍗",tier:"GROWTH"},
+{id:"ntsprinting",name:"NTS Printing",cost:22000,rev:8500,op:4300,staff:3,value:29000,cat:"Creative",archetype:"B2B PRINTING",ability:"Bulk Print Order",abilityText:"Order pukal dan pelanggan bisnes menyokong recurring demand.",logo:"",fallback:"🖨️",tier:"GROWTH"},
+{id:"kopiology",name:"Kopiology",cost:30000,rev:11200,op:6500,staff:3,value:40000,cat:"F&B",archetype:"SPECIALTY CAFE",ability:"Coffee Community",abilityText:"Brand café mendapat manfaat daripada repeat customer dan networking.",logo:"",fallback:"☕",tier:"GROWTH"},
+{id:"mochimo",name:"Mochimo",cost:18000,rev:7600,op:4100,staff:2,value:24500,cat:"F&B",archetype:"DESSERT BRAND",ability:"Sweet Trend",abilityText:"Produk dessert mudah mendapat boost ketika trend dan festival.",logo:"",fallback:"🍡",tier:"STARTUP"},
+{id:"karatengland",name:"Karat England Cafe",cost:28000,rev:10400,op:5900,staff:3,value:37000,cat:"F&B",archetype:"THEMED CAFE",ability:"Cafe Experience",abilityText:"Konsep café membantu menarik experience-driven customers.",logo:"",fallback:"☕",tier:"GROWTH"},
+{id:"rajaperfume",name:"Raja Perfume",cost:25000,rev:9200,op:4500,staff:2,value:34000,cat:"Retail",archetype:"FRAGRANCE RETAIL",ability:"High Margin Scent",abilityText:"Produk fragrance mempunyai potensi margin retail yang menarik.",logo:"",fallback:"✨",tier:"GROWTH"},
+{id:"lapalab",name:"LapaLab",cost:26000,rev:9800,op:5500,staff:3,value:35000,cat:"F&B",archetype:"CAFE",ability:"Cafe Lab",abilityText:"Cafe dengan ruang untuk eksperimen menu dan repeat customer.",logo:"",fallback:"☕",tier:"GROWTH"},
+{id:"hashcream",name:"Kilang Hash Cream",cost:85000,rev:24500,op:15000,staff:5,value:110000,cat:"Manufacturing",archetype:"ICE CREAM FACTORY",ability:"Cold Chain Scale",abilityText:"Production dan distribution memberi scaling tinggi dengan kos operasi besar.",logo:"",fallback:"🍦",tier:"ESTABLISHED"},
+{id:"ibing",name:"Ibing Machang",cost:23000,rev:9000,op:5000,staff:3,value:31000,cat:"F&B",archetype:"BINGSU CAFE",ability:"Dessert Chill",abilityText:"Bingsu mendapat demand boost ketika cuaca panas dan social trend.",logo:"",fallback:"🍧",tier:"GROWTH"},
+{id:"eddle",name:"Eddle Kopitiam",cost:32000,rev:11800,op:6700,staff:4,value:42000,cat:"F&B",archetype:"KOPITIAM",ability:"Daily Regulars",abilityText:"Repeat customer memberi asas cashflow F&B yang stabil.",logo:"",fallback:"🥤",tier:"GROWTH"},
+{id:"beejob",name:"BeeJob Printing",cost:20000,rev:8000,op:4100,staff:3,value:27000,cat:"Creative",archetype:"PRINTING SERVICE",ability:"Business Orders",abilityText:"Servis printing mendapat manfaat daripada pelanggan B2B.",logo:"",fallback:"🖨️",tier:"GROWTH"},
+{id:"signboardexpert",name:"Signboard Expert",cost:35000,rev:12500,op:6900,staff:3,value:47000,cat:"Creative",archetype:"SIGNAGE PROJECT SERVICE",ability:"Big Sign Project",abilityText:"Project signage bernilai lebih tinggi tetapi bergantung kepada pipeline tempahan.",logo:"",fallback:"🪧",tier:"GROWTH"},
+{id:"soberbites",name:"Sober Bites",cost:19000,rev:7800,op:4300,staff:2,value:26000,cat:"F&B",archetype:"SNACK F&B",ability:"Bite Size Margin",abilityText:"Operasi lebih lean dengan potensi volume jualan.",logo:"",fallback:"🥪",tier:"STARTUP"},
+{id:"kakmahsate3",name:"Kak Mah Sate 3",cost:27000,rev:10800,op:6100,staff:3,value:36000,cat:"F&B",archetype:"LOCAL F&B",ability:"Sate Crowd",abilityText:"Demand tempatan dan event membantu volume jualan.",logo:"",fallback:"🍢",tier:"GROWTH"},
+{id:"yiekejora",name:"Chalet Yie Kejora",cost:65000,rev:18000,op:10500,staff:4,value:84000,cat:"Hospitality",archetype:"CHALET / STAY",ability:"Holiday Booking",abilityText:"School holiday dan tourism market meningkatkan booking.",logo:"",fallback:"🏡",tier:"ESTABLISHED"},
+{id:"leykos",name:"Leykos Keropok Lekor",cost:30000,rev:11000,op:6200,staff:3,value:40000,cat:"F&B",archetype:"LOCAL FOOD BRAND",ability:"Local Favourite",abilityText:"Produk tempatan mendapat kekuatan daripada repeat demand dan event.",logo:"",fallback:"🐟",tier:"GROWTH"},
+{id:"tengkuazrin",name:"Tengku Azrin Construction",cost:115000,rev:32500,op:21000,staff:5,value:148000,cat:"Construction",archetype:"PROJECT-BASED HIGH VALUE",ability:"Tender Win",abilityText:"Project besar memberi upside tinggi tetapi sensitif kepada delay dan material cost.",logo:"",fallback:"🏗️",tier:"ICONIC"},
+{id:"grandecoffee",name:"Grande Coffee",cost:31000,rev:11500,op:6500,staff:3,value:41000,cat:"F&B",archetype:"CAFE",ability:"Grande Crowd",abilityText:"Cafe mendapat kelebihan daripada footfall dan customer retention.",logo:"",fallback:"☕",tier:"GROWTH"},
+{id:"jangot",name:"Jangot Barbershop",cost:18000,rev:7200,op:3500,staff:2,value:24500,cat:"Services",archetype:"PERSONAL GROOMING",ability:"Repeat Cut",abilityText:"Recurring customer menghasilkan service cashflow yang konsisten.",logo:"",fallback:"💈",tier:"STARTUP"},
+{id:"wifix",name:"Wifix Computer",cost:28000,rev:10800,op:5600,staff:3,value:38000,cat:"Tech",archetype:"COMPUTER RETAIL + SERVICE",ability:"Tech Repair",abilityText:"Repair dan hardware sales membentuk revenue mix yang kukuh.",logo:"",fallback:"💻",tier:"GROWTH"},
+{id:"gubahbina",name:"Gubah Bina Construction",cost:105000,rev:30000,op:19500,staff:5,value:136000,cat:"Construction",archetype:"PROJECT CONTRACTOR",ability:"Build Contract",abilityText:"Contract project memberi payout besar dengan execution risk.",logo:"",fallback:"🏗️",tier:"ICONIC"},
+{id:"jdmh",name:"JDMH Auto Service",cost:36000,rev:13200,op:7200,staff:4,value:48000,cat:"Automotive",archetype:"AUTO WORKSHOP",ability:"Service Bay",abilityText:"Repair dan maintenance memberi recurring automotive demand.",logo:"",fallback:"🔧",tier:"GROWTH"},
+{id:"klinikhijra",name:"Klinik Hijra",cost:100000,rev:28500,op:17500,staff:5,value:130000,cat:"Healthcare",archetype:"HEALTHCARE SERVICE",ability:"Essential Demand",abilityText:"Healthcare mempunyai demand lebih defensif tetapi overhead dan staffing tinggi.",logo:"",fallback:"🩺",tier:"ICONIC"},
+{id:"mkbundle",name:"MK Bundle",cost:21000,rev:8200,op:4400,staff:2,value:28000,cat:"Retail",archetype:"BUNDLE RETAIL",ability:"Treasure Find",abilityText:"Inventory trading memberi peluang margin tinggi dengan risiko slow stock.",logo:"",fallback:"👕",tier:"GROWTH"}
 ];
 const PREBUSINESS_DECK=[
 {name:"Program Usahawan Kelantan",text:"Jumpa mentor. Reputasi +1.",rep:1},{name:"Survey Pasaran",text:"Faham demand customer. Reputasi +1.",rep:1},{name:"Pitching Session",text:"Partner suka idea. +RM1,000.",cash:1000},{name:"Idea Validation",text:"Feedback awal elak kesilapan.",cash:0},{name:"Networking Founder",text:"Jumpa founder tempatan. Reputasi +1.",rep:1},{name:"Booth Komuniti",text:"Jual kecil-kecilan. +RM800.",cash:800},{name:"Business Competition",text:"Menang saguhati. +RM1,500 dan Rep +1.",cash:1500,rep:1},{name:"Prototype Gagal",text:"Prototype tak menjadi. -RM500.",cash:-500},{name:"Mentor Review",text:"Model bisnes bertambah baik. Rep +2.",rep:2},{name:"Early Deposit",text:"Customer pertama bayar deposit. +RM1,200.",cash:1200},{name:"Domain & Branding",text:"Kos branding awal. -RM600.",cash:-600},{name:"Referral Kawan",text:"Dapat peluang baru. +RM700.",cash:700},{name:"Demo Day",text:"Pitch mendapat perhatian. Rep +1.",rep:1},{name:"Sample Sold",text:"Sample pertama terjual. +RM900.",cash:900},{name:"Salah Target Market",text:"Eksperimen awal gagal. -RM400.",cash:-400},{name:"Founder Meetup",text:"Dapat connection penting. Rep +1.",rep:1}];
@@ -1381,7 +1429,7 @@ async function openBusinessFromTile(){
 }
 
 async function resolveLandingTile(pos){
- const tile=trackPoint(pos),me=myPlayer();if(!tile||!me)return;log(`📍 ${me.name} landed on ${tile.title||tile.type}`);
+ const tile=trackPoint(pos),me=myPlayer();if(!tile||!me)return;log(`📍 ${me.name} landed on ${tile.title||tile.type}`);const dramatic=["BUSINESS","EVENT","DEAL","GOAL","CASH","LOAN","MARKET"];if(dramatic.includes(String(tile.type||"").toUpperCase()))showCinematic(String(tile.title||tile.type).toUpperCase(),tile.sub||tile.label||"","LANDED ON",900);
  switch(tile.type){
   case "START":showTileModal(tile,"Bonus RM5,000 diberi bila lengkap satu pusingan.");break;
   case "BUSINESS":showTileModal(tile,"Lokasi peluang: <b>"+N(businessLocationForTrack(pos)).name+"</b>.","LIHAT PELUANG",openBusinessFromTile);break;
@@ -1724,7 +1772,7 @@ function render(){
  $("businessBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";
  $("loanBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";
  $("dealBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";
- $("endTurnBtn").disabled=!isMyTurn()||room?.phase!=="ACTION";const guide=$("turnGuide"),goal=$("goalProgress"),goalText=$("goalText"),active=players.find(p=>p.uid===room?.turnUid);if(guide){if(!isMyTurn())guide.textContent=`Menunggu ${active?.name||"Founder"} selesaikan turn.`;else if(["ROLL","READY"].includes(room?.phase)&&!rollAlreadyUsed)guide.textContent="STEP 1 • ROLL dua dadu sekali.";else if(["ROLLING","MOVING"].includes(room?.phase))guide.textContent="STEP 2 • Pawn sedang bergerak...";else if(room?.phase==="ACTION")guide.textContent="STEP 3 • Pilih action jika perlu, kemudian END TURN."}const anw=currentNetWorth(active||{});if(goal)goal.style.width=Math.min(100,Math.max(0,anw/10000))+"%";if(goalText)goalText.textContent=`${fmt(anw)} / RM1,000,000 • ${Math.min(100,Math.floor(anw/10000))}%`;
+ $("endTurnBtn").disabled=!isMyTurn()||room?.phase!=="ACTION";const guide=$("turnGuide"),goal=$("goalProgress"),goalText=$("goalText"),active=players.find(p=>p.uid===room?.turnUid);if(guide){if(!isMyTurn())guide.textContent=`Menunggu ${active?.name||"Founder"} selesaikan turn.`;else if(["ROLL","READY"].includes(room?.phase)&&!rollAlreadyUsed)guide.textContent="STEP 1 • ROLL dua dadu sekali.";else if(["ROLLING","MOVING"].includes(room?.phase))guide.textContent="STEP 2 • Pawn sedang bergerak...";else if(room?.phase==="ACTION")guide.textContent="STEP 3 • Pilih action jika perlu, kemudian END TURN."}const anw=currentNetWorth(active||{});if(goal)goal.style.width=Math.min(100,Math.max(0,anw/10000))+"%";if(goalText)goalText.textContent=`${fmt(anw)} / RM1,000,000 • ${Math.min(100,Math.floor(anw/10000))}%`;visualTurnUpdate();
 }
 
 
@@ -1873,7 +1921,7 @@ async function endCurrentTurn(){
      tx.update(rRef,patch);
    });
    closeModals();
-   if(wrapped)toast(`Round baru • ${next.name}`);
+   if(wrapped){toast(`Round baru • ${next.name}`);setTimeout(()=>showCinematic(`ROUND ${Number(room?.round||1)+1}`,"Market baharu sedang bermula","MARKET UPDATE",1200),180);}
    else toast(`Turn ${next.name}`);
    log(`➡️ Giliran ${next.name}`);
  }catch(e){console.error("End turn:",e);toast(e.message||"End Turn gagal")}

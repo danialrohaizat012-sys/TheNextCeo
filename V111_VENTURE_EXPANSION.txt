@@ -1,0 +1,10 @@
+V1.1.1 VENTURE EXPANSION
+Added 25 permission-approved real ventures:
+Factory Mobile, D Apple Fried Chicken, NTS Printing, Kopiology, Mochimo, Karat England Cafe, Raja Perfume, LapaLab, Kilang Hash Cream, Ibing Machang, Eddle Kopitiam, BeeJob Printing, Signboard Expert, Sober Bites, Kak Mah Sate 3, Chalet Yie Kejora, Leykos Keropok Lekor, Tengku Azrin Construction, Grande Coffee, Jangot Barbershop, Wifix Computer, Gubah Bina Construction, JDMH Auto Service, Klinik Hijra, MK Bundle.
+
+Confirmed classifications:
+- LapaLab = F&B / Cafe
+- Kilang Hash Cream = Manufacturing / Ice Cream Factory
+- Ibing Machang = F&B / Bingsu Cafe
+
+Temporary fallback icons are used until clean logos are supplied. Stats are game-balancing values, not real-world financial claims.
