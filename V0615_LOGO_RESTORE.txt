@@ -1,0 +1,9 @@
+V0.6.15 RESTORED USER-UPLOADED LOGOS
+
+Restored bundled logo assets from images already supplied earlier in this conversation.
+Bundled clean logos: ajc, allfamous, astonian, ayenas, azam, fixmobile, garden, kedua, meney, mos, nasken, nasrom, sayap, uruz
+
+The previous build referred to venture-clean/*.webp but accidentally did not include that folder.
+This build physically includes the venture-clean folder inside the ZIP, so GitHub Pages can serve the files.
+
+Sayap Niaga was re-cropped to remove the phone screenshot chrome.

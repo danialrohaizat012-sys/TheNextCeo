@@ -1,0 +1,7 @@
+V0.6.16 LOGO POLISH
+- Uses the actual logos already supplied by the user.
+- Manual crops tuned per brand.
+- Sayap Niaga phone screenshot chrome removed; only the central brand emblem area is kept.
+- Standardized 1200x900 venture logo cards with consistent safe area and sharpening.
+- Original brand artwork is preserved; no invented replacement logos.
+- Missing official-logo ventures remain typography/category fallbacks until official artwork is supplied.
