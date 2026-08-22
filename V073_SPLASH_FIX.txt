@@ -1,0 +1,6 @@
+V0.7.3 LANDSCAPE SPLASH FIX
+- Keeps the existing splash artwork.
+- In landscape, splash artwork uses contain instead of cover so no part of the design is cropped.
+- Progress/loading area is constrained to a landscape-safe width.
+- Added runtime fallback for background-size/object-fit on landscape phones.
+- Portrait behavior remains unchanged.

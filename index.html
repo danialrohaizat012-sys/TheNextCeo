@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Next CEO">
 <title>Kelantan Next CEO Online</title>
-<link rel="manifest" href="manifest.json?v=0.7.1">
+<link rel="manifest" href="manifest.json?v=0.7.3">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
@@ -379,27 +379,79 @@ body{overscroll-behavior:none}
 }
 
 
-/* ===== V0.7.1 LANDSCAPE-FIRST MOBILE ===== */
-.gx-rotate-lock{display:none}
-@media(max-width:900px) and (orientation:landscape){
+/* ===== V0.7.2 RESPONSIVE RECOVERY ===== */
+/* Do not force orientation. Each layout gets its own composition. */
+html,body{max-width:100%;overflow-x:hidden}
+#gxTurnHud{box-sizing:border-box}
+@media (max-width:767px) and (orientation:portrait){
+ body{padding-bottom:74px}
+ #gxTurnHud{position:relative;top:auto;margin:8px;width:calc(100% - 16px);grid-template-columns:minmax(0,1fr) 78px;padding:8px 9px;border-radius:14px}
+ .gx-turnwho{font-size:8px}.gx-turnname{font-size:13px}
+ .gx-stats{gap:4px;margin-top:4px}.gx-pill{font-size:8px;padding:4px 6px}
+ .gx-progress{margin-top:5px}.gx-roll{min-width:72px;height:42px;font-size:11px;border-radius:12px}
+ #boardWrap,.boardWrap{width:100%;max-width:100%;overflow:hidden;margin:0 auto}
+ #board{width:min(96vw,620px)!important;height:auto!important;aspect-ratio:1/1;margin:0 auto;border-radius:12px}
+ .gx-bottomnav{display:grid;grid-template-columns:repeat(5,1fr)}
+}
+@media (max-width:932px) and (orientation:landscape){
+ body{padding:0 72px 8px 8px!important}
+ #gxTurnHud{position:relative;top:auto;margin:6px 0;width:100%;grid-template-columns:minmax(0,1fr) 78px;padding:6px 9px;border-radius:12px}
+ .gx-turnwho{font-size:7px}.gx-turnname{font-size:12px}
+ .gx-stats{gap:4px;margin-top:3px}.gx-pill{font-size:7px;padding:3px 5px}
+ .gx-progress{margin-top:4px;height:4px}.gx-roll{height:38px;min-width:70px;font-size:10px}
+ #boardWrap,.boardWrap{width:100%;max-width:100%;display:flex;justify-content:center;overflow:visible}
+ #board{width:auto!important;height:min(78vh,calc(100vw - 100px))!important;max-width:calc(100vw - 100px)!important;aspect-ratio:1/1;margin:0 auto;border-radius:12px}
+ .gx-bottomnav{display:grid;position:fixed;left:auto;right:5px;top:50%;bottom:auto;transform:translateY(-50%);width:58px;grid-template-columns:1fr;gap:2px;padding:5px;border-radius:15px}
+ .gx-navbtn{font-size:7px;padding:4px 1px}.gx-navbtn b{font-size:17px}
+}
+@media (min-width:933px){
  body{padding-bottom:0}
- .gx-bottomnav{position:fixed;left:auto;right:8px;top:50%;bottom:auto;transform:translateY(-50%);display:grid;grid-template-columns:1fr;gap:4px;width:62px;padding:7px;border:1px solid #233a4a;border-radius:18px;background:rgba(7,18,27,.96);backdrop-filter:blur(16px)}
- .gx-navbtn{font-size:8px}.gx-navbtn b{font-size:18px}
- .gx-turnhud{position:fixed;left:8px;top:8px;right:auto;width:min(330px,42vw);margin:0;z-index:1002;padding:8px 10px}
- .gx-turnname{font-size:14px}.gx-pill{font-size:9px;padding:4px 7px}.gx-roll{height:42px;min-width:76px;font-size:12px}
- #gameLayout,.gameLayout{grid-template-columns:minmax(0,1fr) 260px!important;gap:10px!important}
+ .gx-bottomnav{display:none!important}
+ #gxTurnHud{max-width:1180px;margin:8px auto 12px}
+ #boardWrap,.boardWrap{min-width:0}
+ #board{max-width:100%;height:auto}
+}
+/* Undo any accidental desktop two-column constraint from generic selectors. */
+@media(min-width:900px){
+ .game-shell,.app{display:block!important;max-width:1180px;margin-left:auto;margin-right:auto}
  #boardWrap,.boardWrap{position:relative!important;top:auto!important}
- #board{max-height:calc(100vh - 16px);width:auto;max-width:calc(100vw - 340px);margin:8px auto;aspect-ratio:1/1}
 }
-@media(max-width:900px) and (orientation:portrait){
- .gx-rotate-lock{display:flex;position:fixed;inset:0;z-index:20000;background:#07131c;color:#f0dfc0;align-items:center;justify-content:center;text-align:center;padding:28px}
- .gx-rotate-inner{max-width:330px}
- .gx-rotate-icon{font-size:56px;animation:gxRotateHint 1.5s ease-in-out infinite alternate}
- .gx-rotate-title{font-size:24px;font-weight:1000;margin-top:14px}
- .gx-rotate-copy{font-size:13px;line-height:1.55;color:#aab7bf;margin-top:8px}
- .gx-rotate-skip{margin-top:18px;border:1px solid #385064;background:#10202b;color:#e8d8bb;padding:10px 14px;border-radius:12px;font-weight:900}
+
+
+/* ===== V0.7.3 LANDSCAPE SPLASH FIX ===== */
+@media(max-width:932px) and (orientation:landscape){
+ #splash,#splashScreen,.splash,.splashScreen{
+   padding:0!important;
+   align-items:center!important;
+   justify-content:center!important;
+   overflow:hidden!important;
+ }
+ #splash img,#splashScreen img,.splash img,.splashScreen img,
+ .splashArt,.splash-art,.splashImage,.splash-image{
+   width:auto!important;
+   height:100%!important;
+   max-width:100%!important;
+   max-height:100%!important;
+   object-fit:contain!important;
+   object-position:center center!important;
+ }
+ #splash::before,#splashScreen::before,.splash::before,.splashScreen::before{
+   background-size:contain!important;
+   background-position:center center!important;
+   background-repeat:no-repeat!important;
+ }
+ .splashCard,.splash-card,.splashContent,.splash-content{
+   width:min(72vw,680px)!important;
+   max-width:72vw!important;
+   margin:0 auto!important;
+   transform:none!important;
+ }
+ .splashProgress,.splash-progress,.loadingBar,.loading-bar{
+   width:min(58vw,520px)!important;
+   margin-left:auto!important;
+   margin-right:auto!important;
+ }
 }
-@keyframes gxRotateHint{from{transform:rotate(0deg)}to{transform:rotate(90deg)}}
 
 </style>
 <script>
@@ -424,16 +476,6 @@ body{overscroll-behavior:none}
 <link rel="preload" as="image" href="venture-clean/fixmobile.webp">
 </head>
 <body>
-
-<div id="gxRotateLock" class="gx-rotate-lock">
-  <div class="gx-rotate-inner">
-    <div class="gx-rotate-icon">📱</div>
-    <div class="gx-rotate-title">Pusing Phone Ke Landscape</div>
-    <div class="gx-rotate-copy">Kelantan Next CEO direka untuk dimainkan secara landscape supaya board, pawn, dadu dan action panel boleh dilihat lebih besar.</div>
-    <button type="button" id="gxRotateSkip" class="gx-rotate-skip">Teruskan Portrait</button>
-  </div>
-</div>
-
 
 <div id="gxDiceVeil" class="gx-diceveil"></div>
 <div id="gxTurnHud" class="gx-turnhud">
@@ -1759,27 +1801,22 @@ window.gxLanding=gxLanding;
 setInterval(gxRefresh,700);setTimeout(gxRefresh,300);
 
 
-/* ===== V0.7.1 LANDSCAPE PREFERENCE ===== */
-let gxPortraitOverride=false;
-function gxApplyOrientationUI(){
- const portrait=window.matchMedia("(orientation:portrait)").matches;
- const small=window.matchMedia("(max-width:900px)").matches;
- const lock=document.getElementById("gxRotateLock");
- if(lock)lock.style.display=(small&&portrait&&!gxPortraitOverride)?"flex":"none";
+/* ===== V0.7.3 SPLASH LANDSCAPE SAFETY ===== */
+function gxFixSplashLandscape(){
+ const landscape=window.matchMedia("(orientation:landscape)").matches&&window.innerWidth<=932;
+ if(!landscape)return;
+ const sels=["#splash","#splashScreen",".splash",".splashScreen"];
+ for(const s of sels){
+   document.querySelectorAll(s).forEach(el=>{
+     el.style.backgroundSize="contain";
+     el.style.backgroundPosition="center center";
+     el.style.backgroundRepeat="no-repeat";
+   });
+ }
 }
-async function gxTryLandscape(){
- try{
-  if(screen.orientation&&screen.orientation.lock){
-   await screen.orientation.lock("landscape");
-  }
- }catch(_){}
- gxApplyOrientationUI();
-}
-document.getElementById("gxRotateSkip")?.addEventListener("click",()=>{gxPortraitOverride=true;gxApplyOrientationUI()});
-window.addEventListener("orientationchange",gxApplyOrientationUI);
-window.addEventListener("resize",gxApplyOrientationUI);
-["pointerdown","touchstart"].forEach(ev=>window.addEventListener(ev,()=>{gxTryLandscape()},{once:true,passive:true}));
-gxApplyOrientationUI();
+gxFixSplashLandscape();
+window.addEventListener("resize",gxFixSplashLandscape);
+window.addEventListener("orientationchange",gxFixSplashLandscape);
 
 </script>
 </body>

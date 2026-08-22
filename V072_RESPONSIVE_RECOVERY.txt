@@ -1,0 +1,22 @@
+V0.7.2 RESPONSIVE RECOVERY
+
+The forced-landscape experiment from V0.7.1 is removed.
+
+PORTRAIT PHONE
+- Board remains square and nearly full phone width.
+- Compact HUD above the board.
+- Bottom navigation remains at bottom.
+- No rotate blocker and no forced screen.orientation lock.
+
+LANDSCAPE PHONE
+- Board scales primarily from viewport height, not width.
+- Compact HUD stays above board.
+- Navigation becomes a narrow right rail.
+- Safe right padding prevents navigation from covering the board.
+
+DESKTOP/TABLET
+- Removes the overly aggressive generic two-column .app/.game-shell rule.
+- Content returns to a stable centered layout.
+- Board is no longer forced sticky.
+
+Goal: orientation should adapt to the player, not fight the player.
