@@ -1,0 +1,1 @@
+V0.6.7: 86 contextual cards: 16 startup events, 28 business events, 24 opportunities, 18 market cards. Recent history reduces repetition.

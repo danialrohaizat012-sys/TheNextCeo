@@ -1,0 +1,9 @@
+V0.6.8 PORTFOLIO NEGOTIATION
+- Buyer selects another Founder.
+- Buyer sees that Founder's current business portfolio.
+- Buyer selects one business and enters an offer price.
+- Seller receives a live incoming-offer popup.
+- Seller can ACCEPT or REJECT.
+- On ACCEPT, Firestore transaction verifies buyer cash and seller ownership, transfers cash to seller, and transfers the exact business to buyer.
+- On REJECT, no cash or business moves.
+- If buyer spends the money or seller no longer owns the business before acceptance, the deal fails safely.

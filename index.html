@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Next CEO">
 <title>Kelantan Next CEO Online</title>
-<link rel="manifest" href="manifest.json?v=0.6.5">
+<link rel="manifest" href="manifest.json?v=0.6.8">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
@@ -316,10 +316,13 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 
 /* V0.6.5 visible tile functions */
 .trackLabels{position:absolute;inset:0;z-index:12;pointer-events:none}
-.trackTileLabel{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;text-align:center;font-size:6px;font-weight:1000;line-height:1;color:#17130e;text-shadow:0 1px rgba(255,255,255,.4);padding:1px;box-sizing:border-box;overflow:hidden}
+.trackTileLabel{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:flex-end;justify-content:center;text-align:center;font-size:5.8px;font-weight:1000;line-height:1;color:#17130e;text-shadow:0 1px rgba(255,255,255,.4);padding:1px 1px 4px;box-sizing:border-box;overflow:hidden}
 .trackTileLabel.top,.trackTileLabel.bottom{width:7%;height:6.7%}.trackTileLabel.left,.trackTileLabel.right{width:7%;height:8.3%;font-size:5.4px}
 .trackTileLabel.special{color:#fff3d3;text-shadow:0 1px 2px #000}
 @media(max-width:680px){.trackTileLabel{font-size:5px}.trackTileLabel.left,.trackTileLabel.right{font-size:4.6px}}
+
+/* ===== V0.6.8 PORTFOLIO NEGOTIATION ===== */
+.dealBox{width:min(560px,94vw)!important}.dealLabel{display:block;margin:12px 0 6px;font-size:9px;font-weight:1000;letter-spacing:1px;color:#d9ad62}.dealPortfolio{display:grid;gap:8px;max-height:220px;overflow:auto}.dealBiz{padding:11px;border:1px solid #294354;border-radius:12px;background:#0a1721;cursor:pointer}.dealBiz.selected{border-color:#d2a052;box-shadow:0 0 0 2px rgba(210,160,82,.18)}.dealBiz b{color:#f0dfc0;font-size:11px}.dealBiz small{display:block;color:#9eabb3;margin-top:4px}.dealEmpty{padding:15px;border:1px dashed #385061;border-radius:12px;color:#9eabb3;text-align:center;font-size:10px}.dealIncomingKicker{font-size:9px;font-weight:1000;letter-spacing:1.5px;color:#d9ad62}.incomingDealCard{margin:13px 0;padding:15px;border-radius:14px;background:linear-gradient(135deg,#101f2a,#09141d);border:1px solid #8b683b}.incomingDealCard h3{margin:0 0 7px;color:#f0dfc0}.incomingDealCard .price{font-size:23px;font-weight:1000;color:#e3b866;margin:10px 0}.incomingDealCard p{color:#aeb8bf;font-size:10px;line-height:1.5}.dealDecision{display:grid;grid-template-columns:1fr 1.4fr;gap:8px}
 </style>
 <script>
 (function(){
@@ -483,7 +486,7 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
         <section class="ruleCard"><b>6. BUSINESS</b><p>Petak Business membuka peluang membeli bisnes. Jika cash cukup, bisnes masuk portfolio dan boleh menjana cashflow.</p></section>
         <section class="ruleCard"><b>7. CASHFLOW</b><p>Cashflow bergantung kepada portfolio. Petak Cashflow boleh memberi payout daripada operasi bisnes anda.</p></section>
         <section class="ruleCard"><b>8. LOAN</b><p>Petak Loan membenarkan pembiayaan. Loan menambah cash tetapi juga hutang. Gunakan leverage dengan waras.</p></section>
-        <section class="ruleCard"><b>9. DEAL</b><p>Petak Deal membuka negotiation dengan Founder lain. Gunakan rundingan untuk mempercepat strategi anda.</p></section>
+        <section class="ruleCard"><b>9. DEAL</b><p>NEGO DEAL membolehkan anda pilih Founder lain, lihat business dalam portfolio mereka, pilih business yang mahu dibeli dan tetapkan harga offer. Seller akan menerima popup untuk ACCEPT atau REJECT. Cash dan business hanya berpindah selepas seller menerima offer.</p></section>
         <section class="ruleCard"><b>10. EVENT & PASAR</b><p>Event ikut tahap Founder. Sebelum ada business, event fokus idea, pitching, survey dan networking. Risiko operasi seperti banjir, stok rosak, mesin rosak dan supplier delay hanya aktif selepas anda mempunyai business.</p></section>
         <section class="ruleCard"><b>11. REPUTASI</b><p>Networking dan latihan boleh meningkatkan Reputasi. Sesetengah kejadian boleh menurunkannya.</p></section>
         <section class="ruleCard"><b>12. MATLAMAT RM1 JUTA</b><p>Net worth = cash + nilai portfolio − hutang. Capai sekurang-kurangnya RM1 juta dan mendarat di MATLAMAT untuk menang.</p></section>
@@ -521,7 +524,18 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 </div></div>
 <div class="modal" id="businessModal"><div class="box"><h2>Business Opportunities</h2><div id="offers" class="shop"></div><button class="btn light closeBtn">Tutup</button></div></div>
 <div class="modal" id="loanModal"><div class="box"><h2>Business Financing</h2><div id="loans"></div><button class="btn light closeBtn">Tutup</button></div></div>
-<div class="modal" id="dealModal"><div class="box"><h2>Negotiation</h2><p class="muted">Hantar cash deal kepada Founder lain.</p><select id="dealTo" class="input"></select><input id="dealAmount" class="input" type="number" step="1000" value="5000"><input id="dealNote" class="input" placeholder="Terma deal"><button id="sendDealBtn" class="btn gold">SEND DEAL</button><button class="btn light closeBtn">Tutup</button></div></div>
+<div class="modal" id="dealModal"><div class="box dealBox">
+<h2>🤝 NEGO DEAL</h2><p class="muted">Pilih Founder, pilih business dalam portfolio dia, kemudian buat tawaran harga.</p>
+<label class="dealLabel">FOUNDER</label><select id="dealTo" class="input"></select>
+<label class="dealLabel">BUSINESS YANG NAK DIBELI</label><div id="dealPortfolio" class="dealPortfolio"></div>
+<label class="dealLabel">HARGA TAWARAN</label><input id="dealAmount" class="input" type="number" step="500" value="5000">
+<input id="dealNote" class="input" placeholder="Nota kepada seller (optional)">
+<button id="sendDealBtn" class="btn gold">HANTAR OFFER</button><button class="btn light closeBtn">Tutup</button></div></div>
+<div class="modal" id="incomingDealModal"><div class="box dealBox">
+<div class="dealIncomingKicker">INCOMING OFFER</div><h2>🤝 Ada Founder Nak Beli Business Anda</h2>
+<div id="incomingDealCard" class="incomingDealCard"></div>
+<div class="dealDecision"><button id="rejectDealBtn" class="btn light">REJECT</button><button id="acceptDealBtn" class="btn gold">ACCEPT DEAL</button></div>
+</div></div>
 
 <script type="module">
 
@@ -626,7 +640,7 @@ const TRACK_FUNCTION_NAMES={START:"START",BUSINESS:"BUSINESS",OPPORTUNITY:"PELUA
 function trackEdge(i){if(i<=12)return"top";if(i<=20)return"right";if(i<=30)return"bottom";return"left"}
 function renderTrackLabels(){
  const w=$("trackLabels");if(!w)return;w.innerHTML="";
- TRACK.forEach((t,i)=>{const el=document.createElement("div"),special=["START","EVENT","OPPORTUNITY","DEAL","TARGET","MARKET","LOAN","REST"].includes(t.type);el.className=`trackTileLabel ${trackEdge(i)}${special?" special":""}`;el.style.left=t.x+"%";el.style.top=t.y+"%";el.textContent=TRACK_FUNCTION_NAMES[t.type]||t.type;w.appendChild(el)});
+ TRACK.forEach((t,i)=>{const printed=["START","EVENT","OPPORTUNITY","DEAL","TARGET","MARKET","LOAN","REST","TRAINING"].includes(t.type);if(printed)return;const el=document.createElement("div");el.className=`trackTileLabel ${trackEdge(i)}`;el.style.left=t.x+"%";el.style.top=t.y+"%";el.textContent=TRACK_FUNCTION_NAMES[t.type]||t.type;w.appendChild(el)});
 }
 const B=[
 ["Marketplace Seller",6000,3000,1000,1,7000,"Retail"],["Creative Freelancer",7000,3500,900,1,8000,"Digital"],
@@ -638,36 +652,20 @@ const B=[
 ["Regional Distribution Co.",150000,36000,24000,3,190000,"Logistics"],["Central Production Kitchen",180000,40000,27000,3,230000,"Manufacturing"],
 ["Kelantan Manufacturing Plant",320000,70000,48000,3,410000,"Manufacturing"],["National Franchise Network",450000,95000,65000,3,580000,"Franchise"]
 ].map((x,i)=>({id:"b"+i,name:x[0],cost:x[1],rev:x[2],op:x[3],staff:x[4],value:x[5],cat:x[6]}));
-const LOCAL_EVENTS=[
- {name:"MPKB Datang Check",text:"Dokumen premis tak lengkap. Kompaun RM1,500.",cash:-1500,requiresBusiness:true},
- {name:"Hujan Lebat & Banjir Kilat",text:"Operasi terganggu dan stok rosak. -RM2,500.",cash:-2500,requiresBusiness:true},
- {name:"TikTok Viral",text:"Content bisnes meletup. +RM3,000 jualan.",cash:3000,requiresBusiness:true},
- {name:"Corporate Order",text:"Dapat order syarikat. +RM2,500.",cash:2500,requiresBusiness:true},
- {name:"Supplier Lambat",text:"Penghantaran terganggu. -RM1,000.",cash:-1000,requiresBusiness:true},
- {name:"Geran Usahawan",text:"Permohonan berjaya. +RM4,000.",cash:4000,requiresBusiness:true},
- {name:"Mesin Rosak",text:"Repair kecemasan. -RM1,800.",cash:-1800,requiresBusiness:true},
- {name:"Musim Perayaan",text:"Demand meningkat. +RM2,000.",cash:2000,requiresBusiness:true},
- {name:"Program Usahawan Kelantan",text:"Jumpa mentor dan tambah network. Reputasi +1.",rep:1,preBusiness:true},
- {name:"Survey Pasaran",text:"Anda memahami customer sebelum launch. Reputasi +1.",rep:1,preBusiness:true},
- {name:"Pitching Session",text:"Pitch menarik bakal partner. +RM1,000 modal.",cash:1000,preBusiness:true},
- {name:"Idea Validation",text:"Feedback customer membantu anda elak kesilapan awal. Tiada kerugian.",cash:0,preBusiness:true},
- {name:"Networking Founder",text:"Jumpa usahawan tempatan. Reputasi +1.",rep:1,preBusiness:true},
- {name:"Booth Komuniti",text:"Cuba jual secara kecil-kecilan. +RM800.",cash:800,preBusiness:true}
-];
-function hasOperatingBusiness(p){return Array.isArray(p?.biz)&&p.biz.length>0}
-function randomContextEvent(p){
- const hasBiz=hasOperatingBusiness(p);
- const pool=LOCAL_EVENTS.filter(x=>hasBiz?!x.preBusiness:!x.requiresBusiness);
- return pool[Math.floor(Math.random()*pool.length)];
-}
+const PREBUSINESS_DECK=[
+{name:"Program Usahawan Kelantan",text:"Jumpa mentor. Reputasi +1.",rep:1},{name:"Survey Pasaran",text:"Faham demand customer. Reputasi +1.",rep:1},{name:"Pitching Session",text:"Partner suka idea. +RM1,000.",cash:1000},{name:"Idea Validation",text:"Feedback awal elak kesilapan.",cash:0},{name:"Networking Founder",text:"Jumpa founder tempatan. Reputasi +1.",rep:1},{name:"Booth Komuniti",text:"Jual kecil-kecilan. +RM800.",cash:800},{name:"Business Competition",text:"Menang saguhati. +RM1,500 dan Rep +1.",cash:1500,rep:1},{name:"Prototype Gagal",text:"Prototype tak menjadi. -RM500.",cash:-500},{name:"Mentor Review",text:"Model bisnes bertambah baik. Rep +2.",rep:2},{name:"Early Deposit",text:"Customer pertama bayar deposit. +RM1,200.",cash:1200},{name:"Domain & Branding",text:"Kos branding awal. -RM600.",cash:-600},{name:"Referral Kawan",text:"Dapat peluang baru. +RM700.",cash:700},{name:"Demo Day",text:"Pitch mendapat perhatian. Rep +1.",rep:1},{name:"Sample Sold",text:"Sample pertama terjual. +RM900.",cash:900},{name:"Salah Target Market",text:"Eksperimen awal gagal. -RM400.",cash:-400},{name:"Founder Meetup",text:"Dapat connection penting. Rep +1.",rep:1}];
+const BUSINESS_EVENT_DECK=[
+{name:"TikTok Viral",text:"Content meletup. +RM3,000.",cash:3000},{name:"Corporate Order",text:"Order besar masuk. +RM2,500.",cash:2500},{name:"Geran Usahawan",text:"Geran berjaya. +RM4,000.",cash:4000},{name:"Musim Perayaan",text:"Demand naik. +RM2,000.",cash:2000},{name:"Review 5 Bintang",text:"Traffic naik. +RM1,500, Rep +1.",cash:1500,rep:1},{name:"Repeat Order",text:"Customer lama kembali. +RM1,200.",cash:1200},{name:"Collaboration Lokal",text:"Kolaborasi berjaya. +RM1,800, Rep +1.",cash:1800,rep:1},{name:"Staff Top Performer",text:"Staff capai target. +RM1,000.",cash:1000},{name:"MPKB Check",text:"Dokumen tak lengkap. -RM1,500.",cash:-1500},{name:"Banjir Kilat",text:"Stok terjejas. -RM2,500.",cash:-2500},{name:"Supplier Lambat",text:"Delivery terganggu. -RM1,000.",cash:-1000},{name:"Mesin Rosak",text:"Repair kecemasan. -RM1,800.",cash:-1800},{name:"Customer Refund",text:"Refund customer. -RM900.",cash:-900},{name:"Staff Berhenti",text:"Operasi terganggu. -RM700.",cash:-700},{name:"Utiliti Naik",text:"Kos meningkat. -RM800.",cash:-800},{name:"Competitor Sebelah",text:"Sales terjejas. -RM1,200.",cash:-1200},{name:"Slow Moving Stock",text:"Clearance diperlukan. -RM1,000.",cash:-1000},{name:"POS Down",text:"Sistem tergendala. -RM600.",cash:-600},{name:"Influencer Review",text:"Review positif. +RM2,200, Rep +1.",cash:2200,rep:1},{name:"Supplier Rebate",text:"Dapat rebate. +RM1,300.",cash:1300},{name:"Bulk Discount",text:"Diskaun volume. +RM1,100.",cash:1100},{name:"Staff Silap Order",text:"Order diganti. -RM750.",cash:-750},{name:"Media Feature",text:"Masuk media tempatan. +RM1,500, Rep +2.",cash:1500,rep:2},{name:"Aircond Rosak",text:"Repair premis. -RM1,000.",cash:-1000},{name:"Birthday Booking",text:"Tempahan berkumpulan. +RM1,600.",cash:1600},{name:"Fake Review",text:"Recovery reputasi. -RM500, Rep -1.",cash:-500,rep:-1},{name:"Supplier Credit",text:"Cash buffer supplier. +RM1,000.",cash:1000},{name:"Peak Hour Queue",text:"Customer tak tunggu. -RM650.",cash:-650}];
 const OPPORTUNITIES=[
- {name:"Walk-In Besar",text:"Customer borong masuk. +RM2,000.",cash:2000},
- {name:"Silap Pricing",text:"Margin tersalah kira. -RM1,000.",cash:-1000},
- {name:"Referral",text:"Customer bawa customer baru. +RM1,500.",cash:1500},
- {name:"Competitor Discount",text:"Terpaksa turunkan harga. -RM800.",cash:-800},
- {name:"Micro Grant",text:"Dapat bantuan kecil. +RM2,500.",cash:2500},
- {name:"Bad Review",text:"Perlu recovery customer. -RM700 dan -1 Reputasi.",cash:-700,rep:-1}
-];
+{name:"Walk-In Besar",text:"+RM2,000.",cash:2000},{name:"Silap Pricing",text:"-RM1,000.",cash:-1000},{name:"Referral",text:"+RM1,500.",cash:1500},{name:"Competitor Discount",text:"-RM800.",cash:-800},{name:"Micro Grant",text:"+RM2,500.",cash:2500},{name:"Bad Review",text:"-RM700, Rep -1.",cash:-700,rep:-1},{name:"Tender Kecil",text:"+RM2,800.",cash:2800},{name:"Pop-Up Space",text:"+RM1,000, Rep +1.",cash:1000,rep:1},{name:"Wrong Supplier",text:"-RM1,300.",cash:-1300},{name:"Upsell",text:"+RM900.",cash:900},{name:"Cross-Sell",text:"+RM700.",cash:700},{name:"Return Customer",text:"+RM1,100.",cash:1100},{name:"Packaging Rosak",text:"-RM600.",cash:-600},{name:"Vendor Sponsor",text:"+RM1,500.",cash:1500},{name:"Business Award",text:"Rep +2.",rep:2},{name:"Content Flop",text:"-RM500.",cash:-500},{name:"Weekend Boom",text:"+RM1,700.",cash:1700},{name:"Complaint",text:"-RM400, Rep -1.",cash:-400,rep:-1},{name:"Bundle Deal",text:"+RM1,300.",cash:1300},{name:"Free Booth",text:"+RM800, Rep +1.",cash:800,rep:1},{name:"Preorder Meletup",text:"+RM2,100.",cash:2100},{name:"Salah Beli Stock",text:"-RM900.",cash:-900},{name:"Investor Connection",text:"Rep +2.",rep:2},{name:"Cancellation",text:"-RM1,100.",cash:-1100}];
+const MARKET_DECK=[
+{name:"Ekonomi Perlahan",text:"Demand turun. -RM1,200.",cash:-1200,requiresBusiness:true},{name:"Payday Weekend",text:"+RM1,600.",cash:1600,requiresBusiness:true},{name:"School Holiday",text:"+RM1,300.",cash:1300,requiresBusiness:true},{name:"Supplier Naik Harga",text:"-RM1,000.",cash:-1000,requiresBusiness:true},{name:"Trend Lokal Viral",text:"+RM1,800.",cash:1800,requiresBusiness:true},{name:"Cuaca Buruk",text:"-RM700.",cash:-700,requiresBusiness:true},{name:"Festival Tempatan",text:"+RM2,000.",cash:2000,requiresBusiness:true},{name:"Logistik Turun",text:"+RM800.",cash:800,requiresBusiness:true},{name:"Price War",text:"-RM900.",cash:-900,requiresBusiness:true},{name:"Confidence Naik",text:"+RM1,200.",cash:1200,requiresBusiness:true},{name:"Harga Minyak Naik",text:"-RM600.",cash:-600,requiresBusiness:true},{name:"Bantuan Kerajaan",text:"+RM1,000.",cash:1000,requiresBusiness:true},{name:"Musim Hujan",text:"-RM500.",cash:-500,requiresBusiness:true},{name:"Event Besar Negeri",text:"+RM1,500.",cash:1500,requiresBusiness:true},{name:"Research Trend",text:"Rep +1.",rep:1,preBusiness:true},{name:"Customer Observation",text:"Rep +1.",rep:1,preBusiness:true},{name:"Competitor Research",text:"Rep +1.",rep:1,preBusiness:true},{name:"Demand Validation",text:"+RM500.",cash:500,preBusiness:true}];
+function drawFromDeck(deck,key){const me=myPlayer(),hist=Array.isArray(me?.[key])?me[key]:[];let pool=deck.filter(x=>!hist.includes(x.name));if(!pool.length)pool=deck;const card=pool[Math.floor(Math.random()*pool.length)];updateDoc(playerRef(user.uid),{[key]:[...hist,card.name].slice(-10)}).catch(()=>{});return card}
+function randomContextEvent(p){return drawFromDeck(hasOperatingBusiness(p)?BUSINESS_EVENT_DECK:PREBUSINESS_DECK,"eventHistory")}
+function randomMarketEvent(p){const b=hasOperatingBusiness(p),deck=MARKET_DECK.filter(x=>b?!x.preBusiness:!x.requiresBusiness);return drawFromDeck(deck,"marketHistory")}
+function randomOpportunity(){return drawFromDeck(OPPORTUNITIES,"opportunityHistory")}
+function hasOperatingBusiness(p){return Array.isArray(p?.biz)&&p.biz.length>0}
+
 
 function currentNetWorth(p){
  return (p?.cash||0)+(p?.biz||[]).reduce((a,b)=>a+(b.value||0),0)-(p?.debt||0);
@@ -747,14 +745,14 @@ async function resolveLandingTile(pos){
  switch(tile.type){
   case "START":showTileModal(tile,"Bonus RM5,000 diberi bila lengkap satu pusingan.");break;
   case "BUSINESS":showTileModal(tile,"Lokasi peluang: <b>"+N(businessLocationForTrack(pos)).name+"</b>.","LIHAT PELUANG",openBusinessFromTile);break;
-  case "OPPORTUNITY":{const e=OPPORTUNITIES[Math.floor(Math.random()*OPPORTUNITIES.length)];await applyPlayerDelta({cash:e.cash||0,rep:e.rep||0});showTileModal(tile,"<b>"+e.name+"</b><br>"+e.text);log(me.name+": "+e.name);break}
+  case "OPPORTUNITY":{const e=randomOpportunity();await applyPlayerDelta({cash:e.cash||0,rep:e.rep||0});showTileModal(tile,"<b>"+e.name+"</b><br>"+e.text);log(me.name+": "+e.name);break}
   case "COST":
  if(!hasOperatingBusiness(me))showTileModal(tile,"Belum ada business aktif. <b>Tiada kos operasi dikenakan.</b>");
  else{await applyPlayerDelta({cash:-1000});showTileModal(tile,"Kos operasi: <b>-RM1,000</b>.");}
  break;
   case "TRAINING":if((me.cash||0)>=1000){await applyPlayerDelta({cash:-1000,rep:1});showTileModal(tile,"Bayar <b>RM1,000</b> • Reputasi <b>+1</b>.")}else showTileModal(tile,"Cash tak cukup untuk latihan.");break;
-  case "MARKET":
-  case "EVENT":{const e=randomContextEvent(me);await applyPlayerDelta({cash:e.cash||0,rep:e.rep||0});showTileModal(tile,"<b>"+e.name+"</b><br>"+e.text);log(me.name+": "+e.name);break}
+  case "MARKET":{const e=randomMarketEvent(me);await applyPlayerDelta({cash:e.cash||0,rep:e.rep||0});showTileModal(tile,"<b>🌍 "+e.name+"</b><br>"+e.text);log(me.name+" PASAR: "+e.name);break}
+  case "EVENT":{const e=randomContextEvent(me);await applyPlayerDelta({cash:e.cash||0,rep:e.rep||0});showTileModal(tile,"<b>⚡ "+e.name+"</b><br>"+e.text);log(me.name+" EVENT: "+e.name);break}
   case "CASH":{const amount=tile.label==="46"?2000:(tile.label==="11"?1000:1500);await applyPlayerDelta({cash:amount});showTileModal(tile,"Cash masuk: <b>+"+fmt(amount)+"</b>.");break}
   case "SUPPLIER":{
  if(!hasOperatingBusiness(me)){await applyPlayerDelta({rep:1});showTileModal(tile,"Belum ada business. Supplier beri quotation dan contact. <b>Reputasi +1</b>.");break}
@@ -1020,6 +1018,7 @@ function enterRoom(id){
    snap=>{players=snap.docs.map(d=>d.data()); renderLobby(); render();},
    e=>{console.error("Players listener error",e);alert("Player sync error: "+(e.code||"")+" "+e.message);}
  );
+ watchDeals();
 }
 function renderLobby(){
  $("lobbyPlayers").innerHTML=players.map(p=>`<div class="lobbyplayer"><span>${p.name}</span><b>${p.uid===room?.hostUid?"HOST":"READY"}</b></div>`).join("");
@@ -1041,6 +1040,7 @@ function renderRoomState(){
 }
 function render(){
  if(!room||!players.length)return;
+ renderTrackLabels();
  const board=$("board");board.querySelectorAll(".node,.pawn,.building").forEach(e=>e.remove());
  nodes.forEach(n=>{const e=document.createElement("button");e.className="node";e.style.left=n.x+"%";e.style.top=n.y+"%";e.title=n.name;e.disabled=true;e.setAttribute("aria-hidden","true");board.appendChild(e)});
  players.forEach((p,i)=>{const tp=trackPoint(p.trackPos||0),e=document.createElement("div");e.className="pawn";e.style.left=`calc(${tp.x}% + ${(i%3-1)*7}px)`;e.style.top=`calc(${tp.y}% + ${Math.floor(i/3)*6}px)`;e.style.setProperty("--pawn-color",COLORS[i%COLORS.length]);e.title=`${p.name} • ${trackLabel(p.trackPos||0)}`;board.appendChild(e);
@@ -1160,14 +1160,69 @@ $("loanBtn").onclick=()=>{ const L=[["Micro Loan",10000,3000,4,0],["SME Loan",30
 async function takeLoan(i){ const L=[["Micro Loan",10000,3000,4,0],["SME Loan",30000,8000,4,2],["Growth Loan",100000,27000,4,5]][i],me=myPlayer(); if((me.rep||0)<L[4])return toast("Reputasi tak cukup");
  await updateDoc(playerRef(user.uid),{cash:me.cash+L[1],debt:(me.debt||0)+L[2]*L[3],loans:arrayUnion({name:L[0],pay:L[2],left:L[3]})});$("loanModal").classList.remove("show");
 }
+let selectedDealBizId=null;
+function dealBizKey(b,i){return String(b.id||b.name||("biz-"+i))}
+function renderDealPortfolio(){
+ const target=players.find(p=>p.uid===$("dealTo").value),wrap=$("dealPortfolio");
+ selectedDealBizId=null;
+ if(!target||(target.biz||[]).length===0){wrap.innerHTML=`<div class="dealEmpty">${target?.name||"Founder"} belum mempunyai business untuk dijual.</div>`;return}
+ wrap.innerHTML=(target.biz||[]).map((b,i)=>`<div class="dealBiz" data-dealbiz="${dealBizKey(b,i)}"><b>${b.name}</b><small>Portfolio Value ${fmt(b.value||0)} • Staff ${b.staffNow||0}/${b.staff||0}${b.manager?" • Manager":""}</small></div>`).join("");
+ wrap.querySelectorAll("[data-dealbiz]").forEach(el=>el.onclick=()=>{wrap.querySelectorAll(".dealBiz").forEach(x=>x.classList.remove("selected"));el.classList.add("selected");selectedDealBizId=el.dataset.dealbiz});
+}
 $("dealBtn").onclick=()=>{
- $("dealTo").innerHTML=players.filter(p=>p.uid!==user.uid).map(p=>`<option value="${p.uid}">${p.name}</option>`).join("");$("dealModal").classList.add("show");
+ const others=players.filter(p=>p.uid!==user.uid&&!p.bankrupt);
+ if(!others.length)return toast("Tiada Founder lain untuk negotiation");
+ $("dealTo").innerHTML=others.map(p=>`<option value="${p.uid}">${p.name}</option>`).join("");
+ $("dealAmount").value=5000;$("dealNote").value="";renderDealPortfolio();$("dealModal").classList.add("show");
 };
+$("dealTo").onchange=renderDealPortfolio;
 $("sendDealBtn").onclick=async()=>{
- const to=$("dealTo").value,amount=+$("dealAmount").value,note=$("dealNote").value,me=myPlayer(),other=players.find(p=>p.uid===to);
- if(!other||amount<=0||me.cash<amount)return toast("Deal tak sah");
- await runTransaction(db,async tx=>{const aRef=playerRef(user.uid),bRef=playerRef(to),a=await tx.get(aRef),b=await tx.get(bRef);if(a.data().cash<amount)throw new Error("Cash tak cukup");tx.update(aRef,{cash:a.data().cash-amount});tx.update(bRef,{cash:b.data().cash+amount})});
- $("dealModal").classList.remove("show");log(`DEAL: ${me.name} → ${other.name} ${fmt(amount)} ${note}`);
+ const to=$("dealTo").value,amount=+$("dealAmount").value,note=$("dealNote").value.trim(),me=myPlayer(),seller=players.find(p=>p.uid===to);
+ if(!seller||!selectedDealBizId)return toast("Pilih business dahulu");
+ if(amount<=0||me.cash<amount)return toast("Cash tak cukup untuk offer ini");
+ const idx=(seller.biz||[]).findIndex((b,i)=>dealBizKey(b,i)===selectedDealBizId);
+ if(idx<0)return toast("Business tak dijumpai");
+ const b=seller.biz[idx],deal={id:`${Date.now()}-${user.uid.slice(0,5)}`,fromUid:user.uid,fromName:me.name,toUid:to,toName:seller.name,bizKey:selectedDealBizId,bizName:b.name,bizValue:b.value||0,amount,note,status:"pending",createdAt:Date.now()};
+ await setDoc(doc(db,"rooms",roomId,"deals",deal.id),deal);
+ $("dealModal").classList.remove("show");toast("Offer dihantar kepada "+seller.name);log(`🤝 ${me.name} offer ${fmt(amount)} untuk ${b.name} milik ${seller.name}`);
+};
+
+let incomingDeal=null,unsubDeals=null;
+function watchDeals(){
+ if(unsubDeals)unsubDeals();
+ unsubDeals=onSnapshot(collection(db,"rooms",roomId,"deals"),snap=>{
+   const pending=snap.docs.map(d=>d.data()).filter(d=>d.toUid===user.uid&&d.status==="pending").sort((a,b)=>a.createdAt-b.createdAt);
+   incomingDeal=pending[0]||null;
+   if(incomingDeal){
+    $("incomingDealCard").innerHTML=`<h3>${incomingDeal.bizName}</h3><p><b>${incomingDeal.fromName}</b> nak beli business ini daripada portfolio anda.</p><div class="price">${fmt(incomingDeal.amount)}</div><p>Anggaran nilai portfolio: ${fmt(incomingDeal.bizValue)}${incomingDeal.note?`<br><br>“${incomingDeal.note}”`:""}</p>`;
+    $("incomingDealModal").classList.add("show");
+   }else $("incomingDealModal").classList.remove("show");
+ },e=>console.warn("Deal listener:",e));
+}
+$("rejectDealBtn").onclick=async()=>{
+ if(!incomingDeal)return;
+ await updateDoc(doc(db,"rooms",roomId,"deals",incomingDeal.id),{status:"rejected",resolvedAt:Date.now()});
+ log(`❌ ${myPlayer().name} reject offer ${incomingDeal.fromName} untuk ${incomingDeal.bizName}`);
+};
+$("acceptDealBtn").onclick=async()=>{
+ if(!incomingDeal)return;
+ const d=incomingDeal;
+ try{
+  await runTransaction(db,async tx=>{
+   const buyerRef=playerRef(d.fromUid),sellerRef=playerRef(d.toUid);
+   const buyerSnap=await tx.get(buyerRef),sellerSnap=await tx.get(sellerRef);
+   if(!buyerSnap.exists()||!sellerSnap.exists())throw new Error("Founder tak dijumpai");
+   const buyer=buyerSnap.data(),seller=sellerSnap.data();
+   if((buyer.cash||0)<d.amount)throw new Error("Buyer dah tak cukup cash");
+   const sellerBiz=[...(seller.biz||[])],i=sellerBiz.findIndex((b,j)=>dealBizKey(b,j)===d.bizKey);
+   if(i<0)throw new Error("Business dah tiada dalam portfolio seller");
+   const [business]=sellerBiz.splice(i,1),buyerBiz=[...(buyer.biz||[]),business];
+   tx.update(buyerRef,{cash:(buyer.cash||0)-d.amount,biz:buyerBiz});
+   tx.update(sellerRef,{cash:(seller.cash||0)+d.amount,biz:sellerBiz});
+   tx.update(doc(db,"rooms",roomId,"deals",d.id),{status:"accepted",resolvedAt:Date.now()});
+  });
+  $("incomingDealModal").classList.remove("show");log(`✅ DEAL ACCEPTED: ${d.fromName} beli ${d.bizName} daripada ${d.toName} pada ${fmt(d.amount)}`);
+ }catch(e){toast(e.message||"Deal gagal");}
 };
 $("cashflowBtn").onclick=async()=>{
  if(!isHost())return;
