@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Next CEO">
 <title>Kelantan Next CEO Online</title>
-<link rel="manifest" href="manifest.json?v=0.7.0">
+<link rel="manifest" href="manifest.json?v=0.7.1">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
@@ -378,6 +378,29 @@ body{overscroll-behavior:none}
  #boardWrap,.boardWrap{position:sticky;top:90px}
 }
 
+
+/* ===== V0.7.1 LANDSCAPE-FIRST MOBILE ===== */
+.gx-rotate-lock{display:none}
+@media(max-width:900px) and (orientation:landscape){
+ body{padding-bottom:0}
+ .gx-bottomnav{position:fixed;left:auto;right:8px;top:50%;bottom:auto;transform:translateY(-50%);display:grid;grid-template-columns:1fr;gap:4px;width:62px;padding:7px;border:1px solid #233a4a;border-radius:18px;background:rgba(7,18,27,.96);backdrop-filter:blur(16px)}
+ .gx-navbtn{font-size:8px}.gx-navbtn b{font-size:18px}
+ .gx-turnhud{position:fixed;left:8px;top:8px;right:auto;width:min(330px,42vw);margin:0;z-index:1002;padding:8px 10px}
+ .gx-turnname{font-size:14px}.gx-pill{font-size:9px;padding:4px 7px}.gx-roll{height:42px;min-width:76px;font-size:12px}
+ #gameLayout,.gameLayout{grid-template-columns:minmax(0,1fr) 260px!important;gap:10px!important}
+ #boardWrap,.boardWrap{position:relative!important;top:auto!important}
+ #board{max-height:calc(100vh - 16px);width:auto;max-width:calc(100vw - 340px);margin:8px auto;aspect-ratio:1/1}
+}
+@media(max-width:900px) and (orientation:portrait){
+ .gx-rotate-lock{display:flex;position:fixed;inset:0;z-index:20000;background:#07131c;color:#f0dfc0;align-items:center;justify-content:center;text-align:center;padding:28px}
+ .gx-rotate-inner{max-width:330px}
+ .gx-rotate-icon{font-size:56px;animation:gxRotateHint 1.5s ease-in-out infinite alternate}
+ .gx-rotate-title{font-size:24px;font-weight:1000;margin-top:14px}
+ .gx-rotate-copy{font-size:13px;line-height:1.55;color:#aab7bf;margin-top:8px}
+ .gx-rotate-skip{margin-top:18px;border:1px solid #385064;background:#10202b;color:#e8d8bb;padding:10px 14px;border-radius:12px;font-weight:900}
+}
+@keyframes gxRotateHint{from{transform:rotate(0deg)}to{transform:rotate(90deg)}}
+
 </style>
 <script>
 (function(){
@@ -401,6 +424,16 @@ body{overscroll-behavior:none}
 <link rel="preload" as="image" href="venture-clean/fixmobile.webp">
 </head>
 <body>
+
+<div id="gxRotateLock" class="gx-rotate-lock">
+  <div class="gx-rotate-inner">
+    <div class="gx-rotate-icon">📱</div>
+    <div class="gx-rotate-title">Pusing Phone Ke Landscape</div>
+    <div class="gx-rotate-copy">Kelantan Next CEO direka untuk dimainkan secara landscape supaya board, pawn, dadu dan action panel boleh dilihat lebih besar.</div>
+    <button type="button" id="gxRotateSkip" class="gx-rotate-skip">Teruskan Portrait</button>
+  </div>
+</div>
+
 
 <div id="gxDiceVeil" class="gx-diceveil"></div>
 <div id="gxTurnHud" class="gx-turnhud">
@@ -1724,6 +1757,29 @@ function gxLanding(title,desc,icon="✨"){
 }
 window.gxLanding=gxLanding;
 setInterval(gxRefresh,700);setTimeout(gxRefresh,300);
+
+
+/* ===== V0.7.1 LANDSCAPE PREFERENCE ===== */
+let gxPortraitOverride=false;
+function gxApplyOrientationUI(){
+ const portrait=window.matchMedia("(orientation:portrait)").matches;
+ const small=window.matchMedia("(max-width:900px)").matches;
+ const lock=document.getElementById("gxRotateLock");
+ if(lock)lock.style.display=(small&&portrait&&!gxPortraitOverride)?"flex":"none";
+}
+async function gxTryLandscape(){
+ try{
+  if(screen.orientation&&screen.orientation.lock){
+   await screen.orientation.lock("landscape");
+  }
+ }catch(_){}
+ gxApplyOrientationUI();
+}
+document.getElementById("gxRotateSkip")?.addEventListener("click",()=>{gxPortraitOverride=true;gxApplyOrientationUI()});
+window.addEventListener("orientationchange",gxApplyOrientationUI);
+window.addEventListener("resize",gxApplyOrientationUI);
+["pointerdown","touchstart"].forEach(ev=>window.addEventListener(ev,()=>{gxTryLandscape()},{once:true,passive:true}));
+gxApplyOrientationUI();
 
 </script>
 </body>

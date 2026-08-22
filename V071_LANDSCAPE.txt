@@ -1,0 +1,8 @@
+V0.7.1 LANDSCAPE-FIRST
+- PWA manifest orientation set to landscape.
+- On supported installed PWAs, Android/iOS browser context will prefer landscape.
+- Portrait phones show a rotate-to-landscape screen so the board is larger.
+- User can still continue in portrait if needed.
+- Landscape mobile HUD is compact and bottom nav moves to the right edge.
+- Board gets more screen area in landscape.
+- Attempts Screen Orientation API lock after first interaction where supported.
