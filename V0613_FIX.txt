@@ -1,0 +1,12 @@
+KELANTAN NEXT CEO : START UP — V0.6.13
+
+FIX 1 — DICE ANIMATION
+The V0.6.12 audio engine had a recursion bug:
+ensureAudio() -> startMusicLoop() -> ensureAudio().
+When dice SFX started, that loop could stop execution before animateDoubleDice() ran.
+V0.6.13 removes that recursion and makes audio non-blocking, so the cinematic two-dice animation remains the gameplay priority.
+
+FIX 2 — MAP DISTRICT CIRCLES
+Removed the circular .node markers that sat above Kelantan district names.
+The Kelantan map now shows the district names/artwork cleanly without those dots.
+They were legacy movement nodes from the old map-based movement system and are no longer needed because pawn movement now uses the outer board track.

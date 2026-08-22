@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Next CEO">
 <title>Kelantan Next CEO Online</title>
-<link rel="manifest" href="manifest.json?v=0.6.12">
+<link rel="manifest" href="manifest.json?v=0.6.13">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
@@ -332,6 +332,9 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 /* ===== V0.6.12 AUDIO SYSTEM ===== */
 .soundBox{width:min(480px,94vw)!important}.soundHead{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.soundKicker{font-size:8px;font-weight:1000;letter-spacing:1.5px;color:#d9ad62}.soundHead h2{margin:3px 0 15px;color:#f1dfc2}.soundControl{display:flex;justify-content:space-between;align-items:center;margin:14px 0 7px;color:#dfe5e8;font-size:11px;font-weight:900}.soundToggle{min-width:58px;border:1px solid #8b6a38;background:#152632;color:#efd59e;border-radius:999px;padding:7px 10px;font-size:9px;font-weight:1000}.soundToggle.off{opacity:.45;background:#0d171e}.soundBox input[type="range"]{width:100%;accent-color:#c89b4d}.soundDemo{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:16px}.audioToast{position:fixed;right:12px;bottom:16px;z-index:4700;background:#0b1822;color:#f0dfc0;border:1px solid #8d6b38;padding:8px 10px;border-radius:10px;font-size:8px;font-weight:900;opacity:0;transform:translateY(8px);transition:.2s}.audioToast.show{opacity:1;transform:none}
 @media(max-width:560px){.soundDemo{grid-template-columns:1fr}.soundBox{width:94vw!important}}
+
+/* V0.6.13 map cleanup */
+#board .node{display:none!important}
 </style>
 <script>
 (function(){
@@ -610,16 +613,17 @@ function ensureAudio(){
   musicGain.connect(audioCtx.destination);sfxGain.connect(audioCtx.destination);
  }
  if(audioCtx.state==="suspended")audioCtx.resume().catch(()=>{});
- if(musicEnabled&&!musicTimer)startMusicLoop();
  return audioCtx;
 }
 function audioNote(freq,dur=.12,type="sine",vol=.12,when=0,dest="sfx"){
+ try{
  const ctx=ensureAudio();if(!ctx)return;
  const o=ctx.createOscillator(),g=ctx.createGain(),target=dest==="music"?musicGain:sfxGain;
  o.type=type;o.frequency.setValueAtTime(freq,ctx.currentTime+when);
  g.gain.setValueAtTime(Math.max(.0001,vol),ctx.currentTime+when);
  g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+when+dur);
  o.connect(g);g.connect(target);o.start(ctx.currentTime+when);o.stop(ctx.currentTime+when+dur+.02);
+ }catch(_){}
 }
 function audioNoise(dur=.07,vol=.12,when=0){
  const ctx=ensureAudio();if(!ctx)return;
@@ -645,7 +649,8 @@ const SFX={
  victory(){[523,659,784,1047].forEach((f,i)=>audioNote(f,.22,"sine",.09,i*.12))}
 };
 function startMusicLoop(){
- if(!musicEnabled||musicTimer||!ensureAudio())return;
+ if(!musicEnabled||musicTimer)return;
+ const ctx=ensureAudio();if(!ctx)return;
  const progression=[[196,247,294],[220,262,330],[174,220,262],[196,247,330]];
  const tick=()=>{
   if(!musicEnabled||!audioCtx){stopMusicLoop();return}
@@ -666,7 +671,10 @@ function refreshAudioUI(){
  if(musicEnabled)startMusicLoop();else stopMusicLoop();
 }
 function audioReadyToast(){const e=$("audioToast");if(!e)return;e.classList.add("show");setTimeout(()=>e.classList.remove("show"),1000)}
-["pointerdown","keydown","touchstart"].forEach(ev=>window.addEventListener(ev,()=>{if(!audioCtx){ensureAudio();audioReadyToast()}},{once:true,passive:true}));
+["pointerdown","keydown","touchstart"].forEach(ev=>window.addEventListener(ev,()=>{
+ if(!audioCtx){ensureAudio();audioReadyToast()}
+ if(musicEnabled&&!musicTimer)setTimeout(startMusicLoop,60);
+},{once:true,passive:true}));
 
 const COLORS=["#ef476f","#118ab2","#06d6a0","#8338ec","#fb8500","#4361ee"];
 const nodes=[
@@ -1179,8 +1187,8 @@ function renderRoomState(){
 function render(){
  if(!room||!players.length)return;
  renderTrackLabels();
- const board=$("board");board.querySelectorAll(".node,.pawn,.building").forEach(e=>e.remove());
- nodes.forEach(n=>{const e=document.createElement("button");e.className="node";e.style.left=n.x+"%";e.style.top=n.y+"%";e.title=n.name;e.disabled=true;e.setAttribute("aria-hidden","true");board.appendChild(e)});
+ const board=$("board");board.querySelectorAll(".pawn,.building").forEach(e=>e.remove());
+
  players.forEach((p,i)=>{const tp=trackPoint(p.trackPos||0),e=document.createElement("div");e.className="pawn";e.style.left=`calc(${tp.x}% + ${(i%3-1)*7}px)`;e.style.top=`calc(${tp.y}% + ${Math.floor(i/3)*6}px)`;e.style.setProperty("--pawn-color",COLORS[i%COLORS.length]);e.title=`${p.name} • ${trackLabel(p.trackPos||0)}`;board.appendChild(e);
    (p.biz||[]).slice(0,8).forEach((b,j)=>{const bn=N(b.loc),q=document.createElement("div");q.className="building";q.style.left=`calc(${bn.x}% + ${(j%3-1)*14}px)`;q.style.top=`calc(${bn.y}% - ${14+Math.floor(j/3)*12}px)`;q.textContent="🏪";board.appendChild(q)})});
  $("players").innerHTML=players.map((p,i)=>{const nw=p.cash+(p.biz||[]).reduce((a,b)=>a+(b.value||0),0)-(p.debt||0);return `<div class="player ${p.uid===room.turnUid?"active":""}"><b>${p.name}</b><div class="money">${fmt(p.cash)}</div><small>Net ${fmt(nw)} • Debt ${fmt(p.debt)} • ${trackLabel(p.trackPos||0)}</small></div>`}).join("");
@@ -1254,7 +1262,7 @@ $("rollBtn").onclick=async()=>{
  $("rollBtn").disabled=true;
  const d1=1+Math.floor(Math.random()*6),d2=1+Math.floor(Math.random()*6),total=d1+d2;
  await updateDoc(roomRef(),{dice1:d1,dice2:d2,dice:total,move:total,phase:"ROLLING"});
- SFX.dice();
+ try{SFX.dice()}catch(_){}
  await animateDoubleDice(d1,d2);
  await updateDoc(roomRef(),{phase:"MOVING"});
  const finalPos=await animatePawnSteps(total);
