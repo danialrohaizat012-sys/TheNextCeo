@@ -1,0 +1,26 @@
+KELANTAN NEXT CEO : START UP — V0.6.12 AUDIO EXPERIENCE
+
+AUDIO ENGINE
+- WebAudio-based generated audio; no copyrighted music/audio assets bundled.
+- Mobile/PWA-safe: audio initializes after first user interaction.
+- Separate Music and SFX toggles.
+- Separate volume sliders; settings persist in localStorage.
+
+SFX
+- Dual dice clacks
+- Pawn step clicks
+- Acquire venture success
+- Cash/start bonus
+- Opportunity/Event good and bad stings
+- Incoming negotiation notification
+- Deal accepted / rejected
+- Bankruptcy
+- Victory
+
+BACKGROUND MUSIC
+- Lightweight generated ambient/chord loop.
+- Can be disabled independently from SFX.
+
+UI
+- SOUND button added beside RULES.
+- Sound Settings modal includes toggles, volume and test buttons.

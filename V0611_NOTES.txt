@@ -1,0 +1,15 @@
+V0.6.11 CLEAN LOGOS + UNIQUE VENTURE OWNERSHIP
+
+LOGO CLEANUP
+- Rebuilt standardized 1024x1024 logo cards from original supplied brand artwork.
+- Removed the full phone screenshot/UI from Sayap Niaga; only the brand emblem is used.
+- Normalized cropping, safe padding, sharpness and card backgrounds.
+- Preserved original brand artwork instead of stretching it.
+- Clean files live in /venture-clean as WebP.
+
+UNIQUE VENTURES
+- A real venture can only have ONE owner at a time.
+- Marketplace marks purchased ventures as OWNED + Founder name.
+- Purchased venture cannot be acquired again from the market.
+- Acquisition uses a Firestore transaction and room.ventureOwners registry to prevent two players buying the same venture at nearly the same time.
+- Nego Deal remains valid: if a venture is sold to another Founder, ownership registry transfers to the buyer.
