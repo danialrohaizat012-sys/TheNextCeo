@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Next CEO">
 <title>Kelantan Next CEO Online</title>
-<link rel="manifest" href="manifest.json?v=0.8.5">
+<link rel="manifest" href="manifest.json?v=0.8.6">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
@@ -526,6 +526,10 @@ html,body{max-width:100%;overflow-x:hidden}
   document.documentElement.dataset.kncBuild="0.5.3";
   window.__KNC_SPLASH_BOOT__=performance.now();
 })();
+
+window.addEventListener("error",()=>{try{window.__KNC_FORCE_SPLASH_FINISH__?.()}catch(_){}});
+window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_FINISH__?.()}catch(_){}});
+
 </script>
 <link rel="preload" as="image" href="venture-clean/ayenas.webp">
 <link rel="preload" as="image" href="venture-clean/mos.webp">
@@ -574,7 +578,7 @@ html,body{max-width:100%;overflow-x:hidden}
     <div class="splashProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <span class="splashProgressBar" id="splashProgressBar"></span>
     </div>
-    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V0.5.9</div><div class="splashCredit">Developed by BinaLab</div>
+    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V0.8.6</div><div class="splashCredit">Developed by BinaLab</div>
     <button type="button" class="splashSkip" id="splashSkip">TERUSKAN</button>
   </div>
 </div>
@@ -856,6 +860,57 @@ html,body{max-width:100%;overflow-x:hidden}
 <div id="incomingDealCard" class="incomingDealCard"></div>
 <div class="dealDecision"><button id="rejectDealBtn" class="btn light">REJECT</button><button id="acceptDealBtn" class="btn gold">ACCEPT DEAL</button></div>
 </div></div>
+
+
+<script>
+(function(){
+  const TOTAL=4000;
+  const tasks=[
+    "MENYUSUN BOARD & VENTURE",
+    "MEMUATKAN EKONOMI KELANTAN",
+    "MENYEDIAKAN DADU & PAWN",
+    "MENGHUBUNGKAN MULTIPLAYER",
+    "SEDIA UNTUK BINA EMPAYAR"
+  ];
+  function bootSplash(){
+    const splash=document.getElementById("splash");
+    const bar=document.getElementById("splashProgressBar");
+    const pct=document.getElementById("splashPercent");
+    const task=document.getElementById("splashTask");
+    const skip=document.getElementById("splashSkip");
+    if(!splash)return;
+    let finished=false,start=performance.now();
+    function finish(){
+      if(finished)return;finished=true;
+      if(bar)bar.style.width="100%";
+      if(pct)pct.textContent="100%";
+      if(task)task.textContent="SEDIA UNTUK BINA EMPAYAR";
+      splash.style.opacity="0";
+      splash.style.transform="scale(1.015)";
+      splash.style.pointerEvents="none";
+      setTimeout(()=>{splash.style.display="none";},520);
+    }
+    function tick(now){
+      if(finished)return;
+      const elapsed=Math.max(0,now-start),progress=Math.min(1,elapsed/TOTAL),percent=Math.round(progress*100);
+      if(bar)bar.style.width=percent+"%";
+      if(pct)pct.textContent=percent+"%";
+      if(task){
+        const ti=Math.min(tasks.length-1,Math.floor(progress*tasks.length));
+        task.textContent=tasks[ti];
+      }
+      if(progress>=1)finish(); else requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+    if(skip){skip.style.display="inline-flex";skip.addEventListener("click",finish,{once:true});}
+    // Absolute watchdog: splash must never trap the app.
+    setTimeout(finish,TOTAL+900);
+    window.__KNC_FORCE_SPLASH_FINISH__=finish;
+  }
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",bootSplash,{once:true});
+  else bootSplash();
+})();
+</script>
 
 <script type="module">
 

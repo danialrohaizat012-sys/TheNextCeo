@@ -1,0 +1,14 @@
+V0.8.6 SPLASH BOOT FIX
+
+Root problem:
+The splash markup/progress bar existed, but there was no reliable independent splash controller left in the page.
+As the game gained more module code, any runtime/bootstrap issue could leave the splash permanently on screen.
+
+Fix:
+- Splash now has its own classic non-module controller.
+- 4-second functional loading progress.
+- Progress is independent from Firebase/auth/game module.
+- Hard watchdog guarantees splash closes even if a later JavaScript module errors.
+- TERUSKAN button is available as a manual escape.
+- Global error/unhandledrejection safety also forces splash finish.
+- No gameplay/deal/QR logic was removed.
