@@ -1,0 +1,13 @@
+V0.9.0 NEXTCEO PAY QR FIX
+
+ROOT CAUSE:
+QR generation depended on a dynamic CDN import at runtime. If CDN/module loading failed, Pay Online still worked but QR did not appear.
+
+FIX:
+- QR generator is now bundled locally as knc-qr.js.
+- No internet/CDN is needed to GENERATE a QR.
+- QR SVG is generated directly on-device.
+- Transaction Code remains visible as fallback.
+- Scanner uses native BarcodeDetector first when supported (best on Android/Chromium).
+- Scanner falls back to jsQR dynamic import where needed.
+- If scanning is unsupported, manual Transaction Code still completes the same payment flow.

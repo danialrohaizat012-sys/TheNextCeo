@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Next CEO">
 <title>Kelantan Next CEO Online</title>
-<link rel="manifest" href="manifest.json?v=0.8.9">
+<link rel="manifest" href="manifest.json?v=0.9.0">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
@@ -624,7 +624,7 @@ window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_
     <div class="splashProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <span class="splashProgressBar" id="splashProgressBar"></span>
     </div>
-    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V0.8.9</div><div class="splashCredit">Developed by BinaLab</div>
+    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V0.9.0</div><div class="splashCredit">Developed by BinaLab</div>
     <button type="button" class="splashSkip" id="splashSkip">TERUSKAN</button>
   </div>
 </div>
@@ -958,6 +958,7 @@ window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_
 })();
 </script>
 
+<script src="knc-qr.js"></script>
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
@@ -1949,7 +1950,7 @@ $("dealPayQRBtn")?.addEventListener("click",async()=>{
    $("dealPayModal").classList.remove("show");
    openNextPay();
    document.querySelector('[data-paytab="send"]')?.click();
-   $("payQRResult").innerHTML=`<div id="liveDealPayQR"></div><div class="paySummary"><div class="payAmount">${fmt(d.amount)}</div><div class="payMeta">Acquisition: <b>${d.bizName}</b><br>${d.fromName} → ${d.toName}<br>Expires in 5 minutes<br><br>Transaction Code: <b>${txid}</b></div></div>`;
+   $("payQRResult").innerHTML=`<div id="liveDealPayQR"></div><div class="paySummary"><div class="payAmount">${fmt(d.amount)}</div><div class="payMeta">Acquisition: <b>${d.bizName}</b><br>${d.fromName} → ${d.toName}<br>Expires in 5 minutes<br><br>Transaction Code: <b>${txid}</b><br><small>Jika kamera tak boleh scan, seller boleh masukkan code ini secara manual.</small></div></div>`;
    await renderQR(code,$("liveDealPayQR"));
  }catch(e){console.error(e);toast(e.message||"QR deal gagal dijana")}
 });
@@ -2133,11 +2134,12 @@ document.querySelectorAll("[data-paytab]").forEach(b=>b.addEventListener("click"
 async function renderQR(text,target){
  target.innerHTML=`<div class="payStatus">Generating QR...</div>`;
  try{
-  const mod=await import("https://cdn.jsdelivr.net/npm/qrcode@1.5.4/+esm");
-  const svg=await mod.toString(text,{type:"svg",margin:1,width:260,errorCorrectionLevel:"M"});
-  target.innerHTML=`<div class="payQRWrap">${svg}</div>`;
+   if(!window.KNCQRCode)throw new Error("Local QR engine unavailable");
+   const svg=window.KNCQRCode.svg(text,280);
+   target.innerHTML=`<div class="payQRWrap">${svg}</div><div class="payStatus">QR READY • Scan menggunakan NextCEO Pay</div>`;
  }catch(e){
-  target.innerHTML=`<div class="payStatus">QR library gagal dimuat. Gunakan Transaction Code di bawah.</div>`;
+   console.error("QR generation:",e);
+   target.innerHTML=`<div class="payStatus">QR gagal dijana: ${e.message||e}. Gunakan Transaction Code di bawah.</div>`;
  }
 }
 $("generatePayQR")?.addEventListener("click",async()=>{
@@ -2219,25 +2221,57 @@ async function startPayScanner(){
  try{
   payScannerStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"}},audio:false});
   $("payVideo").srcObject=payScannerStream;await $("payVideo").play();
-  $("payScanStatus").textContent="Scanner aktif. Arah kamera kepada QR.";
+  $("payScanStatus").textContent="Scanner aktif. Arah kamera kepada QR NextCEO Pay.";
+  const v=$("payVideo");
+
+  // Fast native path on supported Android/Chromium browsers.
+  if("BarcodeDetector" in window){
+    try{
+      const detector=new BarcodeDetector({formats:["qr_code"]});
+      const scanNative=async()=>{
+        if(!payScannerStream)return;
+        try{
+          const codes=await detector.detect(v);
+          const raw=codes?.[0]?.rawValue;
+          if(raw){
+            const parsed=parsePayCode(raw);
+            if(parsed){stopPayScanner();$("payScanStatus").textContent="QR detected.";await loadPayment(parsed.tx,parsed.room);return}
+          }
+        }catch(_){}
+        payScannerTimer=requestAnimationFrame(scanNative);
+      };
+      scanNative();return;
+    }catch(_){}
+  }
+
+  // Compatibility fallback: attempt jsQR only if internet is available.
   const canvas=document.createElement("canvas"),ctx=canvas.getContext("2d",{willReadFrequently:true});
   let jsQR=null;
-  try{const mod=await import("https://cdn.jsdelivr.net/npm/jsqr@1.4.0/+esm");jsQR=mod.default||mod}catch(_){}
-  if(!jsQR){$("payScanStatus").textContent="Scanner library tak dapat dimuat. Gunakan Transaction Code.";return}
+  try{
+    const mod=await import("https://cdn.jsdelivr.net/npm/jsqr@1.4.0/+esm");
+    jsQR=mod.default||mod;
+  }catch(_){}
+  if(!jsQR){
+    $("payScanStatus").textContent="Scanner QR tidak disokong pada browser ini. Gunakan Transaction Code di bawah.";
+    return;
+  }
   const scan=()=>{
-   const v=$("payVideo");
-   if(v.readyState>=2){
-    canvas.width=v.videoWidth;canvas.height=v.videoHeight;ctx.drawImage(v,0,0);
-    const img=ctx.getImageData(0,0,canvas.width,canvas.height),qr=jsQR(img.data,img.width,img.height,{inversionAttempts:"dontInvert"});
-    if(qr?.data){
-      const parsed=parsePayCode(qr.data);
-      if(parsed){stopPayScanner();$("payScanStatus").textContent="QR detected.";loadPayment(parsed.tx,parsed.room);return}
+    if(!payScannerStream)return;
+    if(v.readyState>=2){
+      canvas.width=v.videoWidth;canvas.height=v.videoHeight;ctx.drawImage(v,0,0);
+      const img=ctx.getImageData(0,0,canvas.width,canvas.height),qr=jsQR(img.data,img.width,img.height,{inversionAttempts:"attemptBoth"});
+      if(qr?.data){
+        const parsed=parsePayCode(qr.data);
+        if(parsed){stopPayScanner();$("payScanStatus").textContent="QR detected.";loadPayment(parsed.tx,parsed.room);return}
+      }
     }
-   }
-   payScannerTimer=requestAnimationFrame(scan);
+    payScannerTimer=requestAnimationFrame(scan);
   };
   scan();
- }catch(e){$("payScanStatus").textContent="Camera tak dapat dibuka. Benarkan camera permission atau guna Transaction Code."}
+ }catch(e){
+   console.error("Scanner:",e);
+   $("payScanStatus").textContent="Camera tak dapat dibuka. Benarkan camera permission atau guna Transaction Code.";
+ }
 }
 function stopPayScanner(){
  if(payScannerTimer){cancelAnimationFrame(payScannerTimer);payScannerTimer=null}
