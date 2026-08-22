@@ -1,0 +1,9 @@
+KELANTAN NEXT CEO : START UP — V0.7 GAME EXPERIENCE UPDATE
+- New compact turn HUD: current founder, cash, ventures, net worth, RM1M victory progress.
+- Dedicated prominent Roll control that bridges to the existing game roll/move action.
+- Cinematic background veil during dice sequence.
+- Mobile bottom navigation: Board / Portfolio / Deal / Players / More.
+- Desktop responsive game-shell rules and sticky-board treatment where compatible.
+- Pawn hop micro-animation utility and landing-card reveal utility added.
+- Existing Firebase multiplayer/game state is preserved rather than rewritten.
+- Core objective: make Board → Roll → Move → Land → Action → Next Turn feel like a game rather than an admin dashboard.

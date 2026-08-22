@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Next CEO">
 <title>Kelantan Next CEO Online</title>
-<link rel="manifest" href="manifest.json?v=0.6.16">
+<link rel="manifest" href="manifest.json?v=0.7.0">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
@@ -341,6 +341,43 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 .ventureBrandFallback{width:100%;height:100%;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:#f5f1e8;color:#10202b;padding:20px;box-sizing:border-box}
 .ventureBrandMark{width:84px;height:84px;border-radius:22px;background:#10202b;color:#d8ad5a;display:grid;place-items:center;font-size:25px;font-weight:1000;letter-spacing:-1px;border:3px solid #d8ad5a}
 .ventureBrandName{font-size:13px;font-weight:1000;text-align:center;letter-spacing:.6px;text-transform:uppercase}
+
+/* ===== V0.7 GAME EXPERIENCE UPDATE ===== */
+:root{--gx-gold:#efbd58;--gx-ink:#07131c;--gx-panel:#0d1c27;--gx-line:#294253}
+body{overscroll-behavior:none}
+#gameTopbar,.topbar{position:sticky;top:0;z-index:45;backdrop-filter:blur(14px)}
+.game-shell,.app{max-width:1180px;margin:auto}
+#boardWrap,.boardWrap{position:relative;isolation:isolate}
+#board{box-shadow:0 18px 55px rgba(0,0,0,.32);border-radius:20px;overflow:hidden}
+.gx-turnhud{position:sticky;top:8px;z-index:44;margin:8px 10px 10px;padding:10px 12px;border:1px solid var(--gx-line);border-radius:18px;background:rgba(8,21,30,.92);backdrop-filter:blur(14px);display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.gx-turnwho{font-size:12px;color:#93a6b3;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.gx-turnname{font-size:16px;font-weight:1000;color:#fff}
+.gx-stats{display:flex;gap:7px;flex-wrap:wrap;margin-top:5px}
+.gx-pill{font-size:11px;font-weight:900;padding:5px 8px;border-radius:999px;background:#08141d;border:1px solid #233b4b;color:#d9e2e7}
+.gx-roll{min-width:88px;height:48px;border:0;border-radius:15px;background:linear-gradient(135deg,#f6cf75,#e8aa37);color:#10202b;font-weight:1000;font-size:14px;box-shadow:0 8px 20px rgba(232,170,55,.25)}
+.gx-roll:active{transform:translateY(2px) scale(.98)}
+.gx-progress{height:5px;border-radius:999px;background:#162936;overflow:hidden;margin-top:7px}
+.gx-progress>i{display:block;height:100%;width:12%;background:linear-gradient(90deg,#d99e35,#ffe39a);border-radius:inherit;transition:width .45s ease}
+.gx-landflash{position:fixed;inset:0;z-index:9990;display:grid;place-items:center;background:rgba(1,8,13,.72);backdrop-filter:blur(5px);animation:gxFade .22s ease}
+.gx-landcard{width:min(88vw,420px);padding:26px;border-radius:25px;background:#0d1c27;border:1px solid #365166;box-shadow:0 24px 80px rgba(0,0,0,.55);text-align:center;animation:gxPop .38s cubic-bezier(.2,.9,.2,1.15)}
+.gx-landicon{font-size:50px}.gx-landtitle{font-size:13px;letter-spacing:.14em;color:#e7b655;font-weight:1000;margin-top:9px}.gx-landdesc{font-size:22px;font-weight:1000;color:#fff;margin-top:5px}
+.gx-diceveil{position:fixed;inset:0;z-index:9980;background:rgba(0,7,12,.55);backdrop-filter:blur(4px);pointer-events:none;opacity:0;transition:opacity .2s}.gx-diceveil.on{opacity:1}
+.gx-bottomnav{display:none}
+@keyframes gxPop{from{opacity:0;transform:translateY(30px) scale(.9)}to{opacity:1;transform:none}}
+@keyframes gxFade{from{opacity:0}to{opacity:1}}
+@keyframes gxPawnHop{0%{transform:translate(-50%,-50%) scale(1)}45%{transform:translate(-50%,-66%) scale(1.12)}100%{transform:translate(-50%,-50%) scale(1)}}
+.pawn.gx-hop{animation:gxPawnHop .28s ease}
+@media(max-width:760px){
+ body{padding-bottom:76px}
+ .gx-bottomnav{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);left:0;right:0;bottom:0;z-index:1000;background:rgba(7,18,27,.96);border-top:1px solid #233a4a;backdrop-filter:blur(16px);padding:7px 5px calc(7px + env(safe-area-inset-bottom))}
+ .gx-navbtn{border:0;background:none;color:#8ea1ae;font-size:10px;font-weight:900;padding:5px 2px}.gx-navbtn b{display:block;font-size:20px;margin-bottom:2px}.gx-navbtn.active{color:#efbd58}
+ #board{border-radius:14px}
+}
+@media(min-width:900px){
+ .game-shell,.app{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(310px,.72fr);gap:18px;align-items:start}
+ #boardWrap,.boardWrap{position:sticky;top:90px}
+}
+
 </style>
 <script>
 (function(){
@@ -364,6 +401,29 @@ button,input,select{font:inherit}button{cursor:pointer}img{max-width:100%}
 <link rel="preload" as="image" href="venture-clean/fixmobile.webp">
 </head>
 <body>
+
+<div id="gxDiceVeil" class="gx-diceveil"></div>
+<div id="gxTurnHud" class="gx-turnhud">
+  <div>
+    <div class="gx-turnwho">CURRENT TURN</div>
+    <div id="gxTurnName" class="gx-turnname">Founder</div>
+    <div class="gx-stats">
+      <span id="gxCash" class="gx-pill">💰 RM0</span>
+      <span id="gxVentures" class="gx-pill">🏢 0 Ventures</span>
+      <span id="gxWorth" class="gx-pill">📈 RM0 NW</span>
+    </div>
+    <div class="gx-progress"><i id="gxProgress"></i></div>
+  </div>
+  <button id="gxRollBtn" class="gx-roll" type="button">🎲 ROLL</button>
+</div>
+<nav class="gx-bottomnav" aria-label="Game navigation">
+ <button class="gx-navbtn active" data-gx-target="market"><b>🗺️</b>Board</button>
+ <button class="gx-navbtn" data-gx-target="portfolio"><b>💼</b>Portfolio</button>
+ <button class="gx-navbtn" data-gx-target="deal"><b>🤝</b>Deal</button>
+ <button class="gx-navbtn" data-gx-target="founders"><b>👥</b>Players</button>
+ <button class="gx-navbtn" data-gx-target="feed"><b>☰</b>More</button>
+</nav>
+
 <div id="splash" aria-live="polite" aria-label="Loading Kelantan Next CEO">
   <img class="splashArtwork" src="commercial-splash-final.jpg" alt="">
   <div class="splashOverlay"></div><div class="splashCleanShade"></div>
@@ -1615,6 +1675,55 @@ $("rulesBtn").onclick=openRules;
 $("rulesCloseX").onclick=closeRules;
 $("rulesDone").onclick=closeRules;
 $("rulesModal").addEventListener("click",e=>{if(e.target===$("rulesModal"))closeRules()});
+
+
+/* ===== V0.7 EXPERIENCE BRIDGE ===== */
+const gxMoney=n=>{n=Number(n||0);return "RM"+Math.round(n).toLocaleString("en-MY")};
+function gxFindRoll(){
+ return [...document.querySelectorAll("button")].find(b=>/roll|move/i.test((b.textContent||"").trim()) && b.id!=="gxRollBtn");
+}
+function gxReadState(){
+ let me=null, players=[];
+ try{
+  if(typeof room!=="undefined"&&room?.players)players=Object.values(room.players);
+  else if(typeof state!=="undefined"&&state?.players)players=Object.values(state.players);
+ }catch(_){}
+ try{
+  const nm=(typeof myName!=="undefined"&&myName)||(localStorage.getItem("founderName"))||"Founder";
+  me=players.find(x=>x?.name===nm)||players[0]||{};
+ }catch(_){me=players[0]||{}}
+ const cash=Number(me?.cash??me?.money??0), ventures=Array.isArray(me?.portfolio)?me.portfolio.length:Object.keys(me?.portfolio||{}).length;
+ const worth=Number(me?.netWorth??me?.networth??cash);
+ return {name:me?.name||"Founder",cash,ventures,worth};
+}
+function gxRefresh(){
+ const s=gxReadState();
+ gxTurnName.textContent=s.name;
+ gxCash.textContent="💰 "+gxMoney(s.cash);
+ gxVentures.textContent="🏢 "+s.ventures+" Venture"+(s.ventures===1?"":"s");
+ gxWorth.textContent="📈 "+gxMoney(s.worth)+" NW";
+ gxProgress.style.width=Math.max(2,Math.min(100,(s.worth/1000000)*100))+"%";
+ const real=gxFindRoll(); gxRollBtn.disabled=!real||real.disabled;
+}
+gxRollBtn.addEventListener("click",async()=>{
+ const real=gxFindRoll();if(!real||real.disabled)return;
+ gxDiceVeil.classList.add("on");
+ try{real.click()}finally{setTimeout(()=>gxDiceVeil.classList.remove("on"),1500)}
+});
+document.querySelectorAll(".gx-navbtn").forEach(btn=>btn.addEventListener("click",()=>{
+ document.querySelectorAll(".gx-navbtn").forEach(x=>x.classList.toggle("active",x===btn));
+ const t=btn.dataset.gxTarget;
+ const target=[...document.querySelectorAll("button")].find(b=>(b.textContent||"").trim().toLowerCase().includes(t));
+ if(target)target.click();
+}));
+function gxLanding(title,desc,icon="✨"){
+ if(document.querySelector(".gx-landflash"))return;
+ const x=document.createElement("div");x.className="gx-landflash";
+ x.innerHTML=`<div class="gx-landcard"><div class="gx-landicon">${icon}</div><div class="gx-landtitle">YOU LANDED ON</div><div class="gx-landdesc">${title}</div><div style="margin-top:8px;color:#9babb5">${desc||""}</div></div>`;
+ document.body.appendChild(x);setTimeout(()=>x.remove(),1150);
+}
+window.gxLanding=gxLanding;
+setInterval(gxRefresh,700);setTimeout(gxRefresh,300);
 
 </script>
 </body>
