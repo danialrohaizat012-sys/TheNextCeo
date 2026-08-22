@@ -1,0 +1,25 @@
+KELANTAN NEXT CEO : START UP — V0.8 GAMEPLAY DEPTH
+
+NEW: CEO ACTION
+One strategic action per round:
+- INVEST: upgrade an owned venture
+- NETWORK: stores an opportunity boost
+- RECRUIT: opens Talent Market
+- MARKETING: RM2,000 activation and stores marketing boost
+- SAVE CASH: stores a defensive cash shield
+
+NEW: VENTURE LEVELS
+Level 1 Startup → Level 2 Growing → Level 3 Established → Level 4 Expansion → Level 5 Market Leader.
+Upgrade cost scales with level. Revenue/value increase when upgraded.
+
+NEW: TALENT MARKET
+- Marketing Executive
+- Operations Manager (owner capacity +1)
+- Accountant
+- Sales Closer
+Talent is stored on the player and recruitment costs cash.
+
+FOUNDATION: EVENT DECK CATEGORIES
+Market / Opportunity / Crisis / Network / Kelantan Event labels are defined for the next event-reveal integration.
+
+Existing Firebase multiplayer, dice, pawn movement, venture ownership, audio and responsive work are preserved.

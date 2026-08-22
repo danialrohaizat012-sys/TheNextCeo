@@ -1,0 +1,22 @@
+V0.8.2 ECONOMY + VENTURE ARCHETYPES
+
+Venture categories now behave differently:
+- F&B: high demand, operating-cost sensitivity
+- Automotive: high ticket, high margin, higher volatility
+- Professional Service: stable recurring model
+- Construction: highest project upside, payment/project risk
+- Gaming & Retail: balanced ecosystem model
+- Manufacturing: strong scaling, higher capital risk
+- Education: stable, reputation-driven
+- Event & Venue: seasonal high-value booking
+- Retail and Service fallback models
+
+FUNCTIONAL CHANGES
+- Archetype multiplier affects projected venture income.
+- Archetype scale multiplier affects venture upgrades.
+- Venture risk falls slightly as level increases.
+- Marketing Executive gives projected revenue bonus.
+- CEO Marketing gives a larger temporary projected boost.
+- Diversified portfolios get 2% / 5% / 8% projected-income bonus at 2 / 3 / 4+ archetypes.
+- Added archetype-themed economic events.
+- Economy panels show projected income, level, growth and risk where venture details support it.

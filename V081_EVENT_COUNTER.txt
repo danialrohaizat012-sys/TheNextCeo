@@ -1,0 +1,16 @@
+V0.8.1 EVENT DECK + COUNTER OFFER
+
+EVENT DECK
+- 12 contextual events across Market, Opportunity, Crisis, Network and Kelantan.
+- Business-dependent events cannot trigger before a player owns a venture.
+- Animated event reveal card.
+- Network CEO boost can improve a bad draw.
+- Save Cash shield halves one negative event and is then consumed.
+
+COUNTER OFFER
+- Incoming negotiation now has a Counter Offer amount field.
+- Deal history stores each offer/counter.
+- Countered deals remain active.
+- Recipient can accept, reject, or counter instead of only yes/no.
+
+Existing V0.8 CEO Action, Venture Levels, Talent Market and multiplayer logic preserved.

@@ -1,0 +1,14 @@
+V0.7.4 CROSS-PLATFORM PAWN STEP FEEDBACK
+
+ANDROID / SUPPORTED BROWSERS
+- Keeps real 10ms vibration on every pawn step.
+- Adds a subtle step click and pawn pulse.
+
+IPHONE / IOS PWA
+- Web Vibration API is unavailable, so every pawn step now has:
+  1. short audible click,
+  2. micro-hop animation,
+  3. brief gold pulse/glow.
+- This gives a clear tactile-like rhythm without pretending iOS web vibration exists.
+
+Sound obeys the existing SFX volume/toggle.

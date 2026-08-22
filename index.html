@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Next CEO">
 <title>Kelantan Next CEO Online</title>
-<link rel="manifest" href="manifest.json?v=0.7.3">
+<link rel="manifest" href="manifest.json?v=0.8.2">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
@@ -453,6 +453,46 @@ html,body{max-width:100%;overflow-x:hidden}
  }
 }
 
+
+/* ===== V0.7.4 CROSS-PLATFORM STEP FEEDBACK ===== */
+.pawn.stepPulse{
+  filter:drop-shadow(0 0 10px rgba(239,189,88,.72)) drop-shadow(0 5px 6px rgba(0,0,0,.42));
+}
+@media(prefers-reduced-motion:reduce){
+  .pawn.gx-hop{animation:none!important}
+}
+
+
+/* ===== V0.8 GAMEPLAY DEPTH ===== */
+.ceoActionBar{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0}
+.ceoActionBtn{border:1px solid #294454;background:#0c1b26;color:#dbe4e9;border-radius:12px;padding:8px 5px;font-size:8px;font-weight:1000}
+.ceoActionBtn b{display:block;font-size:18px;margin-bottom:3px}.ceoActionBtn:disabled{opacity:.35}
+.depthBadge{display:inline-flex;align-items:center;gap:4px;border:1px solid #3a5363;border-radius:999px;padding:4px 7px;font-size:7px;font-weight:1000;color:#e7c77d}
+.bizLevel{display:flex;gap:3px;margin-top:5px}.bizLevel i{width:13px;height:4px;border-radius:99px;background:#243946}.bizLevel i.on{background:#e9b64f}
+.talentGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.talentCard{border:1px solid #294454;background:#0c1b26;border-radius:14px;padding:11px}.talentCard h4{margin:0;color:#fff}.talentCard p{font-size:8px;color:#9cafba;min-height:30px}.talentCard button{width:100%}
+.counterBox{display:grid;grid-template-columns:1fr auto;gap:7px;margin-top:9px}
+.marketPulse{animation:marketPulse 1s ease}
+@keyframes marketPulse{50%{filter:brightness(1.22)}}
+@media(max-width:650px){.ceoActionBar{grid-template-columns:repeat(5,minmax(58px,1fr));overflow-x:auto}.talentGrid{grid-template-columns:1fr}}
+
+
+/* ===== V0.8.1 EVENT DECK + COUNTER OFFER ===== */
+.eventReveal{perspective:1000px;margin-top:10px}.eventRevealCard{min-height:240px;position:relative;transform-style:preserve-3d;animation:eventFlip .65s ease}
+.eventFace{border:1px solid #345166;border-radius:20px;padding:22px;background:#0b1923;text-align:center;box-shadow:0 18px 45px rgba(0,0,0,.3)}
+.eventType{font-size:8px;letter-spacing:.18em;font-weight:1000;color:#e5b85c}.eventIcon{font-size:44px;margin:12px}.eventTitle{font-size:20px;font-weight:1000;color:#fff}.eventCopy{font-size:10px;line-height:1.55;color:#aebbc3;margin:10px 0}.eventImpact{font-size:13px;font-weight:1000;color:#f0cf88}
+@keyframes eventFlip{from{opacity:0;transform:rotateY(90deg) scale(.92)}to{opacity:1;transform:none}}
+.counterPanel{border-top:1px solid #294454;margin-top:12px;padding-top:12px}.counterPanel input{width:100%;box-sizing:border-box;background:#07141d;color:#fff;border:1px solid #365064;border-radius:10px;padding:10px;font-weight:900}.dealHistory{font-size:8px;color:#9badb8;margin-top:8px;max-height:90px;overflow:auto}.dealHistory div{padding:5px 0;border-bottom:1px solid #1c303d}
+
+
+/* ===== V0.8.2 ECONOMY + ARCHETYPES ===== */
+.archStrip{display:flex;gap:5px;flex-wrap:wrap;margin:7px 0}
+.archChip{font-size:7px;font-weight:1000;padding:4px 7px;border-radius:999px;border:1px solid #355062;color:#d8e1e6;background:#0a1822}
+.econPanel{border:1px solid #294454;background:#0a1822;border-radius:15px;padding:11px;margin-top:9px}
+.econGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.econStat{background:#07131c;border-radius:10px;padding:8px;text-align:center}.econStat small{display:block;font-size:6px;color:#8498a5;text-transform:uppercase}.econStat b{font-size:10px;color:#fff}
+@media(max-width:620px){.econGrid{grid-template-columns:repeat(2,1fr)}}
+
 </style>
 <script>
 (function(){
@@ -530,6 +570,7 @@ html,body{max-width:100%;overflow-x:hidden}
     <button data-tab="logWrap">FEED</button>
     <button type="button" id="rulesBtn">RULES</button>
     <button type="button" id="soundBtn">🔊 SOUND</button>
+<button type="button" id="ceoBtn">🧠 CEO ACTION</button>
   </div>
 
   <div class="layout" id="gameLayout" style="display:none">
@@ -640,8 +681,36 @@ html,body{max-width:100%;overflow-x:hidden}
       <button id="testCashSound" class="btn light">💰 Test Cash</button>
       <button id="testDealSound" class="btn light">🤝 Test Deal</button>
     </div>
-    <p class="muted" style="margin-top:10px">Audio bermula selepas interaksi pertama kerana sekatan autoplay browser/PWA.</p>
+    <p class="muted" style="margin-top:10px">Audio bermula selepas interaksi pertama kerana sekatan autoplay browser/PWA. Android menggunakan vibration; iPhone menggunakan step sound + pawn pulse sebagai haptic fallback.</p>
   </div>
+</div>
+
+
+<div class="modal" id="eventDeckModal">
+ <div class="box">
+  <div class="soundHead"><div><div class="soundKicker">BUSINESS WORLD</div><h2>Event Reveal</h2></div><button class="rulesCloseX" id="eventDeckClose">×</button></div>
+  <div id="eventReveal" class="eventReveal"></div>
+ </div>
+</div>
+<div class="modal" id="ceoActionModal">
+ <div class="box">
+  <div class="soundHead"><div><div class="soundKicker">ONE ACTION PER TURN</div><h2>CEO Strategy</h2></div><button class="rulesCloseX" id="ceoClose">×</button></div>
+  <p class="muted">Dadu tentukan keadaan. CEO tentukan tindak balas.</p>
+  <div class="ceoActionBar">
+   <button class="ceoActionBtn" data-ceo="invest"><b>📈</b>INVEST</button>
+   <button class="ceoActionBtn" data-ceo="network"><b>🤝</b>NETWORK</button>
+   <button class="ceoActionBtn" data-ceo="recruit"><b>👥</b>RECRUIT</button>
+   <button class="ceoActionBtn" data-ceo="marketing"><b>📣</b>MARKETING</button>
+   <button class="ceoActionBtn" data-ceo="save"><b>🛡️</b>SAVE CASH</button>
+  </div>
+  <div id="ceoActionBody"></div>
+ </div>
+</div>
+<div class="modal" id="talentModal">
+ <div class="box">
+  <div class="soundHead"><div><div class="soundKicker">TALENT MARKET</div><h2>Recruit Team</h2></div><button class="rulesCloseX" id="talentClose">×</button></div>
+  <div id="talentGrid" class="talentGrid"></div>
+ </div>
 </div>
 <div class="modal" id="rulesModal">
   <div class="box rulesBox">
@@ -808,7 +877,11 @@ async function playDiceRollSound(){
 
 const SFX={
  dice(){audioNoise(.055,.16,0);audioNoise(.045,.12,.09);audioNoise(.06,.2,.18);audioNote(95,.08,"triangle",.09,.18)},
- step(){audioNote(145,.045,"triangle",.07)},
+ step(){
+   // Audible micro-click for iPhone/PWA where Web Vibration API is unavailable.
+   audioNote(210,.035,"square",.075,0);
+   audioNote(125,.045,"triangle",.045,.018);
+ },
  cashIn(){audioNote(660,.08,"sine",.09,0);audioNote(880,.10,"sine",.09,.08);audioNote(1100,.14,"sine",.08,.16)},
  cashOut(){audioNote(360,.10,"triangle",.09,0);audioNote(250,.15,"triangle",.08,.09)},
  card(){audioNoise(.06,.08,0);audioNote(520,.08,"sine",.05,.04)},
@@ -967,6 +1040,8 @@ function currentNetWorth(p){
 function ownerCapacityUsed(p){
  return (p?.biz||[]).filter(b=>!b.manager).length;
 }
+function ownerCapacityLimit(p){return 2+((p?.talents||[]).some(t=>t.id==="operations")?1:0)}
+
 function ventureOwner(ventureId){
  return players.find(p=>(p.biz||[]).some(b=>b.id===ventureId));
 }
@@ -1042,9 +1117,9 @@ $("tileCloseBtn").onclick=()=>$("tileModal").classList.remove("show");
 
 let ventureFilter="ALL";
 function ventureCardHTML(b){
- const me=myPlayer(),owner=ventureOwner(b.id),owned=!!owner,can=!owned&&(me?.cash||0)>=b.cost&&ownerCapacityUsed(me)<2;
+ const me=myPlayer(),owner=ventureOwner(b.id),owned=!!owner,can=!owned&&(me?.cash||0)>=b.cost&&ownerCapacityUsed(me)<ownerCapacityLimit(me);
  const visual=b.logo?`<img src="${b.logo}" alt="${b.name} logo" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><div class="ventureFallback" style="display:none">${(b.name||"?").split(/\s+/).map(x=>x[0]).join("").slice(0,3).toUpperCase()}</div>`:`<div><div class="ventureFallback">${(b.name||"?").split(/\s+/).map(x=>x[0]).join("").slice(0,3).toUpperCase()}</div><div class="logoComing">OFFICIAL LOGO COMING SOON</div></div>`;
- return `<article class="ventureCard" data-cat="${b.cat}"><div class="ventureVisual">${visual}<span class="ventureTier">${b.tier}</span>${owned?`<span class="ventureOwned">OWNED • ${owner.name}</span>`:""}</div><div class="ventureBody"><div class="ventureCat">${b.cat}</div><div class="ventureName">${b.name}</div><div class="ventureArch">${b.archetype}</div><div class="ventureStats"><div class="ventureStat"><span>ENTRY</span><b>${fmt(b.cost)}</b></div><div class="ventureStat"><span>BASE CF</span><b>+${fmt(b.rev-b.op)}</b></div><div class="ventureStat"><span>STAFF</span><b>${b.staff}</b></div></div><div class="ventureAbility"><b>✦ ${b.ability}</b><small>${b.abilityText}</small></div><button class="ventureBuy" data-buy="${b.id}" ${can?"":"disabled"}>${owned?"VENTURE ALREADY OWNED":(me?.cash||0)<b.cost?"NEED "+fmt(b.cost-(me?.cash||0)):ownerCapacityUsed(me)>=2?"OWNER CAPACITY FULL":"START / ACQUIRE VENTURE"}</button></div></article>`;
+ return `<article class="ventureCard" data-cat="${b.cat}"><div class="ventureVisual">${visual}<span class="ventureTier">${b.tier}</span>${owned?`<span class="ventureOwned">OWNED • ${owner.name}</span>`:""}</div><div class="ventureBody"><div class="ventureCat">${b.cat}</div><div class="ventureName">${b.name}</div><div class="ventureArch">${b.archetype}</div><div class="ventureStats"><div class="ventureStat"><span>ENTRY</span><b>${fmt(b.cost)}</b></div><div class="ventureStat"><span>BASE CF</span><b>+${fmt(b.rev-b.op)}</b></div><div class="ventureStat"><span>STAFF</span><b>${b.staff}</b></div></div><div class="ventureAbility"><b>✦ ${b.ability}</b><small>${b.abilityText}</small></div><button class="ventureBuy" data-buy="${b.id}" ${can?"":"disabled"}>${owned?"VENTURE ALREADY OWNED":(me?.cash||0)<b.cost?"NEED "+fmt(b.cost-(me?.cash||0)):ownerCapacityUsed(me)>=ownerCapacityLimit(me)?"OWNER CAPACITY FULL":"START / ACQUIRE VENTURE"}</button></div></article>`;
 }
 function renderVentureMarket(){
  const cats=["ALL",...new Set(B.map(b=>b.cat))];
@@ -1405,6 +1480,30 @@ async function animateDoubleDice(d1,d2){
  overlay.classList.remove("show");overlay.setAttribute("aria-hidden","true");await new Promise(r=>setTimeout(r,190));overlay.style.display="none";
  w1.classList.remove("rolling");w2.classList.remove("rolling");
 }
+
+function pulseCurrentPawn(){
+ try{
+  const me=myPlayer?.();
+  if(!me)return;
+  const ownIndex=players.findIndex(p=>p.uid===user.uid);
+  const pawns=[...document.querySelectorAll("#board .pawn")];
+  const pawn=pawns[ownIndex];
+  if(!pawn)return;
+  pawn.classList.remove("gx-hop","stepPulse");
+  void pawn.offsetWidth;
+  pawn.classList.add("gx-hop","stepPulse");
+  setTimeout(()=>pawn.classList.remove("gx-hop","stepPulse"),320);
+ }catch(_){}
+}
+function stepFeedback(){
+ try{SFX.step()}catch(_){}
+ pulseCurrentPawn();
+ try{
+  // Android/compatible browsers get real vibration.
+  if(navigator.vibrate)navigator.vibrate(10);
+ }catch(_){}
+}
+
 async function animatePawnSteps(steps){
  let pos=Number(myPlayer()?.trackPos||0);
  for(let i=0;i<steps;i++){
@@ -1424,8 +1523,7 @@ async function animatePawnSteps(steps){
   render();
   const point=trackPoint(pos),flash=document.createElement("div");flash.className="trackStepFlash";flash.style.left=point.x+"%";flash.style.top=point.y+"%";$("board").appendChild(flash);setTimeout(()=>flash.remove(),360);
   await updateDoc(playerRef(user.uid),{trackPos:pos});
-  SFX.step();
-  try{navigator.vibrate?.(10)}catch(_){}
+  stepFeedback();
   await new Promise(r=>setTimeout(r,305));
  }
  return pos;
@@ -1450,7 +1548,7 @@ async function buy(id){
  if(me.bankrupt)return toast("Anda sudah bankrupt");
  if(ventureIsOwned(id))return toast("Venture ini sudah dimiliki Founder lain");
  if(me.cash<b.cost)return toast("Cash tak cukup");
- if(ownerCapacityUsed(me)>=2)return toast("Owner Capacity penuh • lantik Manager dahulu");
+ if(ownerCapacityUsed(me)>=ownerCapacityLimit(me))return toast("Owner Capacity penuh • lantik Manager dahulu");
 
  try{
   await runTransaction(db,async tx=>{
@@ -1461,7 +1559,7 @@ async function buy(id){
    if(owners[id]&&owners[id]!==user.uid)throw new Error("Venture ini baru dibeli Founder lain");
    if((pd.cash||0)<b.cost)throw new Error("Cash tak cukup");
    const unmanaged=(pd.biz||[]).filter(x=>!x.manager).length;
-   if(unmanaged>=2)throw new Error("Owner Capacity penuh");
+   if(unmanaged>=ownerCapacityLimit(pd))throw new Error("Owner Capacity penuh");
    const acquired={...b,loc:businessLocationForTrack(pd.trackPos||0),staffNow:0,manager:false};
    tx.update(pRef,{cash:(pd.cash||0)-b.cost,biz:[...(pd.biz||[]),acquired]});
    tx.update(rRef,{[`ventureOwners.${id}`]:user.uid});
@@ -1521,7 +1619,7 @@ $("sendDealBtn").onclick=async()=>{
  if(amount<=0||me.cash<amount)return toast("Cash tak cukup untuk offer ini");
  const idx=(seller.biz||[]).findIndex((b,i)=>dealBizKey(b,i)===selectedDealBizId);
  if(idx<0)return toast("Business tak dijumpai");
- const b=seller.biz[idx],deal={id:`${Date.now()}-${user.uid.slice(0,5)}`,fromUid:user.uid,fromName:me.name,toUid:to,toName:seller.name,bizKey:selectedDealBizId,bizName:b.name,bizValue:b.value||0,amount,note,status:"pending",createdAt:Date.now()};
+ const b=seller.biz[idx],deal={id:`${Date.now()}-${user.uid.slice(0,5)}`,fromUid:user.uid,fromName:me.name,toUid:to,toName:seller.name,bizKey:selectedDealBizId,bizName:b.name,bizValue:b.value||0,amount,note,status:"pending",history:[{by:myPlayer()?.name||"Founder",uid:user.uid,amount:Number(amount),at:Date.now()}],createdAt:Date.now()};
  await setDoc(doc(db,"rooms",roomId,"deals",deal.id),deal);
  $("dealModal").classList.remove("show");toast("Offer dihantar kepada "+seller.name);log(`🤝 ${me.name} offer ${fmt(amount)} untuk ${b.name} milik ${seller.name}`);
 };
@@ -1530,11 +1628,17 @@ let incomingDeal=null,unsubDeals=null;
 function watchDeals(){
  if(unsubDeals)unsubDeals();
  unsubDeals=onSnapshot(collection(db,"rooms",roomId,"deals"),snap=>{
-   const pending=snap.docs.map(d=>d.data()).filter(d=>d.toUid===user.uid&&d.status==="pending").sort((a,b)=>a.createdAt-b.createdAt);
+   const pending=snap.docs.map(d=>d.data()).filter(d=>d.toUid===user.uid&&(d.status==="pending"||d.status==="countered")).sort((a,b)=>a.createdAt-b.createdAt);
    incomingDeal=pending[0]||null;
    if(incomingDeal){
     if(!$("incomingDealModal").classList.contains("show"))SFX.dealIncoming();
     $("incomingDealCard").innerHTML=`<h3>${incomingDeal.bizName}</h3><p><b>${incomingDeal.fromName}</b> nak beli business ini daripada portfolio anda.</p><div class="price">${fmt(incomingDeal.amount)}</div><p>Anggaran nilai portfolio: ${fmt(incomingDeal.bizValue)}${incomingDeal.note?`<br><br>“${incomingDeal.note}”`:""}</p>`;
+    setTimeout(()=>{
+      if(incomingDeal&&$("incomingDealCard")){
+        $("incomingDealCard").insertAdjacentHTML("beforeend",counterOfferMarkup(incomingDeal));
+        $("sendCounterBtn")?.addEventListener("click",()=>sendCounterOffer(incomingDeal,$("counterAmount").value));
+      }
+    },0);
     $("incomingDealModal").classList.add("show");
    }else $("incomingDealModal").classList.remove("show");
  },e=>console.warn("Deal listener:",e));
@@ -1752,6 +1856,198 @@ $("rulesDone").onclick=closeRules;
 $("rulesModal").addEventListener("click",e=>{if(e.target===$("rulesModal"))closeRules()});
 
 
+
+
+const EVENT_DECK_LABELS={
+ market:{icon:"📈",label:"MARKET"},
+ opportunity:{icon:"💡",label:"OPPORTUNITY"},
+ crisis:{icon:"⚡",label:"CRISIS"},
+ network:{icon:"🤝",label:"NETWORK"},
+ kelantan:{icon:"🏴",label:"KELANTAN EVENT"}
+};
+
+
+/* ===== V0.8.1 LIVE EVENT DECK ===== */
+const LIVE_EVENT_DECK=[
+ {type:"market",icon:"📈",title:"Cuti Sekolah",text:"Mall, F&B dan entertainment menerima lonjakan pelanggan.",cash:3500,rep:1,requiresBiz:true},
+ {type:"market",icon:"📉",title:"Kos Operasi Naik",text:"Utiliti dan bahan mentah meningkat untuk semua operator.",cash:-2800,requiresBiz:true},
+ {type:"opportunity",icon:"💡",title:"Corporate Order",text:"Sebuah organisasi mahu membuat tempahan besar.",cash:5000,rep:1,requiresBiz:true},
+ {type:"opportunity",icon:"📱",title:"Content Viral",text:"Salah satu venture anda meletup di media sosial.",cash:4200,rep:2,requiresBiz:true},
+ {type:"crisis",icon:"⚡",title:"Equipment Breakdown",text:"Peralatan utama memerlukan pembaikan segera.",cash:-3200,requiresBiz:true},
+ {type:"crisis",icon:"👥",title:"Staff Emergency",text:"Operasi terganggu kerana kekurangan tenaga kerja.",cash:-1800,requiresBiz:true},
+ {type:"network",icon:"🤝",title:"Founder Introduction",text:"Network memperkenalkan anda kepada pelanggan bernilai tinggi.",cash:3000,rep:2},
+ {type:"network",icon:"🎤",title:"Business Networking Night",text:"Anda membuat connection yang berguna untuk round seterusnya.",cash:1200,rep:2},
+ {type:"kelantan",icon:"🏴",title:"Musim Perayaan",text:"Perbelanjaan pengguna tempatan meningkat.",cash:3800,requiresBiz:true},
+ {type:"kelantan",icon:"🌧️",title:"Hujan Lebat",text:"Traffic pelanggan fizikal berkurang untuk beberapa hari.",cash:-1700,requiresBiz:true},
+ {type:"kelantan",icon:"🎓",title:"Musim Kemasukan Pelajar",text:"Permintaan retail, makanan dan servis meningkat.",cash:2600,requiresBiz:true},
+ {type:"market",icon:"🏦",title:"Financing Approved",text:"Akses modal bertambah baik dan keyakinan pasaran meningkat.",cash:2500,rep:1}
+];
+function eligibleLiveEvents(me){
+ const hasBiz=(me?.biz||[]).length>0;
+ return LIVE_EVENT_DECK.filter(e=>!e.requiresBiz||hasBiz);
+}
+function eventTypeMeta(type){return EVENT_DECK_LABELS[type]||{icon:"✨",label:"EVENT"}}
+async function drawLiveEvent(forceType=null){
+ const me=myPlayer();if(!me)return;
+ let pool=eligibleLiveEvents(me);if(forceType)pool=pool.filter(x=>x.type===forceType);
+ if(!pool.length)return toast("Tiada event sesuai sekarang");
+ let ev=pool[Math.floor(Math.random()*pool.length)];
+ // NETWORK CEO action improves downside: convert a negative networkable draw into a positive opportunity.
+ if((me.networkBoost||0)>0 && ev.cash<0){
+   const good=pool.filter(x=>x.cash>0);if(good.length)ev=good[Math.floor(Math.random()*good.length)];
+ }
+ let cash=ev.cash||0,rep=ev.rep||0;
+ // Cash shield halves one negative event.
+ if(cash<0 && (me.cashShield||0)>0)cash=Math.ceil(cash/2);
+ const meta=eventTypeMeta(ev.type);
+ $("eventReveal").innerHTML=`<div class="eventRevealCard"><div class="eventFace"><div class="eventType">${meta.label}</div><div class="eventIcon">${ev.icon}</div><div class="eventTitle">${ev.title}</div><div class="eventCopy">${ev.text}</div><div class="eventImpact">${cash>=0?"+":""}${fmt(cash)}${rep?` • ${rep>0?"+":""}${rep} REP`:""}</div></div></div>`;
+ $("eventDeckModal").classList.add("show");SFX.card?.();
+ const patch={cash:(me.cash||0)+cash,rep:(me.rep||0)+rep,lastEvent:ev.title};
+ if((me.cashShield||0)>0&&cash<0)patch.cashShield=0;
+ if((me.networkBoost||0)>0)patch.networkBoost=0;
+ await updateDoc(playerRef(user.uid),patch);
+ if(cash>0)SFX.eventGood?.(); else if(cash<0)SFX.eventBad?.();
+}
+$("eventDeckClose")?.addEventListener("click",()=>$("eventDeckModal").classList.remove("show"));
+
+
+LIVE_EVENT_DECK.push(
+ {type:"market",icon:"🍗",title:"Food Cost Spike",text:"F&B operators face ingredient inflation.",cash:-2200,requiresBiz:true},
+ {type:"market",icon:"🚗",title:"Used Car Demand",text:"Automotive demand rises sharply this round.",cash:4200,requiresBiz:true},
+ {type:"opportunity",icon:"🏗️",title:"New Development Project",text:"Construction businesses receive a major project lead.",cash:6000,requiresBiz:true},
+ {type:"market",icon:"🎮",title:"Gaming Release Weekend",text:"Gaming and entertainment traffic surges.",cash:3600,requiresBiz:true},
+ {type:"opportunity",icon:"🧾",title:"Annual Compliance Season",text:"Professional services see recurring client demand.",cash:3000,requiresBiz:true}
+);
+
+/* ===== V0.8.1 COUNTER OFFER ===== */
+function counterOfferMarkup(d){
+ return `<div class="counterPanel"><b>COUNTER OFFER</b><div class="counterBox"><input id="counterAmount" type="number" min="1" step="500" value="${Math.max(500,Number(d.amount||0))}"><button class="btn" id="sendCounterBtn">COUNTER</button></div><div class="dealHistory">${(d.history||[]).map(x=>`<div>${x.by}: ${fmt(x.amount)}</div>`).join("")}</div></div>`;
+}
+async function sendCounterOffer(d,newAmount){
+ newAmount=Number(newAmount);if(!d||!newAmount||newAmount<=0)return toast("Masukkan nilai counter offer");
+ const dealRef=doc(db,"rooms",roomId,"deals",d.id);
+ const history=[...(d.history||[]),{by:myPlayer()?.name||"Founder",uid:user.uid,amount:newAmount,at:Date.now()}];
+ await updateDoc(dealRef,{amount:newAmount,status:"countered",counterBy:user.uid,history,updatedAt:Date.now()});
+ SFX.dealIncoming?.();toast("Counter offer dihantar");
+ $("incomingDealModal")?.classList.remove("show");
+}
+
+
+/* ===== V0.8.2 ECONOMY & VENTURE ARCHETYPE ENGINE ===== */
+const ARCHETYPE_RULES={
+ fnb:{label:"F&B",icon:"🍗",income:1.15,risk:.14,scale:1.12,desc:"Demand tinggi • operasi & bahan mentah sensitif"},
+ automotive:{label:"Automotive",icon:"🚗",income:1.28,risk:.18,scale:1.18,desc:"High-ticket • margin besar • transaksi kurang kerap"},
+ professional:{label:"Professional Service",icon:"🧾",income:1.05,risk:.06,scale:1.08,desc:"Recurring income • stabil • growth sederhana"},
+ construction:{label:"Construction",icon:"🏗️",income:1.38,risk:.24,scale:1.22,desc:"Project besar • payment delay risk"},
+ gaming:{label:"Gaming & Retail",icon:"🎮",income:1.18,risk:.12,scale:1.15,desc:"Retail + repair + trade-in ecosystem"},
+ manufacturing:{label:"Manufacturing",icon:"🏭",income:1.32,risk:.20,scale:1.25,desc:"Scale tinggi • perlukan modal & capacity"},
+ education:{label:"Education",icon:"🎓",income:1.08,risk:.07,scale:1.10,desc:"Stable demand • reputation-driven"},
+ event:{label:"Event & Venue",icon:"💍",income:1.22,risk:.16,scale:1.17,desc:"Booking high-value • seasonal"},
+ retail:{label:"Retail",icon:"🛍️",income:1.14,risk:.12,scale:1.13,desc:"Volume driven • inventory sensitive"},
+ service:{label:"Service",icon:"🛠️",income:1.12,risk:.10,scale:1.11,desc:"Skill-driven • repeat customer potential"}
+};
+function normalizeArchetype(b){
+ const s=((b?.archetype||"")+" "+(b?.cat||"")+" "+(b?.name||"")).toLowerCase();
+ if(/food|f&b|coffee|kopi|cookie|ayam|cafe|nasken|ayenas/.test(s))return"fnb";
+ if(/auto|car|perodua|body|fixmobile|aircond|wiring/.test(s))return"automotive";
+ if(/account|consult|professional|uruz/.test(s))return"professional";
+ if(/construct|property|ajc/.test(s))return"construction";
+ if(/gaming|game|meney|kart/.test(s))return"gaming";
+ if(/manufact|oem|izara/.test(s))return"manufacturing";
+ if(/college|education|astonian/.test(s))return"education";
+ if(/wedding|dewan|event|garden/.test(s))return"event";
+ if(/bundle|retail|studio/.test(s))return"retail";
+ return"service";
+}
+function archetypeRule(b){return ARCHETYPE_RULES[normalizeArchetype(b)]||ARCHETYPE_RULES.service}
+function ventureRoundIncome(b,p=null){
+ const r=archetypeRule(b),lv=Math.max(1,Number(b.level||1)),base=Number(b.rev||0);
+ const marketing=p?.marketingBoost?1.15:1;
+ const talent=(p?.talents||[]).some(t=>t.id==="marketing")?1.08:1;
+ return Math.max(0,Math.round(base*r.income*Math.pow(r.scale,lv-1)*marketing*talent));
+}
+function ventureRiskChance(b){const r=archetypeRule(b),lv=Math.max(1,Number(b.level||1));return Math.max(.03,r.risk-(lv-1)*.012)}
+function ventureEconomyMarkup(b){
+ const r=archetypeRule(b),income=ventureRoundIncome(b);
+ return `<div class="econPanel"><div class="archStrip"><span class="archChip">${r.icon} ${r.label}</span><span class="archChip">Risk ${Math.round(ventureRiskChance(b)*100)}%</span></div><div class="econGrid"><div class="econStat"><small>Projected</small><b>${fmt(income)}</b></div><div class="econStat"><small>Level</small><b>${b.level||1}/5</b></div><div class="econStat"><small>Growth</small><b>×${r.scale.toFixed(2)}</b></div><div class="econStat"><small>Risk</small><b>${Math.round(ventureRiskChance(b)*100)}%</b></div></div><div style="font-size:7px;color:#91a4b0;margin-top:7px">${r.desc}</div></div>`;
+}
+function diversifiedPortfolioBonus(p){
+ const kinds=new Set((p?.biz||[]).map(normalizeArchetype)).size;
+ return kinds>=4?.08:kinds>=3?.05:kinds>=2?.02:0;
+}
+function portfolioProjectedIncome(p){
+ const gross=(p?.biz||[]).reduce((s,b)=>s+ventureRoundIncome(b,p),0);
+ return Math.round(gross*(1+diversifiedPortfolioBonus(p)));
+}
+
+/* ===== V0.8 GAMEPLAY DEPTH ENGINE ===== */
+const TALENTS=[
+ {id:"marketing",name:"Marketing Executive",salary:2000,cost:4000,icon:"📣",text:"+15% next venture revenue boost"},
+ {id:"operations",name:"Operations Manager",salary:3000,cost:6000,icon:"⚙️",text:"Owner capacity +1"},
+ {id:"accountant",name:"Accountant",salary:2500,cost:5000,icon:"🧾",text:"Defensive protection against compliance costs"},
+ {id:"sales",name:"Sales Closer",salary:2200,cost:4500,icon:"🤝",text:"+10% acquisition/deal momentum"}
+];
+function currentDepthState(p){return {ceoActionRound:p?.ceoActionRound??-1,talents:p?.talents||[],shield:p?.cashShield||0,marketingBoost:p?.marketingBoost||0,networkBoost:p?.networkBoost||0}}
+function currentRoundSafe(){try{return Number(room?.round||0)}catch(_){return 0}}
+function ceoUsed(){const me=myPlayer();return Number(me?.ceoActionRound??-1)===currentRoundSafe()}
+function refreshCEOButtons(){document.querySelectorAll("[data-ceo]").forEach(b=>b.disabled=ceoUsed())}
+async function markCEOAction(extra={}){
+ const me=myPlayer(); if(!me)return;
+ await updateDoc(playerRef(user.uid),{ceoActionRound:currentRoundSafe(),...extra});
+ refreshCEOButtons();
+}
+function openCEO(){
+ refreshCEOButtons();
+ $("ceoActionBody").innerHTML=ceoUsed()?`<div class="notice">CEO Action untuk round ini sudah digunakan.</div>`:`<div class="notice">Pilih satu strategic action. Pilihan ini hanya boleh digunakan sekali setiap round.</div>`;
+ $("ceoActionModal").classList.add("show");
+}
+$("ceoBtn")?.addEventListener("click",openCEO);$("ceoClose")?.addEventListener("click",()=>$("ceoActionModal").classList.remove("show"));
+$("talentClose")?.addEventListener("click",()=>$("talentModal").classList.remove("show"));
+
+function renderTalentMarket(){
+ const me=myPlayer(),owned=new Set((me?.talents||[]).map(x=>x.id));
+ $("talentGrid").innerHTML=TALENTS.map(t=>`<div class="talentCard"><div style="font-size:28px">${t.icon}</div><h4>${t.name}</h4><p>${t.text}<br>Recruit ${fmt(t.cost)} • Salary ${fmt(t.salary)}/round</p><button class="btn" data-hire="${t.id}" ${owned.has(t.id)?"disabled":""}>${owned.has(t.id)?"HIRED":"RECRUIT"}</button></div>`).join("");
+ document.querySelectorAll("[data-hire]").forEach(b=>b.onclick=()=>hireTalent(b.dataset.hire));
+}
+async function hireTalent(id){
+ const t=TALENTS.find(x=>x.id===id),me=myPlayer();if(!t||!me)return;
+ if((me.cash||0)<t.cost)return toast("Cash tak cukup");
+ if((me.talents||[]).some(x=>x.id===id))return toast("Talent sudah ada");
+ await updateDoc(playerRef(user.uid),{cash:(me.cash||0)-t.cost,talents:[...(me.talents||[]),t]});
+ SFX.buy?.();toast(`${t.name} joined your team`);
+ renderTalentMarket();
+}
+document.querySelectorAll("[data-ceo]").forEach(btn=>btn.onclick=async()=>{
+ if(ceoUsed())return toast("CEO Action round ini sudah digunakan");
+ const type=btn.dataset.ceo,me=myPlayer();if(!me)return;
+ if(type==="recruit"){
+   renderTalentMarket();$("talentModal").classList.add("show");$("ceoActionModal").classList.remove("show");return;
+ }
+ if(type==="network"){await markCEOAction({networkBoost:1});toast("NETWORK: next opportunity improved");}
+ if(type==="marketing"){
+   if((me.cash||0)<2000)return toast("Marketing perlukan RM2,000");
+   await updateDoc(playerRef(user.uid),{cash:(me.cash||0)-2000,marketingBoost:1,ceoActionRound:currentRoundSafe()});toast("MARKETING campaign activated");
+ }
+ if(type==="save"){await markCEOAction({cashShield:1});toast("SAVE CASH: defensive shield activated");}
+ if(type==="invest"){
+   const biz=(me.biz||[]);
+   if(!biz.length)return toast("Belum ada venture untuk upgrade");
+   $("ceoActionBody").innerHTML=`<h3>Upgrade Venture</h3>${biz.map(b=>{const lv=b.level||1,cost=5000*lv;return `<div class="talentCard" style="margin:7px 0"><b>${b.name}</b> <span class="depthBadge">LEVEL ${lv}</span><div class="bizLevel">${[1,2,3,4,5].map(x=>`<i class="${x<=lv?"on":""}"></i>`).join("")}</div><p>${archetypeRule(b).icon} ${archetypeRule(b).label} • Upgrade ${fmt(cost)} • Growth ×${archetypeRule(b).scale.toFixed(2)}</p><button class="btn" data-upgrade="${b.id}" ${lv>=5?"disabled":""}>${lv>=5?"MARKET LEADER":"UPGRADE"}</button></div>`}).join("")}`;
+   document.querySelectorAll("[data-upgrade]").forEach(x=>x.onclick=()=>upgradeVenture(x.dataset.upgrade));return;
+ }
+ $("ceoActionModal").classList.remove("show");
+});
+async function upgradeVenture(id){
+ const me=myPlayer(),biz=[...(me?.biz||[])],i=biz.findIndex(x=>x.id===id);if(i<0)return;
+ const lv=biz[i].level||1,cost=5000*lv;if(lv>=5)return toast("Venture sudah Market Leader");
+ if((me.cash||0)<cost)return toast("Cash tak cukup");
+ const ar=archetypeRule(biz[i]);
+ biz[i]={...biz[i],level:lv+1,rev:Math.round((biz[i].rev||0)*ar.scale),value:Math.round((biz[i].value||0)*(1+((ar.scale-1)*.8)))};
+ await updateDoc(playerRef(user.uid),{cash:(me.cash||0)-cost,biz,ceoActionRound:currentRoundSafe()});
+ SFX.buy?.();toast(`${biz[i].name} naik ke Level ${lv+1}`);$("ceoActionModal").classList.remove("show");
+}
+function talentOwnerCapacityBonus(p){return (p?.talents||[]).some(t=>t.id==="operations")?1:0}
+
 /* ===== V0.7 EXPERIENCE BRIDGE ===== */
 const gxMoney=n=>{n=Number(n||0);return "RM"+Math.round(n).toLocaleString("en-MY")};
 function gxFindRoll(){
@@ -1777,6 +2073,7 @@ function gxRefresh(){
  gxCash.textContent="💰 "+gxMoney(s.cash);
  gxVentures.textContent="🏢 "+s.ventures+" Venture"+(s.ventures===1?"":"s");
  gxWorth.textContent="📈 "+gxMoney(s.worth)+" NW";
+ try{const me=myPlayer?.();if(me){const bonus=diversifiedPortfolioBonus(me);gxWorth.title=`Projected venture income ${fmt(portfolioProjectedIncome(me))}${bonus?` • Diversification +${Math.round(bonus*100)}%`:""}`}}catch(_){}
  gxProgress.style.width=Math.max(2,Math.min(100,(s.worth/1000000)*100))+"%";
  const real=gxFindRoll(); gxRollBtn.disabled=!real||real.disabled;
 }
