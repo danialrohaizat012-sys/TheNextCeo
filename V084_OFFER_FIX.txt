@@ -1,0 +1,13 @@
+V0.8.4 NEGO DEAL OFFER FIX
+
+ROOT ISSUE ADDRESSED:
+The offer system wrote to rooms/{roomId}/deals/{dealId}. If existing Firestore rules only permitted room + player documents, pressing HANTAR OFFER would fail with no useful UI feedback.
+
+NEW DESIGN:
+- Deals are stored inside the existing room document under room.deals.{dealId}.
+- This uses the same room document permissions already required by multiplayer.
+- Send button now shows SENDING / success / exact Firebase error.
+- Incoming offers are watched from the room document.
+- Accept/reject/counter all update the room deal record.
+- Counter Offer alternates active recipient between buyer and seller.
+- Accept uses a Firestore transaction to verify the latest offer, sufficient buyer cash, seller ownership, then transfers venture + cash atomically.

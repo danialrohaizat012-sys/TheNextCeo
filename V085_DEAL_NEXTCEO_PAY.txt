@@ -1,0 +1,20 @@
+V0.8.5 NEGO DEAL × NEXTCEO PAY
+
+NEW DEAL FLOW
+Offer → Counter → Seller Accept Terms → Deal Locked / Awaiting Payment → Buyer chooses payment method.
+
+PAY WITH QR
+- Creates a 5-minute acquisition QR.
+- Seller scans QR on nearby device.
+- Seller sees exact acquisition amount + venture.
+- Confirming QR atomically transfers buyer cash, seller cash, venture ownership, and consumes QR.
+
+PAY ONLINE
+- For remote players.
+- Buyer taps Pay Online.
+- Same atomic Firestore transaction completes cash + venture transfer without camera.
+
+IMPORTANT
+- Seller accepting an offer no longer immediately transfers cash/venture.
+- Ownership moves only after successful payment.
+- QR is in-game only; no real bank payment.

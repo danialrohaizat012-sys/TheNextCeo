@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Next CEO">
 <title>Kelantan Next CEO Online</title>
-<link rel="manifest" href="manifest.json?v=0.8.3">
+<link rel="manifest" href="manifest.json?v=0.8.5">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
@@ -513,6 +513,13 @@ html,body{max-width:100%;overflow-x:hidden}
 .payReceipt{padding:16px;border-radius:16px;background:linear-gradient(145deg,#123125,#0a1b16);border:1px solid #38694f;text-align:center}
 .payReceipt b{display:block;color:#91e2aa;font-size:22px;margin:6px 0}
 
+
+/* ===== V0.8.5 NEGO DEAL × NEXTCEO PAY ===== */
+.dealPayChoice{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.dealLocked{border:1px solid #8b683b;background:#121d23;border-radius:14px;padding:12px;margin-top:10px}
+.dealLocked strong{color:#f1c66e}
+.dealPayBadge{display:inline-block;padding:4px 7px;border-radius:999px;background:#243522;color:#9be0a7;font-size:7px;font-weight:1000;letter-spacing:.08em}
+
 </style>
 <script>
 (function(){
@@ -708,6 +715,18 @@ html,body{max-width:100%;overflow-x:hidden}
 
 
 
+
+<div class="modal" id="dealPayModal">
+ <div class="box dealBox">
+  <div class="soundHead"><div><div class="soundKicker">DEAL ACCEPTED</div><h2>🤝 Complete Acquisition</h2></div><button class="rulesCloseX" id="dealPayClose">×</button></div>
+  <div id="dealPaySummary"></div>
+  <div class="dealPayChoice">
+    <button class="btn gold" id="dealPayQRBtn">📱 PAY WITH QR</button>
+    <button class="btn light" id="dealPayOnlineBtn">⚡ PAY ONLINE</button>
+  </div>
+  <p class="muted" style="margin-top:9px">QR sesuai bila player duduk berdekatan. Pay Online digunakan bila bermain berjauhan.</p>
+ </div>
+</div>
 <div class="modal" id="nextPayModal">
  <div class="box payBox">
   <div class="soundHead"><div><div class="soundKicker">IN-GAME PAYMENT</div><h2>📱 NextCEO Pay</h2></div><button class="rulesCloseX" id="nextPayClose">×</button></div>
@@ -831,7 +850,7 @@ html,body{max-width:100%;overflow-x:hidden}
 <label class="dealLabel">BUSINESS YANG NAK DIBELI</label><div id="dealPortfolio" class="dealPortfolio"></div>
 <label class="dealLabel">HARGA TAWARAN</label><input id="dealAmount" class="input" type="number" step="500" value="5000">
 <input id="dealNote" class="input" placeholder="Nota kepada seller (optional)">
-<button id="sendDealBtn" class="btn gold">HANTAR OFFER</button><button class="btn light closeBtn">Tutup</button></div></div>
+<button id="sendDealBtn" class="btn gold">HANTAR OFFER</button><div id="dealSendStatus" class="payStatus" style="display:none;margin-top:8px"></div><button class="btn light closeBtn">Tutup</button></div></div>
 <div class="modal" id="incomingDealModal"><div class="box dealBox">
 <div class="dealIncomingKicker">INCOMING OFFER</div><h2>🤝 Ada Founder Nak Beli Business Anda</h2>
 <div id="incomingDealCard" class="incomingDealCard"></div>
@@ -1458,7 +1477,7 @@ function enterRoom(id){
    snap=>{players=snap.docs.map(d=>d.data()); renderLobby(); render();},
    e=>{console.error("Players listener error",e);alert("Player sync error: "+(e.code||"")+" "+e.message);}
  );
- watchDeals();
+ watchDeals();watchDealPayments();
 }
 function renderLobby(){
  $("lobbyPlayers").innerHTML=players.map(p=>`<div class="lobbyplayer"><span>${p.name}</span><b>${p.uid===room?.hostUid?"HOST":"READY"}</b></div>`).join("");
@@ -1466,7 +1485,7 @@ function renderLobby(){
 }
 $("startGameBtn").onclick=async()=>{
  if(players.length<2)return toast("Perlu sekurang-kurangnya 2 pemain untuk test online");
- await updateDoc(roomRef(),{status:"playing",turnUid:players[0].uid,round:0,phase:"READY",move:0,dice:0,market:null,ventureOwners:{}});
+ await updateDoc(roomRef(),{status:"playing",turnUid:players[0].uid,round:0,phase:"READY",move:0,dice:0,market:null,ventureOwners:{},deals:{}});
 };
 $("leaveRoomBtn").onclick=async()=>{if(roomId&&user)await deleteDoc(playerRef(user.uid));location.reload()};
 
@@ -1660,25 +1679,53 @@ $("dealBtn").onclick=()=>{
 };
 $("dealTo").onchange=renderDealPortfolio;
 $("sendDealBtn").onclick=async()=>{
- const to=$("dealTo").value,amount=+$("dealAmount").value,note=$("dealNote").value.trim(),me=myPlayer(),seller=players.find(p=>p.uid===to);
+ const btn=$("sendDealBtn"),status=$("dealSendStatus");
+ const to=$("dealTo").value,amount=Math.round(Number($("dealAmount").value||0)),note=$("dealNote").value.trim(),me=myPlayer(),seller=players.find(p=>p.uid===to);
+ status.style.display="none";
  if(!seller||!selectedDealBizId)return toast("Pilih business dahulu");
- if(amount<=0||me.cash<amount)return toast("Cash tak cukup untuk offer ini");
+ if(amount<=0)return toast("Masukkan harga offer");
+ if((me.cash||0)<amount)return toast("Cash tak cukup untuk offer ini");
  const idx=(seller.biz||[]).findIndex((b,i)=>dealBizKey(b,i)===selectedDealBizId);
  if(idx<0)return toast("Business tak dijumpai");
- const b=seller.biz[idx],deal={id:`${Date.now()}-${user.uid.slice(0,5)}`,fromUid:user.uid,fromName:me.name,toUid:to,toName:seller.name,bizKey:selectedDealBizId,bizName:b.name,bizValue:b.value||0,amount,note,status:"pending",history:[{by:myPlayer()?.name||"Founder",uid:user.uid,amount:Number(amount),at:Date.now()}],createdAt:Date.now()};
- await setDoc(doc(db,"rooms",roomId,"deals",deal.id),deal);
- $("dealModal").classList.remove("show");toast("Offer dihantar kepada "+seller.name);log(`🤝 ${me.name} offer ${fmt(amount)} untuk ${b.name} milik ${seller.name}`);
+ const b=seller.biz[idx],id=`D${Date.now().toString(36).toUpperCase()}${Math.random().toString(36).slice(2,5).toUpperCase()}`;
+ const deal={id,fromUid:user.uid,fromName:me.name,toUid:to,toName:seller.name,activeToUid:to,bizKey:selectedDealBizId,bizName:b.name,bizValue:b.value||0,amount,note,status:"pending",history:[{by:me.name,uid:user.uid,amount,at:Date.now()}],createdAt:Date.now()};
+ try{
+   btn.disabled=true;btn.textContent="SENDING...";
+   status.style.display="block";status.textContent="Menghantar offer...";
+   // Store inside room doc instead of /deals subcollection. This reuses the room permissions
+   // already required by the multiplayer game.
+   await updateDoc(roomRef(),{[`deals.${id}`]:deal});
+   status.textContent="Offer berjaya dihantar kepada "+seller.name;
+   SFX.dealIncoming?.();
+   setTimeout(()=>$("dealModal").classList.remove("show"),420);
+   toast("Offer dihantar kepada "+seller.name);
+   log(`🤝 ${me.name} offer ${fmt(amount)} untuk ${b.name} milik ${seller.name}`);
+ }catch(e){
+   console.error("Send offer failed",e);
+   status.style.display="block";
+   status.textContent="Offer gagal: "+(e.code||e.message||"unknown error");
+   toast("Offer gagal dihantar");
+ }finally{
+   btn.disabled=false;btn.textContent="HANTAR OFFER";
+ }
 };
 
 let incomingDeal=null,unsubDeals=null;
+function roomDealList(data){
+ return Object.values(data?.deals||{}).filter(Boolean);
+}
 function watchDeals(){
  if(unsubDeals)unsubDeals();
- unsubDeals=onSnapshot(collection(db,"rooms",roomId,"deals"),snap=>{
-   const pending=snap.docs.map(d=>d.data()).filter(d=>d.toUid===user.uid&&(d.status==="pending"||d.status==="countered")).sort((a,b)=>a.createdAt-b.createdAt);
+ unsubDeals=onSnapshot(roomRef(),snap=>{
+   const rd=snap.data()||{};
+   const pending=roomDealList(rd)
+     .filter(d=>(d.activeToUid||d.toUid)===user.uid&&(d.status==="pending"||d.status==="countered"))
+     .sort((a,b)=>(a.updatedAt||a.createdAt)-(b.updatedAt||b.createdAt));
    incomingDeal=pending[0]||null;
    if(incomingDeal){
-    if(!$("incomingDealModal").classList.contains("show"))SFX.dealIncoming();
-    $("incomingDealCard").innerHTML=`<h3>${incomingDeal.bizName}</h3><p><b>${incomingDeal.fromName}</b> nak beli business ini daripada portfolio anda.</p><div class="price">${fmt(incomingDeal.amount)}</div><p>Anggaran nilai portfolio: ${fmt(incomingDeal.bizValue)}${incomingDeal.note?`<br><br>“${incomingDeal.note}”`:""}</p>`;
+    if(!$("incomingDealModal").classList.contains("show"))SFX.dealIncoming?.();
+    const isOriginalSeller=user.uid===incomingDeal.toUid;
+    $("incomingDealCard").innerHTML=`<h3>${incomingDeal.bizName}</h3><p><b>${incomingDeal.fromName}</b> mahu membeli business ini daripada <b>${incomingDeal.toName}</b>.</p><div class="price">${fmt(incomingDeal.amount)}</div><p>Anggaran nilai portfolio: ${fmt(incomingDeal.bizValue)}${incomingDeal.note?`<br><br>“${incomingDeal.note}”`:""}</p>`;
     setTimeout(()=>{
       if(incomingDeal&&$("incomingDealCard")){
         $("incomingDealCard").insertAdjacentHTML("beforeend",counterOfferMarkup(incomingDeal));
@@ -1687,231 +1734,108 @@ function watchDeals(){
     },0);
     $("incomingDealModal").classList.add("show");
    }else $("incomingDealModal").classList.remove("show");
- },e=>console.warn("Deal listener:",e));
+ },e=>console.warn("Deal room listener:",e));
 }
 $("rejectDealBtn").onclick=async()=>{
  if(!incomingDeal)return;
- await updateDoc(doc(db,"rooms",roomId,"deals",incomingDeal.id),{status:"rejected",resolvedAt:Date.now()});
- SFX.dealReject();
- log(`❌ ${myPlayer().name} reject offer ${incomingDeal.fromName} untuk ${incomingDeal.bizName}`);
+ try{
+   await updateDoc(roomRef(),{[`deals.${incomingDeal.id}.status`]:"rejected",[`deals.${incomingDeal.id}.resolvedAt`]:Date.now()});
+   SFX.dealReject?.();$("incomingDealModal").classList.remove("show");
+   log(`❌ ${myPlayer().name} reject offer untuk ${incomingDeal.bizName}`);
+ }catch(e){toast("Reject gagal: "+(e.code||e.message))}
 };
 $("acceptDealBtn").onclick=async()=>{
  if(!incomingDeal)return;
  const d=incomingDeal;
  try{
-  await runTransaction(db,async tx=>{
-   const buyerRef=playerRef(d.fromUid),sellerRef=playerRef(d.toUid);
+   // Seller accepts the commercial terms only. No cash/venture moves yet.
+   await updateDoc(roomRef(),{
+     [`deals.${d.id}.status`]:"awaiting_payment",
+     [`deals.${d.id}.acceptedTermsAt`]:Date.now(),
+     [`deals.${d.id}.activeToUid`]:d.fromUid
+   });
+   $("incomingDealModal").classList.remove("show");
+   SFX.dealAccept?.();
+   toast("Terms accepted • menunggu payment buyer");
+   log(`🤝 ${d.toName} accepted ${fmt(d.amount)} offer untuk ${d.bizName} • awaiting payment`);
+ }catch(e){console.error(e);toast(e.message||"Accept terms gagal");}
+};
+
+
+let pendingDealPayment=null,unsubDealPayments=null;
+function watchDealPayments(){
+ if(unsubDealPayments)unsubDealPayments();
+ unsubDealPayments=onSnapshot(roomRef(),snap=>{
+   const list=roomDealList(snap.data()||{});
+   const d=list.find(x=>x.status==="awaiting_payment"&&x.fromUid===user.uid);
+   pendingDealPayment=d||null;
+   if(d){
+     $("dealPaySummary").innerHTML=`<div class="dealLocked"><span class="dealPayBadge">TERMS LOCKED</span><h3>${d.bizName}</h3><div class="price">${fmt(d.amount)}</div><p><b>${d.fromName}</b> membeli daripada <b>${d.toName}</b>.<br>Ownership hanya berpindah selepas payment berjaya.</p></div>`;
+     if(!$("dealPayModal").classList.contains("show"))$("dealPayModal").classList.add("show");
+   }else $("dealPayModal").classList.remove("show");
+ },e=>console.warn("Deal payment watcher:",e));
+}
+$("dealPayClose")?.addEventListener("click",()=>$("dealPayModal").classList.remove("show"));
+
+async function completeDealPayment(dealId,mode){
+ await runTransaction(db,async tx=>{
+   const rRef=roomRef(),rSnap=await tx.get(rRef);
+   if(!rSnap.exists())throw new Error("Room tak dijumpai");
+   const live=rSnap.data()?.deals?.[dealId];
+   if(!live||live.status!=="awaiting_payment")throw new Error("Deal tidak lagi menunggu payment");
+   if(live.fromUid!==user.uid)throw new Error("Hanya buyer boleh bayar deal ini");
+   const buyerRef=playerRef(live.fromUid),sellerRef=playerRef(live.toUid);
    const buyerSnap=await tx.get(buyerRef),sellerSnap=await tx.get(sellerRef);
    if(!buyerSnap.exists()||!sellerSnap.exists())throw new Error("Founder tak dijumpai");
    const buyer=buyerSnap.data(),seller=sellerSnap.data();
-   if((buyer.cash||0)<d.amount)throw new Error("Buyer dah tak cukup cash");
-   const sellerBiz=[...(seller.biz||[])],i=sellerBiz.findIndex((b,j)=>dealBizKey(b,j)===d.bizKey);
-   if(i<0)throw new Error("Business dah tiada dalam portfolio seller");
+   if((buyer.cash||0)<live.amount)throw new Error("Cash buyer tak cukup");
+   const sellerBiz=[...(seller.biz||[])],i=sellerBiz.findIndex((b,j)=>dealBizKey(b,j)===live.bizKey);
+   if(i<0)throw new Error("Venture dah tiada pada seller");
    const [business]=sellerBiz.splice(i,1),buyerBiz=[...(buyer.biz||[]),business];
-   tx.update(buyerRef,{cash:(buyer.cash||0)-d.amount,biz:buyerBiz});
-   tx.update(sellerRef,{cash:(seller.cash||0)+d.amount,biz:sellerBiz});
-   tx.update(roomRef(),{[`ventureOwners.${business.id}`]:d.fromUid});
-   tx.update(doc(db,"rooms",roomId,"deals",d.id),{status:"accepted",resolvedAt:Date.now()});
-  });
-  $("incomingDealModal").classList.remove("show");SFX.dealAccept();
-  log(`✅ DEAL ACCEPTED: ${d.fromName} beli ${d.bizName} daripada ${d.toName} pada ${fmt(d.amount)}`);
- }catch(e){toast(e.message||"Deal gagal");}
-};
-$("cashflowBtn").onclick=async()=>{
- if(!isHost())return;
- const m=room.market||{};
- for(const p of players){
-   if(p.bankrupt)continue;
-   let cf=0;
-   for(const b of (p.biz||[])){
-     let x=estimatedBusinessCF(b);
-     if(m.all)x+=m.all;
-     if(m.cat===b.cat)x+=m.bonus||0;
-     if(m.cats?.includes(b.cat))x+=m.bonus||0;
-     cf+=x;
-   }
-   let loans=[...(p.loans||[])],repay=0;
-   loans=loans.map(l=>{if(l.left>0){repay+=l.pay;return {...l,left:l.left-1}}return l});
-   const cashAfter=(p.cash||0)+cf-repay;
-   const debtAfter=Math.max(0,(p.debt||0)-repay);
-   await updateDoc(playerRef(p.uid),{cash:Math.max(0,cashAfter),debt:debtAfter,loans});
- }
- // Refresh local players before evaluating bankruptcy.
- for(const p of players){
-   const projected={...p};
-   if(!p.bankrupt){
-     const snap=await getDoc(playerRef(p.uid));
-     if(snap.exists())Object.assign(projected,snap.data());
-     await checkBankruptcy(projected);
-   }
- }
- const next=nextActivePlayer(room.turnUid);
- if(!next){
-   await updateDoc(roomRef(),{status:"finished",phase:"FINISHED"});
-   log("Game tamat: tiada Founder aktif.");
-   return;
- }
- await updateDoc(roomRef(),{turnUid:next.uid,phase:"ROLL",move:0,dice:0,dice1:0,dice2:0});
- log("Cashflow settled • next Founder.");
-};
+   tx.update(buyerRef,{cash:(buyer.cash||0)-live.amount,biz:buyerBiz});
+   tx.update(sellerRef,{cash:(seller.cash||0)+live.amount,biz:sellerBiz});
+   tx.update(rRef,{
+     [`ventureOwners.${business.id}`]:live.fromUid,
+     [`deals.${live.id}.status`]:"paid",
+     [`deals.${live.id}.paymentMode`]:mode,
+     [`deals.${live.id}.paidAt`]:Date.now(),
+     [`deals.${live.id}.resolvedAt`]:Date.now()
+   });
+ });
+ SFX.dealAccept?.();toast("Deal payment berjaya • venture transferred");
+ $("dealPayModal").classList.remove("show");
+}
 
-function log(t){$("log").innerHTML=`<div>${t}</div>`+$("log").innerHTML}
-document.querySelectorAll(".closeBtn").forEach(b=>b.onclick=()=>b.closest(".modal").classList.remove("show"));
-
-
-// --- PWA install prompt ---
-let deferredPrompt=null;
-const installBtn=document.getElementById("installBtn");
-window.addEventListener("beforeinstallprompt",(e)=>{
-  e.preventDefault(); deferredPrompt=e; installBtn.style.display="inline-block";
+$("dealPayOnlineBtn")?.addEventListener("click",async()=>{
+ if(!pendingDealPayment)return;
+ try{
+   $("dealPayOnlineBtn").disabled=true;$("dealPayOnlineBtn").textContent="PROCESSING...";
+   await completeDealPayment(pendingDealPayment.id,"online");
+ }catch(e){console.error(e);toast(e.message||"Payment gagal")}
+ finally{$("dealPayOnlineBtn").disabled=false;$("dealPayOnlineBtn").textContent="⚡ PAY ONLINE"}
 });
-installBtn?.addEventListener("click",async()=>{
-  if(!deferredPrompt)return;
-  deferredPrompt.prompt();
-  await deferredPrompt.userChoice;
-  deferredPrompt=null;installBtn.style.display="none";
+
+$("dealPayQRBtn")?.addEventListener("click",async()=>{
+ const d=pendingDealPayment;if(!d)return;
+ try{
+   // QR is generated by the SELLER-facing payment request, but because the buyer
+   // is the device initiating this flow we generate a one-time acquisition QR
+   // that the seller can scan/confirm nearby. Completion remains atomic.
+   const txid="DEAL-"+d.id;
+   const expires=Date.now()+5*60*1000;
+   await setDoc(payRef(txid),{
+     tx:txid,roomId,fromUid:d.fromUid,fromName:d.fromName,toUid:d.toUid,toName:d.toName,
+     amount:d.amount,purpose:`Acquisition: ${d.bizName}`,status:"pending",
+     dealId:d.id,dealPayment:true,createdAt:Date.now(),expiresAt:expires
+   });
+   const code=payCode(roomId,txid);
+   $("dealPayModal").classList.remove("show");
+   openNextPay();
+   document.querySelector('[data-paytab="send"]')?.click();
+   $("payQRResult").innerHTML=`<div id="liveDealPayQR"></div><div class="paySummary"><div class="payAmount">${fmt(d.amount)}</div><div class="payMeta">Acquisition: <b>${d.bizName}</b><br>${d.fromName} → ${d.toName}<br>Expires in 5 minutes<br><br>Transaction Code: <b>${txid}</b></div></div>`;
+   await renderQR(code,$("liveDealPayQR"));
+ }catch(e){console.error(e);toast(e.message||"QR deal gagal dijana")}
 });
-window.addEventListener("appinstalled",()=>{installBtn.style.display="none"});
-
-// --- Mobile tab panels ---
-const tabs=[...document.querySelectorAll("#mobileTabs button")];
-tabs.forEach(btn=>btn.addEventListener("click",()=>{
-  tabs.forEach(x=>x.classList.remove("active"));btn.classList.add("active");
-  document.querySelectorAll(".side .card").forEach(x=>x.classList.remove("mobileShow"));
-  document.getElementById(btn.dataset.tab)?.classList.add("mobileShow");
-}));
-
-// --- Functional loading splash ---
-const splashRoot=document.getElementById("splash");
-const splashBar=document.getElementById("splashProgressBar");
-const splashPercent=document.getElementById("splashPercent");
-const splashTask=document.getElementById("splashTask");
-const splashProgress=document.querySelector(".splashProgress");
-const splashSkip=document.getElementById("splashSkip");
-
-let splashValue=0;
-let splashClosed=false;
-const splashStartedAt=performance.now();
-
-function setSplashProgress(value,label){
-  splashValue=Math.max(splashValue,Math.min(100,Math.round(value)));
-  splashBar.style.width=splashValue+"%";
-  splashPercent.textContent=splashValue+"%";
-  splashProgress?.setAttribute("aria-valuenow",String(splashValue));
-  if(label) splashTask.textContent=label;
-}
-
-async function finishSplash(){
-  if(splashClosed)return;
-  const elapsed=performance.now()-splashStartedAt;
-  if(elapsed<4000) await new Promise(r=>setTimeout(r,4000-elapsed));
-  setSplashProgress(100,"MARKET READY");
-  await new Promise(r=>setTimeout(r,250));
-  splashClosed=true;
-  splashRoot.style.opacity="0";
-  splashRoot.style.transform="scale(1.012)";
-  setTimeout(()=>splashRoot.remove(),520);
-}
-
-setSplashProgress(8,"MERANCANG STRATEGI KEMENANGAN");
-
-(async()=>{
-  try{
-    // 1. DOM has already parsed to this script.
-    setSplashProgress(20,"MENGANALISIS PELUANG PASARAN");
-
-    // 2. Confirm main board artwork is decoded.
-    const boardImg=document.querySelector("#board img");
-    if(boardImg){
-      if(!boardImg.complete){
-        await new Promise(resolve=>{
-          const done=()=>resolve();
-          boardImg.addEventListener("load",done,{once:true});
-          boardImg.addEventListener("error",done,{once:true});
-          setTimeout(done,1800);
-        });
-      }else if(boardImg.decode){
-        await boardImg.decode().catch(()=>{});
-      }
-    }
-    setSplashProgress(43,"MENYEDIAKAN PAPAN PERMAINAN");
-
-    // 3. Firebase SDK and configuration have already initialized above this loader.
-    setSplashProgress(configReady ? 62 : 52, configReady ? "MENGHUBUNGKAN USAHAWAN KELANTAN" : "MENYEDIAKAN MARKET");
-
-    // 4. Wait briefly for anonymous auth state to resolve.
-    await new Promise(resolve=>{
-      if(auth.currentUser) return resolve();
-      let settled=false;
-      const off=onAuthStateChanged(auth,()=>{
-        if(settled)return;
-        settled=true;
-        off();
-        resolve();
-      });
-      setTimeout(()=>{
-        if(settled)return;
-        settled=true;
-        off();
-        resolve();
-      },1200);
-    });
-    setSplashProgress(78,"MENYEDIAKAN MULTIPLAYER ONLINE");
-
-    // 5. Service worker registration is attempted below. App itself is usable without it.
-    setSplashProgress(90,"MENYEDIAKAN PENGALAMAN TERBAIK");
-
-    await new Promise(r=>setTimeout(r,220));
-    await finishSplash();
-  }catch(err){
-    console.warn("Splash loader fallback:",err);
-    setSplashProgress(96,"HAMPIR SEDIA");
-    await finishSplash();
-  }
-})();
-
-// Emergency continue only appears if loading is abnormally long.
-setTimeout(()=>{
-  if(!splashClosed && splashSkip) splashSkip.style.display="inline-block";
-},5000);
-splashSkip?.addEventListener("click",finishSplash);
-
-// --- Service worker ---
-if("serviceWorker" in navigator){
-  window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
-}
-
-
-refreshAudioUI();
-// Audio settings
-$("soundBtn").onclick=()=>{ensureAudio();refreshAudioUI();$("soundModal").classList.add("show")};
-$("soundCloseX").onclick=()=>$("soundModal").classList.remove("show");
-$("musicToggle").onclick=()=>{musicEnabled=!musicEnabled;localStorage.setItem("knc_music",musicEnabled?"1":"0");refreshAudioUI()};
-$("sfxToggle").onclick=()=>{sfxEnabled=!sfxEnabled;localStorage.setItem("knc_sfx",sfxEnabled?"1":"0");refreshAudioUI()};
-$("musicVolume").oninput=e=>{musicLevel=Number(e.target.value)/100;localStorage.setItem("knc_music_vol",String(e.target.value));refreshAudioUI()};
-$("sfxVolume").oninput=e=>{sfxLevel=Number(e.target.value)/100;localStorage.setItem("knc_sfx_vol",String(e.target.value));refreshAudioUI()};
-$("testDiceSound").onclick=()=>SFX.dice();$("testCashSound").onclick=()=>SFX.cashIn();$("testDealSound").onclick=()=>SFX.dealIncoming();
-$("soundModal").addEventListener("click",e=>{if(e.target===$("soundModal"))$("soundModal").classList.remove("show")});
-
-// Rules / rule book
-function openRules(){ $("rulesModal").classList.add("show"); }
-function closeRules(){ $("rulesModal").classList.remove("show"); }
-$("rulesBtn").onclick=openRules;
-$("rulesCloseX").onclick=closeRules;
-$("rulesDone").onclick=closeRules;
-$("rulesModal").addEventListener("click",e=>{if(e.target===$("rulesModal"))closeRules()});
-
-
-
-
-const EVENT_DECK_LABELS={
- market:{icon:"📈",label:"MARKET"},
- opportunity:{icon:"💡",label:"OPPORTUNITY"},
- crisis:{icon:"⚡",label:"CRISIS"},
- network:{icon:"🤝",label:"NETWORK"},
- kelantan:{icon:"🏴",label:"KELANTAN EVENT"}
-};
-
 
 /* ===== V0.8.1 LIVE EVENT DECK ===== */
 const LIVE_EVENT_DECK=[
@@ -1970,12 +1894,22 @@ function counterOfferMarkup(d){
  return `<div class="counterPanel"><b>COUNTER OFFER</b><div class="counterBox"><input id="counterAmount" type="number" min="1" step="500" value="${Math.max(500,Number(d.amount||0))}"><button class="btn" id="sendCounterBtn">COUNTER</button></div><div class="dealHistory">${(d.history||[]).map(x=>`<div>${x.by}: ${fmt(x.amount)}</div>`).join("")}</div></div>`;
 }
 async function sendCounterOffer(d,newAmount){
- newAmount=Number(newAmount);if(!d||!newAmount||newAmount<=0)return toast("Masukkan nilai counter offer");
- const dealRef=doc(db,"rooms",roomId,"deals",d.id);
- const history=[...(d.history||[]),{by:myPlayer()?.name||"Founder",uid:user.uid,amount:newAmount,at:Date.now()}];
- await updateDoc(dealRef,{amount:newAmount,status:"countered",counterBy:user.uid,history,updatedAt:Date.now()});
- SFX.dealIncoming?.();toast("Counter offer dihantar");
- $("incomingDealModal")?.classList.remove("show");
+ newAmount=Math.round(Number(newAmount));
+ if(!d||!newAmount||newAmount<=0)return toast("Masukkan nilai counter offer");
+ try{
+   const nextTo=user.uid===d.fromUid?d.toUid:d.fromUid;
+   const history=[...(d.history||[]),{by:myPlayer()?.name||"Founder",uid:user.uid,amount:newAmount,at:Date.now()}];
+   await updateDoc(roomRef(),{
+     [`deals.${d.id}.amount`]:newAmount,
+     [`deals.${d.id}.status`]:"countered",
+     [`deals.${d.id}.counterBy`]:user.uid,
+     [`deals.${d.id}.activeToUid`]:nextTo,
+     [`deals.${d.id}.history`]:history,
+     [`deals.${d.id}.updatedAt`]:Date.now()
+   });
+   SFX.dealIncoming?.();toast("Counter offer dihantar");
+   $("incomingDealModal")?.classList.remove("show");
+ }catch(e){console.error(e);toast("Counter offer gagal: "+(e.code||e.message))}
 }
 
 
@@ -2090,6 +2024,37 @@ async function loadPayment(tx,roomCode=roomId){
 }
 async function acceptPayment(d){
  try{
+  if(d.dealPayment&&d.dealId){
+   // Seller confirms the nearby QR. The acquisition payment + venture transfer
+   // happens as one Firestore transaction, then the QR is consumed.
+   await runTransaction(db,async tx=>{
+    const reqRef=payRef(d.tx),rRef=roomRef(),rSnap=await tx.get(rRef),req=await tx.get(reqRef);
+    if(!req.exists()||req.data().status!=="pending")throw new Error("Payment QR tidak lagi aktif");
+    if(Date.now()>Number(req.data().expiresAt||0))throw new Error("Payment QR expired");
+    if(req.data().toUid!==user.uid)throw new Error("QR ini bukan untuk anda");
+    const live=rSnap.data()?.deals?.[d.dealId];
+    if(!live||live.status!=="awaiting_payment")throw new Error("Deal tidak lagi menunggu payment");
+    const buyerRef=playerRef(live.fromUid),sellerRef=playerRef(live.toUid);
+    const buyerSnap=await tx.get(buyerRef),sellerSnap=await tx.get(sellerRef);
+    const buyer=buyerSnap.data(),seller=sellerSnap.data();
+    if((buyer.cash||0)<live.amount)throw new Error("Cash buyer tak cukup");
+    const sellerBiz=[...(seller.biz||[])],i=sellerBiz.findIndex((b,j)=>dealBizKey(b,j)===live.bizKey);
+    if(i<0)throw new Error("Venture dah tiada pada seller");
+    const [business]=sellerBiz.splice(i,1),buyerBiz=[...(buyer.biz||[]),business];
+    tx.update(buyerRef,{cash:(buyer.cash||0)-live.amount,biz:buyerBiz});
+    tx.update(sellerRef,{cash:(seller.cash||0)+live.amount,biz:sellerBiz});
+    tx.update(rRef,{
+      [`ventureOwners.${business.id}`]:live.fromUid,
+      [`deals.${live.id}.status`]:"paid",
+      [`deals.${live.id}.paymentMode`]:"qr",
+      [`deals.${live.id}.paidAt`]:Date.now(),
+      [`deals.${live.id}.resolvedAt`]:Date.now()
+    });
+    tx.update(reqRef,{status:"paid",paidAt:Date.now(),acceptedBy:user.uid});
+   });
+   $("payConfirmArea").innerHTML=`<div class="payReceipt">ACQUISITION COMPLETE<b>${fmt(d.amount)}</b><span>${d.purpose}</span></div>`;
+   SFX.dealAccept?.();toast("QR payment berjaya • venture transferred");return;
+  }
   await runTransaction(db,async tx=>{
    const reqRef=payRef(d.tx),fromRef=playerRef(d.fromUid),toRef=playerRef(d.toUid);
    const req=await tx.get(reqRef),from=await tx.get(fromRef),to=await tx.get(toRef);
