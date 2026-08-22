@@ -1,0 +1,23 @@
+V0.9.1 CORRECT QR FLOW + ONE ROLL PER TURN
+
+QR DEAL FLOW
+1. Buyer makes offer.
+2. Seller accepts terms.
+3. Seller phone automatically shows acquisition QR.
+4. Buyer gets Complete Acquisition popup.
+5. Buyer taps SCAN SELLER QR.
+6. Buyer camera scanner opens.
+7. Buyer scans seller QR, reviews amount, then CONFIRM & PAY.
+8. Cash and venture transfer atomically.
+9. PAY ONLINE remains available for remote play.
+
+Deal QR now encodes room + deal ID directly and validates against room.deals.
+It no longer needs a separate payment document for acquisition QR.
+
+TURN SYSTEM
+- Added room.turnSerial + room.lastRolledTurnSerial.
+- Roll is guarded by a Firestore transaction, so rapid double taps cannot roll twice.
+- Exactly ONE roll is allowed for each player turn.
+- After rolling and landing, phase becomes ACTION.
+- New END TURN button passes control to the next active Founder and unlocks one fresh roll.
+- Roll button shows ROLL USED after the turn's roll is consumed.

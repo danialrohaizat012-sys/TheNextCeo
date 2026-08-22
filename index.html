@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Next CEO">
 <title>Kelantan Next CEO Online</title>
-<link rel="manifest" href="manifest.json?v=0.9.0">
+<link rel="manifest" href="manifest.json?v=0.9.1">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
@@ -580,6 +580,13 @@ img{height:auto}
   *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
 }
 
+
+/* ===== V0.9.1 QR ROLE FLOW + TURN LOCK ===== */
+#dealSellerQRModal .payQRWrap{min-height:280px}
+#dealSellerQRModal .payQRWrap svg{width:min(280px,72vw)!important;height:auto!important}
+#endTurnBtn{background:linear-gradient(135deg,#50c878,#2f9d58)!important;color:#07140d!important}
+.turnUsed{opacity:.55!important;filter:saturate(.55)}
+
 </style>
 <script>
 (function(){
@@ -624,7 +631,7 @@ window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_
     <div class="splashProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <span class="splashProgressBar" id="splashProgressBar"></span>
     </div>
-    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V0.9.0</div><div class="splashCredit">Developed by BinaLab</div>
+    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V0.9.1</div><div class="splashCredit">Developed by BinaLab</div>
     <button type="button" class="splashSkip" id="splashSkip">TERUSKAN</button>
   </div>
 </div>
@@ -663,6 +670,7 @@ window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_
           <button id="loanBtn">🏦 BANK</button>
           <button id="dealBtn">🤝 DEAL</button>
           <button id="cashflowBtn">💰 CASHFLOW</button>
+          <button id="endTurnBtn" class="gold">✅ END TURN</button>
         </div>
       </div>
     </section>
@@ -766,15 +774,24 @@ window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_
 
 
 
+
+<div class="modal" id="dealSellerQRModal">
+ <div class="box payBox">
+  <div class="soundHead"><div><div class="soundKicker">DEAL PAYMENT REQUEST</div><h2>📱 Tunjuk QR Kepada Buyer</h2></div><button class="rulesCloseX" id="dealSellerQRClose">×</button></div>
+  <div id="dealSellerQRSummary"></div>
+  <div id="dealSellerQRResult"></div>
+  <p class="muted" style="margin-top:9px">Seller tunjuk QR ini. Buyer tekan <b>SCAN SELLER QR</b> dan scan menggunakan phone buyer.</p>
+ </div>
+</div>
 <div class="modal" id="dealPayModal">
  <div class="box dealBox">
   <div class="soundHead"><div><div class="soundKicker">DEAL ACCEPTED</div><h2>🤝 Complete Acquisition</h2></div><button class="rulesCloseX" id="dealPayClose">×</button></div>
   <div id="dealPaySummary"></div>
   <div class="dealPayChoice">
-    <button class="btn gold" id="dealPayQRBtn">📱 PAY WITH QR</button>
+    <button class="btn gold" id="dealPayQRBtn">📷 SCAN SELLER QR</button>
     <button class="btn light" id="dealPayOnlineBtn">⚡ PAY ONLINE</button>
   </div>
-  <p class="muted" style="margin-top:9px">QR sesuai bila player duduk berdekatan. Pay Online digunakan bila bermain berjauhan.</p>
+  <p class="muted" style="margin-top:9px">Jika berdekatan, seller tunjuk QR dan buyer scan. Pay Online digunakan bila bermain berjauhan.</p>
  </div>
 </div>
 <div class="modal" id="nextPayModal">
@@ -841,7 +858,7 @@ window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_
     <div class="rulesScroll">
       <section class="ruleHero">
         <b>🏆 MATLAMAT</b>
-        <span>Jadi Founder pertama yang mencapai <strong>RM1,000,000 net worth</strong> dan mendarat di petak MATLAMAT.</span>
+        <span>Setiap Founder hanya boleh <strong>ROLL sekali setiap turn</strong>. Selepas action, tekan <strong>END TURN</strong>. Jadi Founder pertama yang mencapai <strong>RM1,000,000 net worth</strong> dan mendarat di petak MATLAMAT.</span>
       </section>
 
       <div class="rulesGrid">
@@ -1460,6 +1477,8 @@ $("createRoomBtn").onclick=async()=>{
      phase:"READY",
      market:null,
      turnUid:user.uid,
+     turnSerial:0,
+     lastRolledTurnSerial:-1,
      move:0,
      dice:0
    });
@@ -1602,7 +1621,7 @@ function renderLobby(){
 }
 $("startGameBtn").onclick=async()=>{
  if(players.length<2)return toast("Perlu sekurang-kurangnya 2 pemain untuk test online");
- await updateDoc(roomRef(),{status:"playing",turnUid:players[0].uid,round:0,phase:"READY",move:0,dice:0,market:null,ventureOwners:{},deals:{}});
+ await updateDoc(roomRef(),{status:"playing",turnUid:players[0].uid,round:0,phase:"READY",move:0,dice:0,market:null,ventureOwners:{},deals:{},turnSerial:0,lastRolledTurnSerial:-1});
 };
 $("leaveRoomBtn").onclick=async()=>{if(roomId&&user)await deleteDoc(playerRef(user.uid));location.reload()};
 
@@ -1624,13 +1643,22 @@ function render(){
  $("players").innerHTML=players.map((p,i)=>{const nw=p.cash+(p.biz||[]).reduce((a,b)=>a+(b.value||0),0)-(p.debt||0);return `<div class="player ${p.uid===room.turnUid?"active":""}"><b>${p.name}</b><div class="money">${fmt(p.cash)}</div><small>Net ${fmt(nw)} • Debt ${fmt(p.debt)} • ${trackLabel(p.trackPos||0)}</small></div>`}).join("");
  const me=myPlayer();$("portfolio").innerHTML=(me?.biz||[]).length?(me.biz.map((b,j)=>`<div class="biz"><b>${b.logo?`<img class="portfolioLogo" src="${b.logo}" alt="">`:""}${b.name}</b><small>${b.archetype||b.cat||""} • ${N(b.loc).name} • Staff ${b.staffNow||0}/${b.staff} ${b.manager?"• Manager":""}<br>Value ${fmt(b.value)} • CF est. ${fmt(estimatedBusinessCF(b))}</small><button data-hire="${j}">+ Staff</button>${(b.staffNow||0)>=b.staff&&!b.manager?`<button class="manager" data-manager="${j}">Lantik Manager</button>`:""}</div>`).join("")):`<div class="muted">Belum ada business.</div>`;
  document.querySelectorAll("[data-hire]").forEach(b=>b.onclick=()=>hire(+b.dataset.hire));document.querySelectorAll("[data-manager]").forEach(b=>b.onclick=()=>manager(+b.dataset.manager));
- $("marketBtn").disabled=!isHost();$("rollBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||!["ROLL","READY"].includes(room?.phase);$("businessBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";$("loanBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";$("dealBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";$("cashflowBtn").disabled=!isHost();
+ $("marketBtn").disabled=!isHost();
+ const rollAlreadyUsed=Number(room?.lastRolledTurnSerial??-1)===Number(room?.turnSerial??0);
+ $("rollBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||!["ROLL","READY"].includes(room?.phase)||rollAlreadyUsed;
+ $("rollBtn").classList.toggle("turnUsed",rollAlreadyUsed&&isMyTurn());
+ $("rollBtn").textContent=rollAlreadyUsed&&isMyTurn()?"🎲 ROLL USED":"🎲 ROLL";
+ $("businessBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";
+ $("loanBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";
+ $("dealBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||room?.phase!=="ACTION";
+ $("endTurnBtn").disabled=!isMyTurn()||room?.phase!=="ACTION";
+ $("cashflowBtn").disabled=!isHost();
 }
 
 $("marketBtn").onclick=async()=>{
  if(!isHost())return;const m=markets[Math.floor(Math.random()*markets.length)];
  const nextRound=(room.round||0)+1;const first=players[(nextRound-1)%players.length];
- await updateDoc(roomRef(),{round:nextRound,market:m,phase:"ROLL",turnUid:first.uid,move:0,dice:0,dice1:0,dice2:0});
+ await updateDoc(roomRef(),{round:nextRound,market:m,phase:"ROLL",turnUid:first.uid,turnSerial:Number(room.turnSerial||0)+1,move:0,dice:0,dice1:0,dice2:0});
  log(`Round ${nextRound}: ${m.name}`);
 };
 
@@ -1712,17 +1740,58 @@ async function animatePawnSteps(steps){
 }
 $("rollBtn").onclick=async()=>{
  if(!isMyTurn())return toast("Bukan turn anda");
- $("rollBtn").disabled=true;
  const d1=1+Math.floor(Math.random()*6),d2=1+Math.floor(Math.random()*6),total=d1+d2;
- await updateDoc(roomRef(),{dice1:d1,dice2:d2,dice:total,move:total,phase:"ROLLING"});
- await playDiceRollSound();
- await animateDoubleDice(d1,d2);
- await updateDoc(roomRef(),{phase:"MOVING"});
- const finalPos=await animatePawnSteps(total);
- await updateDoc(roomRef(),{move:0,phase:"ACTION"});
- toast(`${d1} + ${d2} = ${total} langkah`);
- await resolveLandingTile(finalPos);
+ $("rollBtn").disabled=true;
+ try{
+   await runTransaction(db,async tx=>{
+     const rRef=roomRef(),snap=await tx.get(rRef);
+     if(!snap.exists())throw new Error("Room tak dijumpai");
+     const rd=snap.data(),serial=Number(rd.turnSerial||0);
+     if(rd.turnUid!==user.uid)throw new Error("Bukan turn anda");
+     if(!["ROLL","READY"].includes(rd.phase))throw new Error("Roll sudah digunakan untuk turn ini");
+     if(Number(rd.lastRolledTurnSerial??-1)===serial)throw new Error("Setiap player hanya boleh roll sekali setiap turn");
+     tx.update(rRef,{dice1:d1,dice2:d2,dice:total,move:total,phase:"ROLLING",lastRolledTurnSerial:serial});
+   });
+   await playDiceRollSound();
+   await animateDoubleDice(d1,d2);
+   await updateDoc(roomRef(),{phase:"MOVING"});
+   const finalPos=await animatePawnSteps(total);
+   await updateDoc(roomRef(),{move:0,phase:"ACTION"});
+   toast(`${d1} + ${d2} = ${total} langkah`);
+   await resolveLandingTile(finalPos);
+ }catch(e){
+   console.error("Roll:",e);
+   toast(e.message||"Roll gagal");
+ }
 };
+
+async function endCurrentTurn(){
+ if(!isMyTurn())return toast("Bukan turn anda");
+ if(room?.phase!=="ACTION")return toast("Selesaikan roll dahulu");
+ const active=players.filter(p=>!p.bankrupt);
+ if(active.length<2)return toast("Tiada Founder lain yang aktif");
+ const curIndex=active.findIndex(p=>p.uid===user.uid);
+ const next=active[(curIndex+1)%active.length];
+ try{
+   await runTransaction(db,async tx=>{
+     const rRef=roomRef(),snap=await tx.get(rRef);
+     if(!snap.exists())throw new Error("Room tak dijumpai");
+     const rd=snap.data();
+     if(rd.turnUid!==user.uid||rd.phase!=="ACTION")throw new Error("Turn sudah berubah");
+     tx.update(rRef,{
+       turnUid:next.uid,
+       turnSerial:Number(rd.turnSerial||0)+1,
+       phase:"ROLL",
+       move:0,dice:0,dice1:0,dice2:0
+     });
+   });
+   closeModals();
+   toast(`Turn ${next.name}`);
+   log(`➡️ Giliran ${next.name}`);
+ }catch(e){console.error("End turn:",e);toast(e.message||"End Turn gagal")}
+}
+$("endTurnBtn").onclick=endCurrentTurn;
+
 $("businessBtn").onclick=()=>{if(!isMyTurn())return;openVentureMarket();};
 async function buy(id){
  const b=B.find(x=>x.id===id),me=myPlayer();
@@ -1880,20 +1949,40 @@ $("acceptDealBtn").onclick=async()=>{
 };
 
 
-let pendingDealPayment=null,unsubDealPayments=null;
+let pendingDealPayment=null,unsubDealPayments=null,lastSellerQRDealId=null;
+async function showSellerDealQR(d){
+ if(!d||d.toUid!==user.uid||d.status!=="awaiting_payment")return;
+ const code=dealPayCode(roomId,d.id);
+ $("dealSellerQRSummary").innerHTML=`<div class="dealLocked"><span class="dealPayBadge">SELLER RECEIVES</span><h3>${d.bizName}</h3><div class="price">${fmt(d.amount)}</div><p><b>${d.fromName}</b> → <b>${d.toName}</b></p></div>`;
+ $("dealSellerQRResult").innerHTML=`<div id="sellerLiveDealQR"></div><div class="payStatus">Buyer perlu scan QR ini dari phone buyer.<br>Deal Code: <b>${d.id}</b></div>`;
+ await renderQR(code,$("sellerLiveDealQR"));
+ $("dealSellerQRModal").classList.add("show");
+ lastSellerQRDealId=d.id;
+}
 function watchDealPayments(){
  if(unsubDealPayments)unsubDealPayments();
  unsubDealPayments=onSnapshot(roomRef(),snap=>{
    const list=roomDealList(snap.data()||{});
-   const d=list.find(x=>x.status==="awaiting_payment"&&x.fromUid===user.uid);
-   pendingDealPayment=d||null;
-   if(d){
-     $("dealPaySummary").innerHTML=`<div class="dealLocked"><span class="dealPayBadge">TERMS LOCKED</span><h3>${d.bizName}</h3><div class="price">${fmt(d.amount)}</div><p><b>${d.fromName}</b> membeli daripada <b>${d.toName}</b>.<br>Ownership hanya berpindah selepas payment berjaya.</p></div>`;
-     if(!$("dealPayModal").classList.contains("show"))$("dealPayModal").classList.add("show");
+   const buyerDeal=list.find(x=>x.status==="awaiting_payment"&&x.fromUid===user.uid);
+   const sellerDeal=list.find(x=>x.status==="awaiting_payment"&&x.toUid===user.uid);
+   pendingDealPayment=buyerDeal||null;
+
+   if(buyerDeal){
+     $("dealPaySummary").innerHTML=`<div class="dealLocked"><span class="dealPayBadge">TERMS LOCKED</span><h3>${buyerDeal.bizName}</h3><div class="price">${fmt(buyerDeal.amount)}</div><p>Anda membeli daripada <b>${buyerDeal.toName}</b>.<br>Scan QR yang dipaparkan pada phone seller.</p></div>`;
+     if(!$("dealPayModal").classList.contains("show")&&!$("nextPayModal").classList.contains("show"))$("dealPayModal").classList.add("show");
    }else $("dealPayModal").classList.remove("show");
+
+   if(sellerDeal && sellerDeal.id!==lastSellerQRDealId){
+     showSellerDealQR(sellerDeal).catch(e=>console.warn("Seller QR:",e));
+   }
+   if(!sellerDeal){
+     lastSellerQRDealId=null;
+     $("dealSellerQRModal").classList.remove("show");
+   }
  },e=>console.warn("Deal payment watcher:",e));
 }
 $("dealPayClose")?.addEventListener("click",()=>$("dealPayModal").classList.remove("show"));
+$("dealSellerQRClose")?.addEventListener("click",()=>$("dealSellerQRModal").classList.remove("show"));
 
 async function completeDealPayment(dealId,mode){
  await runTransaction(db,async tx=>{
@@ -1922,6 +2011,7 @@ async function completeDealPayment(dealId,mode){
  });
  SFX.dealAccept?.();toast("Deal payment berjaya • venture transferred");
  $("dealPayModal").classList.remove("show");
+ $("dealSellerQRModal").classList.remove("show");
 }
 
 $("dealPayOnlineBtn")?.addEventListener("click",async()=>{
@@ -1935,26 +2025,12 @@ $("dealPayOnlineBtn")?.addEventListener("click",async()=>{
 
 $("dealPayQRBtn")?.addEventListener("click",async()=>{
  const d=pendingDealPayment;if(!d)return;
- try{
-   // QR is generated by the SELLER-facing payment request, but because the buyer
-   // is the device initiating this flow we generate a one-time acquisition QR
-   // that the seller can scan/confirm nearby. Completion remains atomic.
-   const txid="DEAL-"+d.id;
-   const expires=Date.now()+5*60*1000;
-   await setDoc(payRef(txid),{
-     tx:txid,roomId,fromUid:d.fromUid,fromName:d.fromName,toUid:d.toUid,toName:d.toName,
-     amount:d.amount,purpose:`Acquisition: ${d.bizName}`,status:"pending",
-     dealId:d.id,dealPayment:true,createdAt:Date.now(),expiresAt:expires
-   });
-   const code=payCode(roomId,txid);
-   $("dealPayModal").classList.remove("show");
-   openNextPay();
-   document.querySelector('[data-paytab="send"]')?.click();
-   $("payQRResult").innerHTML=`<div id="liveDealPayQR"></div><div class="paySummary"><div class="payAmount">${fmt(d.amount)}</div><div class="payMeta">Acquisition: <b>${d.bizName}</b><br>${d.fromName} → ${d.toName}<br>Expires in 5 minutes<br><br>Transaction Code: <b>${txid}</b><br><small>Jika kamera tak boleh scan, seller boleh masukkan code ini secara manual.</small></div></div>`;
-   await renderQR(code,$("liveDealPayQR"));
- }catch(e){console.error(e);toast(e.message||"QR deal gagal dijana")}
+ $("dealPayModal").classList.remove("show");
+ openNextPay();
+ document.querySelector('[data-paytab="scan"]')?.click();
+ $("payScanStatus").textContent=`Scan QR ${d.bizName} yang sedang dipaparkan pada phone ${d.toName}.`;
+ setTimeout(()=>startPayScanner(),180);
 });
-
 
 /* ===== V0.8.7 NEGO POPUP CLOSE FIX ===== */
 let dismissedIncomingDealId=null;
@@ -2116,6 +2192,48 @@ function parsePayCode(raw){
  const m=s.match(/^KNC_PAY\|([A-Z0-9_-]+)\|([A-Z0-9-]+)$/i);
  return m?{room:m[1].toUpperCase(),tx:m[2].toUpperCase()}:null;
 }
+function dealPayCode(room,dealId){return `KNC_DEAL|${room}|${dealId}`}
+function parseDealPayCode(raw){
+ const s=String(raw||"").trim();
+ const m=s.match(/^KNC_DEAL\|([A-Z0-9_-]+)\|([A-Z0-9-]+)$/i);
+ return m?{room:m[1].toUpperCase(),dealId:m[2]}:null;
+}
+async function loadDealPaymentQR(dealId,roomCode=roomId){
+ if(String(roomCode).toUpperCase()!==String(roomId).toUpperCase())return toast("QR daripada room lain");
+ const snap=await getDoc(roomRef());
+ if(!snap.exists())return toast("Room tak dijumpai");
+ const d=snap.data()?.deals?.[dealId];
+ if(!d)return toast("Deal QR tak dijumpai");
+ if(d.status!=="awaiting_payment")return toast("Deal ini tidak lagi menunggu payment");
+ if(d.fromUid!==user.uid)return toast("QR ini hanya boleh dibayar oleh buyer");
+ pendingDealPayment=d;
+ $("payConfirmArea").innerHTML=`<div class="paySummary"><div class="payMeta">ACQUISITION PAYMENT</div><h3>${d.bizName}</h3><div class="payAmount">${fmt(d.amount)}</div><div class="payMeta">Bayar kepada <b>${d.toName}</b></div><button class="btn gold" id="confirmDealQRPayment" style="margin-top:10px;width:100%">CONFIRM & PAY</button></div>`;
+ $("confirmDealQRPayment").onclick=async()=>{
+   try{
+     $("confirmDealQRPayment").disabled=true;
+     $("confirmDealQRPayment").textContent="PROCESSING...";
+     await completeDealPayment(d.id,"qr");
+     $("nextPayModal").classList.remove("show");
+   }catch(e){console.error(e);toast(e.message||"QR payment gagal")}
+ };
+}
+async function handleScannedPayData(raw){
+ const deal=parseDealPayCode(raw);
+ if(deal){
+   stopPayScanner();
+   $("payScanStatus").textContent="Deal QR detected.";
+   await loadDealPaymentQR(deal.dealId,deal.room);
+   return true;
+ }
+ const pay=parsePayCode(raw);
+ if(pay){
+   stopPayScanner();
+   $("payScanStatus").textContent="Payment QR detected.";
+   await loadPayment(pay.tx,pay.room);
+   return true;
+ }
+ return false;
+}
 function openNextPay(){
  const others=players.filter(p=>p.uid!==user.uid&&!p.bankrupt);
  $("payTo").innerHTML=others.map(p=>`<option value="${p.uid}">${p.name}</option>`).join("");
@@ -2234,8 +2352,7 @@ async function startPayScanner(){
           const codes=await detector.detect(v);
           const raw=codes?.[0]?.rawValue;
           if(raw){
-            const parsed=parsePayCode(raw);
-            if(parsed){stopPayScanner();$("payScanStatus").textContent="QR detected.";await loadPayment(parsed.tx,parsed.room);return}
+            if(await handleScannedPayData(raw))return
           }
         }catch(_){}
         payScannerTimer=requestAnimationFrame(scanNative);
@@ -2261,8 +2378,8 @@ async function startPayScanner(){
       canvas.width=v.videoWidth;canvas.height=v.videoHeight;ctx.drawImage(v,0,0);
       const img=ctx.getImageData(0,0,canvas.width,canvas.height),qr=jsQR(img.data,img.width,img.height,{inversionAttempts:"attemptBoth"});
       if(qr?.data){
-        const parsed=parsePayCode(qr.data);
-        if(parsed){stopPayScanner();$("payScanStatus").textContent="QR detected.";loadPayment(parsed.tx,parsed.room);return}
+        handleScannedPayData(qr.data).then(done=>{if(!done&&payScannerStream)payScannerTimer=requestAnimationFrame(scan)});
+        return;
       }
     }
     payScannerTimer=requestAnimationFrame(scan);
@@ -2282,8 +2399,11 @@ $("startPayScanner")?.addEventListener("click",startPayScanner);
 $("stopPayScanner")?.addEventListener("click",stopPayScanner);
 $("loadPayCode")?.addEventListener("click",()=>{
  let raw=$("payManualCode").value.trim();
+ const deal=parseDealPayCode(raw);
+ if(deal)return loadDealPaymentQR(deal.dealId,deal.room);
  const parsed=parsePayCode(raw);
  if(parsed)return loadPayment(parsed.tx,parsed.room);
+ if(raw&&raw.toUpperCase().startsWith("D"))return loadDealPaymentQR(raw,roomId);
  if(raw)return loadPayment(raw.toUpperCase(),roomId);
  toast("Masukkan Transaction Code");
 });
