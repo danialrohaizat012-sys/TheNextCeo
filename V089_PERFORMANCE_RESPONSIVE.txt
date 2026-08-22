@@ -1,0 +1,20 @@
+V0.8.9 PERFORMANCE + RESPONSIVE PASS
+
+PERFORMANCE
+- Removed non-critical venture-logo preloads from startup.
+- Realtime player/room renders are batched through requestAnimationFrame.
+- HUD refresh reduced from every 700ms to 1.8s + event-driven refresh.
+- Background tabs pause nonessential HUD refresh.
+- Hidden panels use content-visibility and CSS containment.
+- Camera scanner is stopped automatically when the app goes to background.
+- Critical splash/board images get high fetch priority; noncritical assets no longer block boot.
+- Touch/orientation listeners use passive mode where appropriate.
+
+RESPONSIVE
+- Portrait uses full-width board with correct original board aspect ratio.
+- Landscape board scales from both viewport width and dynamic viewport height.
+- Reduced mobile padding/gaps/button size waste.
+- Bottom navigation and panels remain touch friendly.
+
+GOAL
+Faster first paint, fewer full DOM renders, less battery/CPU use, smoother multiplayer updates and cleaner phone/tablet layouts.

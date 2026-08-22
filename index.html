@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Next CEO">
 <title>Kelantan Next CEO Online</title>
-<link rel="manifest" href="manifest.json?v=0.8.6">
+<link rel="manifest" href="manifest.json?v=0.8.9">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
@@ -520,6 +520,66 @@ html,body{max-width:100%;overflow-x:hidden}
 .dealLocked strong{color:#f1c66e}
 .dealPayBadge{display:inline-block;padding:4px 7px;border-radius:999px;background:#243522;color:#9be0a7;font-size:7px;font-weight:1000;letter-spacing:.08em}
 
+
+/* ===== V0.8.8 BOTTOM NAV FUNCTION FIX ===== */
+.gx-bottomnav{pointer-events:auto!important}
+.gx-navbtn{pointer-events:auto!important;touch-action:manipulation;cursor:pointer}
+.gx-navbtn:active{transform:scale(.94)}
+#portfolioWrap,#playersWrap,#logWrap{scroll-margin-top:86px}
+
+
+/* ===== V0.8.9 PERFORMANCE + RESPONSIVE PASS ===== */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
+body{min-height:100dvh}
+img{height:auto}
+.panel,.card,.biz,.player,.ventureCard,.talentCard,.econPanel{
+  contain:layout paint style;
+}
+#playersWrap,#portfolioWrap,#logWrap,#marketCardWrap{
+  content-visibility:auto;
+  contain-intrinsic-size:260px;
+}
+#board{
+  transform:translateZ(0);
+  backface-visibility:hidden;
+  will-change:auto;
+}
+.pawn,.trackStepFlash,.diceRollOverlay,.gx-diceveil{
+  backface-visibility:hidden;
+  transform-style:preserve-3d;
+}
+.gx-bottomnav,.topbar,.gx-turnhud{
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
+}
+@media(max-width:932px){
+  .app{padding-left:8px!important;padding-right:8px!important}
+  .layout{gap:8px!important;margin-top:8px!important}
+  .panel{border-radius:14px}
+  .boardpanel{padding:5px}
+  .boardhead{padding:2px 2px 5px}
+  .actions{gap:5px}
+  .actions button{min-height:38px;padding:8px 6px}
+}
+@media(max-width:767px) and (orientation:portrait){
+  #board{width:100%!important;max-width:100%!important;aspect-ratio:1165/787!important}
+  .layout{display:block!important}
+  .side{margin-top:8px}
+}
+@media(max-width:932px) and (orientation:landscape){
+  #board{
+    width:min(78vw,calc(100dvh * 1.48))!important;
+    height:auto!important;
+    max-height:calc(100dvh - 82px)!important;
+    aspect-ratio:1165/787!important;
+  }
+  .side{gap:7px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+
 </style>
 <script>
 (function(){
@@ -531,20 +591,6 @@ window.addEventListener("error",()=>{try{window.__KNC_FORCE_SPLASH_FINISH__?.()}
 window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_FINISH__?.()}catch(_){}});
 
 </script>
-<link rel="preload" as="image" href="venture-clean/ayenas.webp">
-<link rel="preload" as="image" href="venture-clean/mos.webp">
-<link rel="preload" as="image" href="venture-clean/nasrom.webp">
-<link rel="preload" as="image" href="venture-clean/azam.webp">
-<link rel="preload" as="image" href="venture-clean/allfamous.webp">
-<link rel="preload" as="image" href="venture-clean/nasken.webp">
-<link rel="preload" as="image" href="venture-clean/uruz.webp">
-<link rel="preload" as="image" href="venture-clean/astonian.webp">
-<link rel="preload" as="image" href="venture-clean/ajc.webp">
-<link rel="preload" as="image" href="venture-clean/kedua.webp">
-<link rel="preload" as="image" href="venture-clean/meney.webp">
-<link rel="preload" as="image" href="venture-clean/garden.webp">
-<link rel="preload" as="image" href="venture-clean/sayap.webp">
-<link rel="preload" as="image" href="venture-clean/fixmobile.webp">
 </head>
 <body>
 
@@ -571,14 +617,14 @@ window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_
 </nav>
 
 <div id="splash" aria-live="polite" aria-label="Loading Kelantan Next CEO">
-  <img class="splashArtwork" src="commercial-splash-final.jpg" alt="">
+  <img class="splashArtwork" src="commercial-splash-final.jpg" alt="" fetchpriority="high" decoding="async">
   <div class="splashOverlay"></div><div class="splashCleanShade"></div>
   <div class="splashLoader">
     <div class="splashLoadLabel"><span>MEMUATKAN...</span><span id="splashPercent">0%</span></div>
     <div class="splashProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <span class="splashProgressBar" id="splashProgressBar"></span>
     </div>
-    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V0.8.6</div><div class="splashCredit">Developed by BinaLab</div>
+    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V0.8.9</div><div class="splashCredit">Developed by BinaLab</div>
     <button type="button" class="splashSkip" id="splashSkip">TERUSKAN</button>
   </div>
 </div>
@@ -609,7 +655,7 @@ window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_
     <section>
       <div class="panel boardpanel">
         <div class="boardhead"><div><h2 id="roomTitle">ROOM</h2><div id="turnText" class="muted"></div></div><div id="phasePill" class="pill">READY</div></div>
-        <div class="board" id="board"><div id="trackLabels" class="trackLabels" aria-hidden="true"></div><img src="board.png" alt="Kelantan Next CEO board"></div>
+        <div class="board" id="board"><div id="trackLabels" class="trackLabels" aria-hidden="true"></div><img src="board.png" alt="Kelantan Next CEO board" fetchpriority="high" decoding="async"></div>
         <div class="actions">
           <button class="gold" id="marketBtn">🌍 MARKET</button>
           <button id="rollBtn">🎲 ROLL</button>
@@ -849,14 +895,14 @@ window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_
 </div></div>
 <div class="modal" id="loanModal"><div class="box"><h2>Business Financing</h2><div id="loans"></div><button class="btn light closeBtn">Tutup</button></div></div>
 <div class="modal" id="dealModal"><div class="box dealBox">
-<h2>🤝 NEGO DEAL</h2><p class="muted">Pilih Founder, pilih business dalam portfolio dia, kemudian buat tawaran harga.</p>
+<div class="soundHead"><h2>🤝 NEGO DEAL</h2><button type="button" class="rulesCloseX" id="dealModalClose" aria-label="Tutup">×</button></div><p class="muted">Pilih Founder, pilih business dalam portfolio dia, kemudian buat tawaran harga.</p>
 <label class="dealLabel">FOUNDER</label><select id="dealTo" class="input"></select>
 <label class="dealLabel">BUSINESS YANG NAK DIBELI</label><div id="dealPortfolio" class="dealPortfolio"></div>
 <label class="dealLabel">HARGA TAWARAN</label><input id="dealAmount" class="input" type="number" step="500" value="5000">
 <input id="dealNote" class="input" placeholder="Nota kepada seller (optional)">
-<button id="sendDealBtn" class="btn gold">HANTAR OFFER</button><div id="dealSendStatus" class="payStatus" style="display:none;margin-top:8px"></div><button class="btn light closeBtn">Tutup</button></div></div>
+<button id="sendDealBtn" class="btn gold">HANTAR OFFER</button><div id="dealSendStatus" class="payStatus" style="display:none;margin-top:8px"></div><button type="button" id="dealModalCloseBottom" class="btn light">Tutup</button></div></div>
 <div class="modal" id="incomingDealModal"><div class="box dealBox">
-<div class="dealIncomingKicker">INCOMING OFFER</div><h2>🤝 Ada Founder Nak Beli Business Anda</h2>
+<div style="display:flex;justify-content:flex-end"><button type="button" class="rulesCloseX" id="incomingDealClose" aria-label="Tutup">×</button></div><div class="dealIncomingKicker">INCOMING OFFER</div><h2>🤝 Ada Founder Nak Beli Business Anda</h2>
 <div id="incomingDealCard" class="incomingDealCard"></div>
 <div class="dealDecision"><button id="rejectDealBtn" class="btn light">REJECT</button><button id="acceptDealBtn" class="btn gold">ACCEPT DEAL</button></div>
 </div></div>
@@ -1529,11 +1575,26 @@ function enterRoom(id){
    e=>{console.error("Room listener error",e);alert("Room sync error: "+(e.code||"")+" "+e.message);}
  );
  unsubPlayers=onSnapshot(collection(db,"rooms",id,"players"),
-   snap=>{players=snap.docs.map(d=>d.data()); renderLobby(); render();},
+   snap=>{
+     players=snap.docs.map(d=>d.data());
+     scheduleGameRender();
+   },
    e=>{console.error("Players listener error",e);alert("Player sync error: "+(e.code||"")+" "+e.message);}
  );
  watchDeals();watchDealPayments();
 }
+
+let gameRenderRAF=0;
+function scheduleGameRender(){
+ if(gameRenderRAF)return;
+ gameRenderRAF=requestAnimationFrame(()=>{
+   gameRenderRAF=0;
+   try{renderLobby()}catch(_){}
+   try{render()}catch(e){console.warn("render:",e)}
+   try{scheduleGXRefresh()}catch(_){}
+ });
+}
+
 function renderLobby(){
  $("lobbyPlayers").innerHTML=players.map(p=>`<div class="lobbyplayer"><span>${p.name}</span><b>${p.uid===room?.hostUid?"HOST":"READY"}</b></div>`).join("");
  $("startGameBtn").style.display=isHost()?"":"none";
@@ -1640,7 +1701,7 @@ async function animatePawnSteps(steps){
   }
   const ownIndex=players.findIndex(p=>p.uid===user.uid);
   if(ownIndex>=0)players[ownIndex]={...players[ownIndex],trackPos:pos};
-  render();
+  try{renderBoard?.()}catch(_){}
   const point=trackPoint(pos),flash=document.createElement("div");flash.className="trackStepFlash";flash.style.left=point.x+"%";flash.style.top=point.y+"%";$("board").appendChild(flash);setTimeout(()=>flash.remove(),360);
   await updateDoc(playerRef(user.uid),{trackPos:pos});
   stepFeedback();
@@ -1778,6 +1839,7 @@ function watchDeals(){
      .sort((a,b)=>(a.updatedAt||a.createdAt)-(b.updatedAt||b.createdAt));
    incomingDeal=pending[0]||null;
    if(incomingDeal){
+    if(dismissedIncomingDealId===incomingDeal.id)return;
     if(!$("incomingDealModal").classList.contains("show"))SFX.dealIncoming?.();
     const isOriginalSeller=user.uid===incomingDeal.toUid;
     $("incomingDealCard").innerHTML=`<h3>${incomingDeal.bizName}</h3><p><b>${incomingDeal.fromName}</b> mahu membeli business ini daripada <b>${incomingDeal.toName}</b>.</p><div class="price">${fmt(incomingDeal.amount)}</div><p>Anggaran nilai portfolio: ${fmt(incomingDeal.bizValue)}${incomingDeal.note?`<br><br>“${incomingDeal.note}”`:""}</p>`;
@@ -1890,6 +1952,33 @@ $("dealPayQRBtn")?.addEventListener("click",async()=>{
    $("payQRResult").innerHTML=`<div id="liveDealPayQR"></div><div class="paySummary"><div class="payAmount">${fmt(d.amount)}</div><div class="payMeta">Acquisition: <b>${d.bizName}</b><br>${d.fromName} → ${d.toName}<br>Expires in 5 minutes<br><br>Transaction Code: <b>${txid}</b></div></div>`;
    await renderQR(code,$("liveDealPayQR"));
  }catch(e){console.error(e);toast(e.message||"QR deal gagal dijana")}
+});
+
+
+/* ===== V0.8.7 NEGO POPUP CLOSE FIX ===== */
+let dismissedIncomingDealId=null;
+function closeDealModal(){
+ $("dealModal")?.classList.remove("show");
+ selectedDealBizId=null;
+}
+$("dealModalClose")?.addEventListener("click",closeDealModal);
+$("dealModalCloseBottom")?.addEventListener("click",closeDealModal);
+$("incomingDealClose")?.addEventListener("click",()=>{
+ if(incomingDeal)dismissedIncomingDealId=incomingDeal.id;
+ $("incomingDealModal")?.classList.remove("show");
+});
+["dealModal","incomingDealModal","dealPayModal"].forEach(id=>{
+ const el=$(id);if(!el)return;
+ el.addEventListener("click",e=>{
+  if(e.target!==el)return;
+  if(id==="incomingDealModal"&&incomingDeal)dismissedIncomingDealId=incomingDeal.id;
+  el.classList.remove("show");
+ });
+});
+document.addEventListener("keydown",e=>{
+ if(e.key!=="Escape")return;
+ if(incomingDeal&&$("incomingDealModal")?.classList.contains("show"))dismissedIncomingDealId=incomingDeal.id;
+ ["dealModal","incomingDealModal","dealPayModal"].forEach(id=>$(id)?.classList.remove("show"));
 });
 
 /* ===== V0.8.1 LIVE EVENT DECK ===== */
@@ -2267,11 +2356,36 @@ gxRollBtn.addEventListener("click",async()=>{
  gxDiceVeil.classList.add("on");
  try{real.click()}finally{setTimeout(()=>gxDiceVeil.classList.remove("on"),1500)}
 });
-document.querySelectorAll(".gx-navbtn").forEach(btn=>btn.addEventListener("click",()=>{
+function gxSetNavActive(btn){
  document.querySelectorAll(".gx-navbtn").forEach(x=>x.classList.toggle("active",x===btn));
+}
+function gxShowMobilePanel(id){
+ const panel=$(id);if(!panel)return false;
+ // Reuse the app's existing mobile tab system where possible.
+ const tab=document.querySelector(`.mobileTabs [data-tab="${id}"]`);
+ if(tab){tab.click();setTimeout(()=>panel.scrollIntoView({behavior:"smooth",block:"start"}),40);return true}
+ panel.classList.add("mobileShow");
+ panel.scrollIntoView({behavior:"smooth",block:"start"});return true;
+}
+document.querySelectorAll(".gx-navbtn").forEach(btn=>btn.addEventListener("click",()=>{
+ gxSetNavActive(btn);
  const t=btn.dataset.gxTarget;
- const target=[...document.querySelectorAll("button")].find(b=>(b.textContent||"").trim().toLowerCase().includes(t));
- if(target)target.click();
+ if(t==="market"){
+   const board=$("board");if(board)board.scrollIntoView({behavior:"smooth",block:"center"});
+   return;
+ }
+ if(t==="portfolio"){gxShowMobilePanel("portfolioWrap");return}
+ if(t==="founders"){gxShowMobilePanel("playersWrap");return}
+ if(t==="deal"){
+   const deal=$("dealBtn");
+   if(deal&&!deal.disabled)deal.click(); else toast("Deal belum tersedia sekarang");
+   return;
+ }
+ if(t==="feed"){
+   // More = game feed + quick controls. Feed is the useful landing point,
+   // while the existing top mobile controls remain available.
+   gxShowMobilePanel("logWrap");return;
+ }
 }));
 function gxLanding(title,desc,icon="✨"){
  if(document.querySelector(".gx-landflash"))return;
@@ -2280,7 +2394,19 @@ function gxLanding(title,desc,icon="✨"){
  document.body.appendChild(x);setTimeout(()=>x.remove(),1150);
 }
 window.gxLanding=gxLanding;
-setInterval(gxRefresh,700);setTimeout(gxRefresh,300);
+
+let gxRefreshRAF=0,gxRefreshTimer=0;
+function scheduleGXRefresh(){
+ if(gxRefreshRAF)return;
+ gxRefreshRAF=requestAnimationFrame(()=>{gxRefreshRAF=0;gxRefresh()});
+}
+setTimeout(scheduleGXRefresh,220);
+gxRefreshTimer=setInterval(scheduleGXRefresh,1800);
+document.addEventListener("visibilitychange",()=>{
+ if(document.hidden){if(gxRefreshTimer){clearInterval(gxRefreshTimer);gxRefreshTimer=0}}
+ else{scheduleGXRefresh();if(!gxRefreshTimer)gxRefreshTimer=setInterval(scheduleGXRefresh,1800)}
+});
+
 
 
 /* ===== V0.7.3 SPLASH LANDSCAPE SAFETY ===== */
@@ -2297,8 +2423,40 @@ function gxFixSplashLandscape(){
  }
 }
 gxFixSplashLandscape();
-window.addEventListener("resize",gxFixSplashLandscape);
-window.addEventListener("orientationchange",gxFixSplashLandscape);
+window.addEventListener("resize",gxFixSplashLandscape,{passive:true});
+window.addEventListener("orientationchange",gxFixSplashLandscape,{passive:true});
+
+
+/* ===== V0.8.9 PERFORMANCE HELPERS ===== */
+let __lastViewportKey="";
+function optimizeViewport(){
+ const key=`${innerWidth}x${innerHeight}:${screen.orientation?.type||""}`;
+ if(key===__lastViewportKey)return;
+ __lastViewportKey=key;
+ document.documentElement.style.setProperty("--vh",(innerHeight*.01)+"px");
+}
+let __vpTimer=0;
+function scheduleViewportOptimize(){
+ clearTimeout(__vpTimer);
+ __vpTimer=setTimeout(optimizeViewport,80);
+}
+window.addEventListener("resize",scheduleViewportOptimize,{passive:true});
+window.addEventListener("orientationchange",scheduleViewportOptimize,{passive:true});
+optimizeViewport();
+
+function setNetworkClass(){
+ document.documentElement.classList.toggle("offline",!navigator.onLine);
+}
+window.addEventListener("online",setNetworkClass,{passive:true});
+window.addEventListener("offline",setNetworkClass,{passive:true});
+setNetworkClass();
+
+// Release camera/audio-heavy resources when page is backgrounded.
+document.addEventListener("visibilitychange",()=>{
+ if(document.hidden){
+   try{stopPayScanner?.()}catch(_){}
+ }
+},{passive:true});
 
 </script>
 </body>

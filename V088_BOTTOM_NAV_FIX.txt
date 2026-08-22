@@ -1,0 +1,13 @@
+V0.8.8 BOTTOM TASK BAR FIX
+
+Root cause:
+The bottom bar searched for another button whose visible text contained the internal target string.
+Targets such as "portfolio", "founders" and "feed" did not map reliably to the actual mobile panels, so taps often did nothing.
+
+Fixed mappings:
+BOARD -> scroll/focus actual game board.
+PORTFOLIO -> open existing PORTFOLIO mobile panel and scroll into view.
+DEAL -> trigger the actual Nego Deal button.
+PLAYERS -> open existing FOUNDERS/players panel.
+MORE -> open GAME FEED panel.
+Also added reliable pointer/touch behavior and tap feedback.

@@ -1,0 +1,7 @@
+V0.8.7
+- Nego Deal X close button.
+- Dedicated bottom Tutup handler.
+- Incoming Offer X dismiss.
+- Tap backdrop to close.
+- Escape key closes on desktop.
+- Firestore listener respects manual dismissal, so the same incoming offer does not instantly reopen.
