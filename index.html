@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Next CEO">
 <title>Kelantan Next CEO Online</title>
-<link rel="manifest" href="manifest.json?v=0.9.1">
+<link rel="manifest" href="manifest.json?v=0.9.2">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <style>
@@ -587,6 +587,12 @@ img{height:auto}
 #endTurnBtn{background:linear-gradient(135deg,#50c878,#2f9d58)!important;color:#07140d!important}
 .turnUsed{opacity:.55!important;filter:saturate(.55)}
 
+
+/* ===== V0.9.2 INTERACTION FIXES ===== */
+#ventureMarketClose{pointer-events:auto!important;touch-action:manipulation;position:relative;z-index:8}
+#ventureMarketClose:active{transform:scale(.9)}
+#rollBtn.turnUsed,#gxRollBtn:disabled{opacity:.42!important;filter:saturate(.45)}
+
 </style>
 <script>
 (function(){
@@ -631,7 +637,7 @@ window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_
     <div class="splashProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
       <span class="splashProgressBar" id="splashProgressBar"></span>
     </div>
-    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V0.9.1</div><div class="splashCredit">Developed by BinaLab</div>
+    <div class="splashTask" id="splashTask">MERANCANG STRATEGI KEMENANGAN</div><div class="splashBuild">BUILD V0.9.2</div><div class="splashCredit">Developed by BinaLab</div>
     <button type="button" class="splashSkip" id="splashSkip">TERUSKAN</button>
   </div>
 </div>
@@ -907,7 +913,7 @@ window.addEventListener("unhandledrejection",()=>{try{window.__KNC_FORCE_SPLASH_
   <button id="tileCloseBtn" class="btn light">OK</button>
 </div></div>
 <div class="modal" id="businessModal"><div class="box ventureBox">
-<div class="ventureTop"><div><div class="ventureKicker">KELANTAN VENTURE MARKET</div><h2>Choose Your Next Venture</h2><p class="muted">Game stats sahaja • bukan valuation atau data kewangan sebenar brand.</p></div><button class="ventureX closeBtn" aria-label="Tutup">×</button></div>
+<div class="ventureTop"><div><div class="ventureKicker">KELANTAN VENTURE MARKET</div><h2>Choose Your Next Venture</h2><p class="muted">Game stats sahaja • bukan valuation atau data kewangan sebenar brand.</p></div><button type="button" class="ventureX" id="ventureMarketClose" aria-label="Tutup">×</button></div>
 <div id="ventureFilters" class="ventureFilters"></div><div id="offers" class="ventureMarket"></div>
 </div></div>
 <div class="modal" id="loanModal"><div class="box"><h2>Business Financing</h2><div id="loans"></div><button class="btn light closeBtn">Tutup</button></div></div>
@@ -1313,6 +1319,19 @@ function renderVentureMarket(){
  document.querySelectorAll("[data-vfilter]").forEach(x=>x.onclick=()=>{ventureFilter=x.dataset.vfilter;renderVentureMarket()});
  document.querySelectorAll("[data-buy]").forEach(x=>x.onclick=()=>buy(x.dataset.buy));
 }
+
+/* ===== V0.9.2 VENTURE MARKET CLOSE ===== */
+function closeVentureMarket(){
+ $("businessModal")?.classList.remove("show");
+}
+$("ventureMarketClose")?.addEventListener("click",closeVentureMarket);
+$("businessModal")?.addEventListener("click",e=>{
+ if(e.target===$("businessModal"))closeVentureMarket();
+});
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape"&&$("businessModal")?.classList.contains("show"))closeVentureMarket();
+});
+
 function openVentureMarket(){ventureFilter="ALL";renderVentureMarket();$("businessModal").classList.add("show")}
 async function openBusinessFromTile(){
  $("tileModal").classList.remove("show");openVentureMarket();
@@ -1479,6 +1498,7 @@ $("createRoomBtn").onclick=async()=>{
      turnUid:user.uid,
      turnSerial:0,
      lastRolledTurnSerial:-1,
+     rollConsumedUid:null,
      move:0,
      dice:0
    });
@@ -1621,13 +1641,13 @@ function renderLobby(){
 }
 $("startGameBtn").onclick=async()=>{
  if(players.length<2)return toast("Perlu sekurang-kurangnya 2 pemain untuk test online");
- await updateDoc(roomRef(),{status:"playing",turnUid:players[0].uid,round:0,phase:"READY",move:0,dice:0,market:null,ventureOwners:{},deals:{},turnSerial:0,lastRolledTurnSerial:-1});
+ await updateDoc(roomRef(),{status:"playing",turnUid:players[0].uid,round:0,phase:"READY",move:0,dice:0,market:null,ventureOwners:{},deals:{},turnSerial:0,lastRolledTurnSerial:-1,rollConsumedUid:null});
 };
 $("leaveRoomBtn").onclick=async()=>{if(roomId&&user)await deleteDoc(playerRef(user.uid));location.reload()};
 
 function renderRoomState(){
  $("roomTitle").textContent=`ROOM ${roomId}`;
- $("phasePill").textContent=room?.phase||"READY";
+ $("phasePill").textContent=(room?.rollConsumedUid===room?.turnUid&&room?.phase==="ACTION")?"ACTION • ROLL USED":(room?.phase||"READY");
  const t=players.find(p=>p.uid===room?.turnUid);
  $("turnText").textContent=`${t?.name||"Founder"} • ${room?.phase||"READY"}${room?.dice1&&room?.dice2?` • 🎲 ${room.dice1}+${room.dice2}=${room.dice1+room.dice2}`:` • Movement ${room?.move||0}`}`;
  $("marketCard").innerHTML=room?.market?`<b>${room.market.name}</b><span>${room.market.text}</span>`:`<b>Belum dibuka</b><span>Host mulakan round.</span>`;
@@ -1643,8 +1663,11 @@ function render(){
  $("players").innerHTML=players.map((p,i)=>{const nw=p.cash+(p.biz||[]).reduce((a,b)=>a+(b.value||0),0)-(p.debt||0);return `<div class="player ${p.uid===room.turnUid?"active":""}"><b>${p.name}</b><div class="money">${fmt(p.cash)}</div><small>Net ${fmt(nw)} • Debt ${fmt(p.debt)} • ${trackLabel(p.trackPos||0)}</small></div>`}).join("");
  const me=myPlayer();$("portfolio").innerHTML=(me?.biz||[]).length?(me.biz.map((b,j)=>`<div class="biz"><b>${b.logo?`<img class="portfolioLogo" src="${b.logo}" alt="">`:""}${b.name}</b><small>${b.archetype||b.cat||""} • ${N(b.loc).name} • Staff ${b.staffNow||0}/${b.staff} ${b.manager?"• Manager":""}<br>Value ${fmt(b.value)} • CF est. ${fmt(estimatedBusinessCF(b))}</small><button data-hire="${j}">+ Staff</button>${(b.staffNow||0)>=b.staff&&!b.manager?`<button class="manager" data-manager="${j}">Lantik Manager</button>`:""}</div>`).join("")):`<div class="muted">Belum ada business.</div>`;
  document.querySelectorAll("[data-hire]").forEach(b=>b.onclick=()=>hire(+b.dataset.hire));document.querySelectorAll("[data-manager]").forEach(b=>b.onclick=()=>manager(+b.dataset.manager));
- $("marketBtn").disabled=!isHost();
- const rollAlreadyUsed=Number(room?.lastRolledTurnSerial??-1)===Number(room?.turnSerial??0);
+ $("marketBtn").disabled=!isHost() || (room?.status==="playing" && !["READY","ROUND_END"].includes(room?.phase||""));
+ const rollAlreadyUsed=
+   room?.rollConsumedUid===user?.uid ||
+   Number(room?.lastRolledTurnSerial??-1)===Number(room?.turnSerial??0) ||
+   Number(myPlayer()?.lastRollTurnSerial??-1)===Number(room?.turnSerial??0);
  $("rollBtn").disabled=!isMyTurn()||!!myPlayer()?.bankrupt||!["ROLL","READY"].includes(room?.phase)||rollAlreadyUsed;
  $("rollBtn").classList.toggle("turnUsed",rollAlreadyUsed&&isMyTurn());
  $("rollBtn").textContent=rollAlreadyUsed&&isMyTurn()?"🎲 ROLL USED":"🎲 ROLL";
@@ -1656,9 +1679,17 @@ function render(){
 }
 
 $("marketBtn").onclick=async()=>{
- if(!isHost())return;const m=markets[Math.floor(Math.random()*markets.length)];
+ if(!isHost())return;
+ // Prevent MARKET from being abused to reset the current player's roll.
+ if(room?.status==="playing" && !["READY","ROUND_END"].includes(room?.phase||""))return toast("Market hanya boleh dibuka pada permulaan round");
+ const m=markets[Math.floor(Math.random()*markets.length)];
  const nextRound=(room.round||0)+1;const first=players[(nextRound-1)%players.length];
- await updateDoc(roomRef(),{round:nextRound,market:m,phase:"ROLL",turnUid:first.uid,turnSerial:Number(room.turnSerial||0)+1,move:0,dice:0,dice1:0,dice2:0});
+ await updateDoc(roomRef(),{
+   round:nextRound,market:m,phase:"ROLL",turnUid:first.uid,
+   turnSerial:Number(room.turnSerial||0)+1,
+   rollConsumedUid:null,
+   move:0,dice:0,dice1:0,dice2:0
+ });
  log(`Round ${nextRound}: ${m.name}`);
 };
 
@@ -1740,18 +1771,30 @@ async function animatePawnSteps(steps){
 }
 $("rollBtn").onclick=async()=>{
  if(!isMyTurn())return toast("Bukan turn anda");
- const d1=1+Math.floor(Math.random()*6),d2=1+Math.floor(Math.random()*6),total=d1+d2;
  $("rollBtn").disabled=true;
+ const d1=1+Math.floor(Math.random()*6),d2=1+Math.floor(Math.random()*6),total=d1+d2;
  try{
    await runTransaction(db,async tx=>{
-     const rRef=roomRef(),snap=await tx.get(rRef);
-     if(!snap.exists())throw new Error("Room tak dijumpai");
-     const rd=snap.data(),serial=Number(rd.turnSerial||0);
+     const rRef=roomRef(),pRef=playerRef(user.uid);
+     const rSnap=await tx.get(rRef),pSnap=await tx.get(pRef);
+     if(!rSnap.exists()||!pSnap.exists())throw new Error("Game state tak dijumpai");
+     const rd=rSnap.data(),pd=pSnap.data(),serial=Number(rd.turnSerial||0);
+
      if(rd.turnUid!==user.uid)throw new Error("Bukan turn anda");
      if(!["ROLL","READY"].includes(rd.phase))throw new Error("Roll sudah digunakan untuk turn ini");
-     if(Number(rd.lastRolledTurnSerial??-1)===serial)throw new Error("Setiap player hanya boleh roll sekali setiap turn");
-     tx.update(rRef,{dice1:d1,dice2:d2,dice:total,move:total,phase:"ROLLING",lastRolledTurnSerial:serial});
+     if(rd.rollConsumedUid===user.uid)throw new Error("Anda sudah roll untuk turn ini");
+     if(Number(rd.lastRolledTurnSerial??-1)===serial)throw new Error("Turn ini sudah menggunakan roll");
+     if(Number(pd.lastRollTurnSerial??-1)===serial)throw new Error("Setiap Founder hanya boleh roll sekali setiap turn");
+
+     tx.update(rRef,{
+       dice1:d1,dice2:d2,dice:total,move:total,
+       phase:"ROLLING",
+       lastRolledTurnSerial:serial,
+       rollConsumedUid:user.uid
+     });
+     tx.update(pRef,{lastRollTurnSerial:serial});
    });
+
    await playDiceRollSound();
    await animateDoubleDice(d1,d2);
    await updateDoc(roomRef(),{phase:"MOVING"});
@@ -1764,7 +1807,6 @@ $("rollBtn").onclick=async()=>{
    toast(e.message||"Roll gagal");
  }
 };
-
 async function endCurrentTurn(){
  if(!isMyTurn())return toast("Bukan turn anda");
  if(room?.phase!=="ACTION")return toast("Selesaikan roll dahulu");
@@ -1782,6 +1824,7 @@ async function endCurrentTurn(){
        turnUid:next.uid,
        turnSerial:Number(rd.turnSerial||0)+1,
        phase:"ROLL",
+       rollConsumedUid:null,
        move:0,dice:0,dice1:0,dice2:0
      });
    });

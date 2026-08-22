@@ -1,0 +1,17 @@
+V0.9.2 VENTURE MARKET CLOSE + HARD ROLL LOCK
+
+VENTURE MARKET
+- The X button now has its own explicit ID and click handler.
+- Tap outside the Venture Market modal to close.
+- Escape closes it on desktop.
+- Pointer/touch handling reinforced.
+
+ROLL
+- Added three simultaneous guards:
+  1. room.rollConsumedUid
+  2. room.lastRolledTurnSerial
+  3. player.lastRollTurnSerial
+- All three are checked atomically in Firestore before a roll is accepted.
+- Rapid double tapping cannot create a second roll.
+- Roll lock is cleared ONLY when END TURN passes control to the next Founder.
+- MARKET can no longer be pressed in the middle of an active turn to reset the roll state.
